@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeffi ✦</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- No external icon library needed — using Unicode & emoji instead -->
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -258,12 +258,31 @@
             text-align: center; margin-top: 14px;
             font-size: 0.8rem; color: var(--text-light); font-style: italic;
         }
-        /* ── SPOTIFY EMBED ── */
+        /* ── EMBED PLAYER ── */
         .spotify-wrap {
             margin: 4px 0 16px;
             border-radius: 14px; overflow: hidden;
         }
         .spotify-wrap iframe { display: block; border-radius: 14px; }
+
+        /* ── BILIBILI AUDIO CROP (Option B) ── */
+        /* Clips the iframe so only the bottom controls bar (~48px) is visible.
+           Works because: controls stay visible while paused, and pointer events
+           on the visible strip map correctly to the controls inside the iframe. */
+        .bilibili-crop {
+            height: 48px !important;
+            overflow: hidden;
+            position: relative;
+            border-radius: 12px;
+            background: #000;
+        }
+        .bilibili-crop iframe {
+            position: absolute;
+            top: -252px !important; /* 300px iframe - 48px visible = push up 252px */
+            left: 0;
+            width: 100%;
+            height: 300px !important;
+        }
         .no-spotify {
             text-align: center; padding: 18px 0 8px;
             font-size: 0.82rem; color: var(--text-light); font-style: italic;
@@ -368,14 +387,14 @@
         </div>
         <div class="hero-buttons">
             <a href="#projects" class="btn btn-primary"
-               data-en="<i class='fa-solid fa-rocket'></i> View Projects"
-               data-zh="<i class='fa-solid fa-rocket'></i> 查看项目">
-                <i class="fa-solid fa-rocket"></i> View Projects
+               data-en="🚀 View Projects"
+               data-zh="🚀 查看项目">
+                🚀 View Projects
             </a>
             <a href="#music" class="btn btn-secondary"
-               data-en="<i class='fa-solid fa-music'></i> My Music"
-               data-zh="<i class='fa-solid fa-music'></i> 我的音乐">
-                <i class="fa-solid fa-music"></i> My Music
+               data-en="🎵 My Music"
+               data-zh="🎵 我的音乐">
+                🎵 My Music
             </a>
         </div>
     </div>
@@ -424,9 +443,9 @@
             </div>
             <!-- Prev / Next navigation -->
             <div class="player-nav">
-                <button class="ctrl" id="prevBtn" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="ctrl" id="prevBtn" title="Previous">⏮</button>
                 <span style="font-size:0.75rem;color:var(--text-light);font-weight:700" id="trackCounter">1 / 4</span>
-                <button class="ctrl" id="nextBtn" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+                <button class="ctrl" id="nextBtn" title="Next">⏭</button>
             </div>
         </div>
         <div class="card playlist-card" id="playlistEl"></div>
@@ -445,17 +464,17 @@
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
-    <button class="lb-close" id="lbClose"><i class="fa-solid fa-xmark"></i></button>
+    <button class="lb-close" id="lbClose">✕</button>
     <img id="lbImg" src="" alt="">
 </div>
 
 <!-- FOOTER -->
 <footer>
     <div class="footer-social">
-        <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a href="#" title="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
-        <a href="#" title="Discord"><i class="fa-brands fa-discord"></i></a>
-        <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" title="GitHub">GH</a>
+        <a href="#" title="Twitter/X">𝕏</a>
+        <a href="#" title="Discord">DC</a>
+        <a href="#" title="YouTube">▶</a>
     </div>
     <p id="footerText"
        data-en="Made with 💜 by Jeffi &nbsp;·&nbsp; 2026"
@@ -554,8 +573,8 @@ function renderProjects() {
             <div class="project-desc">${p[lang].desc}</div>
             <div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
             <div class="project-links">
-                <a href="${p.live}"   class="project-link main"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${liveLabel}</a>
-                <a href="${p.github}" class="project-link alt"><i class="fa-brands fa-github"></i> ${githubLabel}</a>
+                <a href="${p.live}"   class="project-link main">↗ ${liveLabel}</a>
+                <a href="${p.github}" class="project-link alt">⌥ ${githubLabel}</a>
             </div>
         </div>
     </div>`).join('');
@@ -563,64 +582,114 @@ function renderProjects() {
 renderProjects();
 
 /* ───────────────── MUSIC PLAYER ───────────────── */
-// 🎵 Add songs here — find the Spotify track ID from the song's Spotify URL
-// e.g. open.spotify.com/track/4oE7MyJhqSD3BaHRpNs8Nl → spotifyId: '4oE7MyJhqSD3BaHRpNs8Nl'
+/*
+  HOW TO ADD SONGS — supported sources:
+
+  ① SPOTIFY  → source: 'spotify',  id: 'TRACK_ID'
+     Get ID from: open.spotify.com/track/TRACK_ID
+
+  ② YOUTUBE  → source: 'youtube',  id: 'VIDEO_ID'
+     Get ID from: youtube.com/watch?v=VIDEO_ID
+
+  ③ BILIBILI → source: 'bilibili', id: 'BV_XXXXXXX'
+     Get ID from: bilibili.com/video/BV_XXXXXXX
+     (Best experienced inside China; may buffer elsewhere)
+
+  ④ NETEASE  → source: 'netease',  id: 'SONG_ID'
+     Get ID from: music.163.com/song?id=SONG_ID
+     (Best experienced inside China; audio-only compact player)
+*/
 const playlist = [
     {
-        title:     'JANE DOE',
-        artist:    'Kenshi Yonezu, Hikaru Utada',
-        emoji:     '🎸',
-        spotifyId: '4oE7MyJhqSD3BaHRpNs8Nl'   // Chainsaw Man: Reze Arc theme
+        title:  'JANE DOE',
+        artist: 'Kenshi Yonezu, Hikaru Utada',
+        emoji:  '🎸',
+        source: 'spotify',
+        id:     '4oE7MyJhqSD3BaHRpNs8Nl'   // Chainsaw Man: Reze Arc theme
     },
     {
-        title:     'Your Next Song',
-        artist:    'Artist Name',
-        emoji:     '🎵',
-        spotifyId: ''   // paste Spotify track ID here
+        title:  'YouTube Example',
+        artist: 'Artist Name',
+        emoji:  '🎵',
+        source: 'youtube',
+        id:     ''   // paste YouTube video ID here, e.g. 'dQw4w9WgXcQ'
     },
     {
-        title:     'Anime OST Pick',
-        artist:    'Composer',
-        emoji:     '🌸',
-        spotifyId: ''
+        title:  '铁花飞',
+        artist: 'Mili',
+        emoji:  '🌺',
+        source: 'bilibili',
+        id:     'BV1BqFZzVEYJ'   // Arknights Ch'en the Dawnstreak EP
     },
     {
-        title:     'maimai Favourite',
-        artist:    'Artist Name',
-        emoji:     '🎮',
-        spotifyId: ''
+        title:  'NetEase Example',
+        artist: 'Artist Name',
+        emoji:  '🎶',
+        source: 'netease',
+        id:     ''   // paste NetEase song ID here, e.g. '447925558'
     },
 ];
 
+/* Platform config: embed URL builder + iframe height + icon */
+const platforms = {
+    spotify:  {
+        icon:   '<span style="font-size:0.75rem;font-weight:800;color:#1DB954;background:rgba(29,185,84,0.12);padding:2px 7px;border-radius:8px">SPOTIFY</span>',
+        height: 80,
+        url:    id => `https://open.spotify.com/embed/track/${id}?utm_source=generator`
+    },
+    youtube:  {
+        icon:   '<span style="font-size:0.75rem;font-weight:800;color:#FF0000;background:rgba(255,0,0,0.1);padding:2px 7px;border-radius:8px">YOUTUBE</span>',
+        height: 200,
+        url:    id => `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
+    },
+    bilibili: {
+        icon:   '<span style="font-size:0.75rem;font-weight:800;color:#00AEEC;background:rgba(0,174,236,0.1);padding:2px 7px;border-radius:8px">BILIBILI</span>',
+        height: 300, // full iframe height; CSS crop will clip it to 48px (controls only)
+        url:    id => `https://player.bilibili.com/player.html?bvid=${id}&page=1&high_quality=1&danmaku=0&autoplay=0`
+    },
+    netease:  {
+        icon:   '<span style="font-size:0.75rem;font-weight:800;color:#C20C0C;background:rgba(194,12,12,0.1);padding:2px 7px;border-radius:8px">NETEASE</span>',
+        height: 86,
+        url:    id => `https://music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66`
+    },
+};
+
 let cur = 0;
-const albumArt      = document.getElementById('albumArt');
-const songTitle     = document.getElementById('songTitle');
-const songArtist    = document.getElementById('songArtist');
-const spotifyWrap   = document.getElementById('spotifyWrap');
-const spotifyFrame  = document.getElementById('spotifyFrame');
-const noSpotify     = document.getElementById('noSpotify');
-const trackCounter  = document.getElementById('trackCounter');
-const playlistEl    = document.getElementById('playlistEl');
+const albumArt     = document.getElementById('albumArt');
+const songTitle    = document.getElementById('songTitle');
+const songArtist   = document.getElementById('songArtist');
+const spotifyWrap  = document.getElementById('spotifyWrap');
+const spotifyFrame = document.getElementById('spotifyFrame');
+const noSpotify    = document.getElementById('noSpotify');
+const trackCounter = document.getElementById('trackCounter');
+const playlistEl   = document.getElementById('playlistEl');
 
 function loadTrack(i) {
-    const t = playlist[i];
-    songTitle.textContent  = t.title;
-    songArtist.textContent = t.artist;
-    albumArt.textContent   = t.emoji;
+    const t  = playlist[i];
+    const pl = platforms[t.source] || platforms.spotify;
+    songTitle.textContent    = t.title;
+    songArtist.textContent   = t.artist;
+    albumArt.textContent     = t.emoji;
     trackCounter.textContent = `${i + 1} / ${playlist.length}`;
 
-    if (t.spotifyId) {
-        spotifyFrame.src = `https://open.spotify.com/embed/track/${t.spotifyId}?utm_source=generator`;
+    if (t.id) {
+        spotifyFrame.src          = pl.url(t.id);
+        spotifyFrame.height       = pl.height;
         spotifyWrap.style.display = 'block';
         noSpotify.style.display   = 'none';
+        // Apply audio-crop for Bilibili (hides video, shows only controls bar)
+        if (t.source === 'bilibili') {
+            spotifyWrap.classList.add('bilibili-crop');
+        } else {
+            spotifyWrap.classList.remove('bilibili-crop');
+        }
     } else {
         spotifyFrame.src          = '';
         spotifyWrap.style.display = 'none';
         noSpotify.style.display   = 'block';
-        // Update hint text for current language
         noSpotify.textContent = lang === 'zh'
-            ? '💡 在源代码中填入 Spotify 曲目 ID 以启用播放'
-            : '💡 Add a Spotify track ID in the source code to enable playback';
+            ? '💡 在源代码中填入曲目 ID 以启用播放'
+            : '💡 Add a track ID in the source code to enable playback';
     }
 
     document.querySelectorAll('.pl-item').forEach((el, idx) => {
@@ -630,16 +699,19 @@ function loadTrack(i) {
 }
 
 function renderPlaylist() {
-    playlistEl.innerHTML = playlist.map((t, i) => `
-    <div class="pl-item ${i === cur ? 'active' : ''}" data-i="${i}">
-        <div class="pl-num">${i === cur ? '▶' : i + 1}</div>
-        <div class="pl-thumb">${t.emoji}</div>
-        <div class="pl-info">
-            <div class="pl-song">${t.title}</div>
-            <div class="pl-artist">${t.artist}</div>
-        </div>
-        ${t.spotifyId ? '<i class="fa-brands fa-spotify" style="color:#1DB954;font-size:1rem;flex-shrink:0"></i>' : ''}
-    </div>`).join('');
+    playlistEl.innerHTML = playlist.map((t, i) => {
+        const pl = platforms[t.source] || platforms.spotify;
+        return `
+        <div class="pl-item ${i === cur ? 'active' : ''}" data-i="${i}">
+            <div class="pl-num">${i === cur ? '▶' : i + 1}</div>
+            <div class="pl-thumb">${t.emoji}</div>
+            <div class="pl-info">
+                <div class="pl-song">${t.title}</div>
+                <div class="pl-artist">${t.artist}</div>
+            </div>
+            <span style="font-size:0.95rem;flex-shrink:0">${pl.icon}</span>
+        </div>`;
+    }).join('');
     document.querySelectorAll('.pl-item').forEach(el => {
         el.addEventListener('click', () => { cur = +el.dataset.i; loadTrack(cur); });
     });
