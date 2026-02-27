@@ -258,6 +258,21 @@
             text-align: center; margin-top: 14px;
             font-size: 0.8rem; color: var(--text-light); font-style: italic;
         }
+        /* ── SPOTIFY EMBED ── */
+        .spotify-wrap {
+            margin: 4px 0 16px;
+            border-radius: 14px; overflow: hidden;
+        }
+        .spotify-wrap iframe { display: block; border-radius: 14px; }
+        .no-spotify {
+            text-align: center; padding: 18px 0 8px;
+            font-size: 0.82rem; color: var(--text-light); font-style: italic;
+        }
+        .player-nav {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: 8px; padding: 0 4px;
+        }
+        .player-nav .ctrl { width: 36px; height: 36px; font-size: 0.95rem; }
 
         /* ── GALLERY ── */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px; }
@@ -391,27 +406,31 @@
                      data-en="Select a song" data-zh="选择一首歌">Select a song</div>
                 <div class="song-artist" id="songArtist">—</div>
             </div>
-            <div class="progress-wrap" id="progressWrap">
-                <div class="progress-fill" id="progressFill"></div>
+            <!-- Spotify embed player -->
+            <div class="spotify-wrap" id="spotifyWrap" style="display:none">
+                <iframe id="spotifyFrame"
+                    src=""
+                    width="100%" height="80"
+                    frameborder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
+                </iframe>
             </div>
-            <div class="progress-times">
-                <span id="currentTime">0:00</span>
-                <span id="totalTime">0:00</span>
+            <!-- Fallback when no Spotify ID -->
+            <div class="no-spotify" id="noSpotify"
+                 data-en="💡 Add a Spotify track ID in the source code to enable playback"
+                 data-zh="💡 在源代码中填入 Spotify 曲目 ID 以启用播放">
+                💡 Add a Spotify track ID in the source code to enable playback
             </div>
-            <div class="controls">
-                <button class="ctrl" id="prevBtn"><i class="fa-solid fa-backward-step"></i></button>
-                <button class="ctrl play-btn" id="playBtn"><i class="fa-solid fa-play" id="playIcon"></i></button>
-                <button class="ctrl" id="nextBtn"><i class="fa-solid fa-forward-step"></i></button>
+            <!-- Prev / Next navigation -->
+            <div class="player-nav">
+                <button class="ctrl" id="prevBtn" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+                <span style="font-size:0.75rem;color:var(--text-light);font-weight:700" id="trackCounter">1 / 4</span>
+                <button class="ctrl" id="nextBtn" title="Next"><i class="fa-solid fa-forward-step"></i></button>
             </div>
         </div>
         <div class="card playlist-card" id="playlistEl"></div>
-        <p class="music-hint" id="musicHint"
-           data-en="💡 Replace the audio src URLs in the source code with your own music files or links"
-           data-zh="💡 在源代码中将音频链接替换为你自己的音乐文件">
-            💡 Replace the audio src URLs in the source code with your own music files or links
-        </p>
     </div>
-    <audio id="audio"></audio>
 </div>
 
 <!-- GALLERY -->
@@ -544,81 +563,87 @@ function renderProjects() {
 renderProjects();
 
 /* ───────────────── MUSIC PLAYER ───────────────── */
-// 🎵 Replace src values with your own audio file URLs or direct mp3 links
+// 🎵 Add songs here — find the Spotify track ID from the song's Spotify URL
+// e.g. open.spotify.com/track/4oE7MyJhqSD3BaHRpNs8Nl → spotifyId: '4oE7MyJhqSD3BaHRpNs8Nl'
 const playlist = [
-    { title: 'Your Favourite Song',   artist: 'Artist Name', emoji: '🎵', src: '' },
-    { title: 'Anime OST Pick',        artist: 'Composer',    emoji: '🌸', src: '' },
-    { title: 'maimai Song Favourite', artist: 'Artist Name', emoji: '🎮', src: '' },
-    { title: 'Chill Track',           artist: 'Artist Name', emoji: '🎶', src: '' },
+    {
+        title:     'JANE DOE',
+        artist:    'Kenshi Yonezu, Hikaru Utada',
+        emoji:     '🎸',
+        spotifyId: '4oE7MyJhqSD3BaHRpNs8Nl'   // Chainsaw Man: Reze Arc theme
+    },
+    {
+        title:     'Your Next Song',
+        artist:    'Artist Name',
+        emoji:     '🎵',
+        spotifyId: ''   // paste Spotify track ID here
+    },
+    {
+        title:     'Anime OST Pick',
+        artist:    'Composer',
+        emoji:     '🌸',
+        spotifyId: ''
+    },
+    {
+        title:     'maimai Favourite',
+        artist:    'Artist Name',
+        emoji:     '🎮',
+        spotifyId: ''
+    },
 ];
 
-let cur = 0, playing = false;
-const audio        = document.getElementById('audio');
-const playBtn      = document.getElementById('playBtn');
-const playIcon     = document.getElementById('playIcon');
-const albumArt     = document.getElementById('albumArt');
-const songTitle    = document.getElementById('songTitle');
-const songArtist   = document.getElementById('songArtist');
-const progressFill = document.getElementById('progressFill');
-const progressWrap = document.getElementById('progressWrap');
-const currentTimeEl = document.getElementById('currentTime');
-const totalTimeEl   = document.getElementById('totalTime');
+let cur = 0;
+const albumArt      = document.getElementById('albumArt');
+const songTitle     = document.getElementById('songTitle');
+const songArtist    = document.getElementById('songArtist');
+const spotifyWrap   = document.getElementById('spotifyWrap');
+const spotifyFrame  = document.getElementById('spotifyFrame');
+const noSpotify     = document.getElementById('noSpotify');
+const trackCounter  = document.getElementById('trackCounter');
 const playlistEl    = document.getElementById('playlistEl');
-
-const fmt = s => isNaN(s) ? '0:00' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 
 function loadTrack(i) {
     const t = playlist[i];
     songTitle.textContent  = t.title;
-    songTitle.dataset.placeholder = 'false';
     songArtist.textContent = t.artist;
     albumArt.textContent   = t.emoji;
-    audio.src = t.src || '';
-    document.querySelectorAll('.pl-item').forEach((el,idx) => {
-        el.classList.toggle('active', idx === i);
-        el.querySelector('.pl-num').textContent = (idx === i && playing) ? '▶' : (idx + 1);
-    });
-}
+    trackCounter.textContent = `${i + 1} / ${playlist.length}`;
 
-function setPlaying(state) {
-    playing = state;
-    playIcon.className = state ? 'fa-solid fa-pause' : 'fa-solid fa-play';
-    albumArt.classList.toggle('spin', state);
-    document.querySelectorAll('.pl-item').forEach((el,i) => {
-        el.querySelector('.pl-num').textContent = (i === cur && state) ? '▶' : (i + 1);
+    if (t.spotifyId) {
+        spotifyFrame.src = `https://open.spotify.com/embed/track/${t.spotifyId}?utm_source=generator`;
+        spotifyWrap.style.display = 'block';
+        noSpotify.style.display   = 'none';
+    } else {
+        spotifyFrame.src          = '';
+        spotifyWrap.style.display = 'none';
+        noSpotify.style.display   = 'block';
+        // Update hint text for current language
+        noSpotify.textContent = lang === 'zh'
+            ? '💡 在源代码中填入 Spotify 曲目 ID 以启用播放'
+            : '💡 Add a Spotify track ID in the source code to enable playback';
+    }
+
+    document.querySelectorAll('.pl-item').forEach((el, idx) => {
+        el.classList.toggle('active', idx === i);
+        el.querySelector('.pl-num').textContent = idx === i ? '▶' : (idx + 1);
     });
 }
 
 function renderPlaylist() {
-    playlistEl.innerHTML = playlist.map((t,i) => `
-    <div class="pl-item ${i===cur?'active':''}" data-i="${i}">
-        <div class="pl-num">${i+1}</div>
+    playlistEl.innerHTML = playlist.map((t, i) => `
+    <div class="pl-item ${i === cur ? 'active' : ''}" data-i="${i}">
+        <div class="pl-num">${i === cur ? '▶' : i + 1}</div>
         <div class="pl-thumb">${t.emoji}</div>
         <div class="pl-info">
             <div class="pl-song">${t.title}</div>
             <div class="pl-artist">${t.artist}</div>
         </div>
+        ${t.spotifyId ? '<i class="fa-brands fa-spotify" style="color:#1DB954;font-size:1rem;flex-shrink:0"></i>' : ''}
     </div>`).join('');
     document.querySelectorAll('.pl-item').forEach(el => {
-        el.addEventListener('click', () => {
-            cur = +el.dataset.i;
-            loadTrack(cur);
-            if (audio.src && audio.src !== window.location.href) {
-                audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
-            }
-        });
+        el.addEventListener('click', () => { cur = +el.dataset.i; loadTrack(cur); });
     });
 }
-
-playBtn.addEventListener('click', () => {
-    if (!audio.src || audio.src === window.location.href) {
-        songTitle.textContent  = lang === 'zh' ? '🎵 请添加音频文件！' : '🎵 Add your audio files!';
-        songArtist.textContent = lang === 'zh' ? '在代码中修改 src 链接' : 'Edit the playlist src values in the code';
-        songTitle.dataset.placeholder = 'false';
-        return;
-    }
-    playing ? (audio.pause(), setPlaying(false)) : audio.play().then(()=>setPlaying(true)).catch(()=>{});
-});
 
 document.getElementById('prevBtn').addEventListener('click', () => {
     cur = (cur - 1 + playlist.length) % playlist.length; loadTrack(cur);
@@ -627,23 +652,6 @@ document.getElementById('nextBtn').addEventListener('click', () => {
     cur = (cur + 1) % playlist.length; loadTrack(cur);
 });
 
-audio.addEventListener('timeupdate', () => {
-    if (!audio.duration) return;
-    progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
-    currentTimeEl.textContent = fmt(audio.currentTime);
-    totalTimeEl.textContent   = fmt(audio.duration);
-});
-audio.addEventListener('ended', () => {
-    cur = (cur + 1) % playlist.length;
-    loadTrack(cur); audio.play().catch(()=>{});
-});
-progressWrap.addEventListener('click', e => {
-    if (!audio.duration) return;
-    const r = progressWrap.getBoundingClientRect();
-    audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
-});
-
-songTitle.dataset.placeholder = 'true';
 renderPlaylist();
 loadTrack(0);
 
