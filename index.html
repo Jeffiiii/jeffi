@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeffi ✦</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --lavender:    #C4A8E8;
+            --pink:        #F5B8C8;
+            --mint:        #A8DDD0;
+            --yellow:      #FFE4A0;
+            --text-dark:   #3D2E5C;
+            --text-mid:    #7A6898;
+            --text-light:  #B8A8D0;
+            --card-bg:     rgba(255, 255, 255, 0.60);
+            --card-border: rgba(196, 168, 232, 0.35);
+            --shadow:      0 8px 40px rgba(196, 168, 232, 0.22);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(150deg, #FDF5FF 0%, #FFF0F8 50%, #EFF9FF 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FDF5FF; }
+        ::-webkit-scrollbar-thumb { background: var(--lavender); border-radius: 10px; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 15px 48px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(196,168,232,0.22);
+        }
+        .nav-logo {
+            font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #9B72CF, #E8709A);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .nav-links { display: flex; gap: 4px; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-mid);
+            font-weight: 700; font-size: 0.88rem;
+            padding: 8px 18px; border-radius: 20px; transition: all 0.25s;
+        }
+        .nav-links a:hover  { background: rgba(196,168,232,0.18); color: var(--text-dark); }
+        .nav-links a.active { background: linear-gradient(135deg,rgba(196,168,232,0.28),rgba(245,184,200,0.28)); color: var(--text-dark); }
+
+        /* ── HERO ── */
+        #home {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            padding: 110px 40px 70px;
+        }
+        .particles-container { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        .particle {
+            position: absolute; font-size: 1.2rem;
+            animation: floatUp linear infinite; opacity: 0;
+        }
+        @keyframes floatUp {
+            0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+            8%   { opacity: 0.85; }
+            92%  { opacity: 0.85; }
+            100% { transform: translateY(-120px) rotate(540deg); opacity: 0; }
+        }
+        .hero-content { text-align: center; z-index: 1; position: relative; }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(196,168,232,0.18); border: 1px solid rgba(196,168,232,0.38);
+            color: var(--text-mid); padding: 6px 20px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 700; margin-bottom: 22px;
+            backdrop-filter: blur(8px);
+        }
+        .hero-name {
+            font-size: clamp(3rem, 9vw, 6rem); font-weight: 900; line-height: 1.05;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #9B72CF 0%, #E8709A 55%, #72C5CF 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-tagline {
+            font-size: clamp(1rem, 2.5vw, 1.25rem); color: var(--text-mid);
+            font-weight: 600; margin-bottom: 22px; max-width: 480px; margin-left: auto; margin-right: auto;
+        }
+        .hero-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .hero-tag {
+            background: rgba(255,255,255,0.65); backdrop-filter: blur(8px);
+            border: 1px solid var(--card-border);
+            padding: 6px 16px; border-radius: 20px;
+            font-size: 0.82rem; font-weight: 700; color: var(--text-mid);
+        }
+        .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 28px; border-radius: 25px;
+            font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 800;
+            cursor: pointer; transition: all 0.28s; border: none; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; box-shadow: 0 4px 22px rgba(196,168,232,0.5);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(196,168,232,0.6); }
+        .btn-secondary {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+            border: 1.5px solid var(--card-border); color: var(--text-dark);
+        }
+        .btn-secondary:hover { transform: translateY(-3px); background: white; }
+
+        /* ── SHARED SECTION ── */
+        .site-section { padding: 80px 48px; max-width: 1120px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 52px; }
+        .section-label {
+            display: inline-block; font-size: 0.75rem; font-weight: 800;
+            letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--lavender); margin-bottom: 8px;
+        }
+        .section-title { font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 900; color: var(--text-dark); }
+        .section-sub { color: var(--text-mid); font-size: 0.97rem; margin-top: 8px; }
+
+        /* ── GLASS CARD ── */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px; box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 18px 52px rgba(196,168,232,0.32); }
+
+        /* ── PROJECTS ── */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; }
+        .project-card { overflow: hidden; }
+        .project-preview {
+            height: 170px; display: flex; align-items: center; justify-content: center;
+            font-size: 3.2rem; border-radius: 18px 18px 0 0;
+        }
+        .project-body { padding: 20px 24px 24px; }
+        .project-title { font-size: 1.08rem; font-weight: 800; margin-bottom: 7px; }
+        .project-desc { font-size: 0.87rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 14px; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+        .tag {
+            font-size: 0.73rem; font-weight: 800; padding: 3px 10px; border-radius: 10px;
+            background: rgba(196,168,232,0.12); color: var(--lavender);
+            border: 1px solid rgba(196,168,232,0.3);
+        }
+        .project-links { display: flex; gap: 10px; }
+        .project-link {
+            font-size: 0.8rem; font-weight: 800; padding: 6px 14px; border-radius: 12px;
+            text-decoration: none; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
+        .project-link.main { background: linear-gradient(135deg, var(--lavender), var(--pink)); color: white; }
+        .project-link.alt  { background: rgba(196,168,232,0.1); color: var(--text-mid); border: 1px solid var(--card-border); }
+        .project-link:hover { transform: translateY(-1px); opacity: 0.88; }
+
+        /* ── MUSIC PLAYER ── */
+        .music-wrap { max-width: 680px; margin: 0 auto; }
+        .now-playing {
+            padding: 32px 30px 28px;
+            background: linear-gradient(135deg, rgba(196,168,232,0.22), rgba(245,184,200,0.22));
+            border-radius: 28px; border: 1px solid rgba(196,168,232,0.3);
+            backdrop-filter: blur(20px); margin-bottom: 18px;
+        }
+        .album-art {
+            width: 96px; height: 96px; border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--lavender), var(--pink), var(--mint));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.6rem;
+            box-shadow: 0 8px 32px rgba(196,168,232,0.45);
+            position: relative; transition: transform 0.5s;
+        }
+        .album-art.spin { animation: spin 8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .album-art::after {
+            content: ''; position: absolute; width: 22px; height: 22px;
+            background: rgba(255,255,255,0.92); border-radius: 50%;
+            top: 50%; left: 50%; transform: translate(-50%,-50%);
+        }
+        .song-info { text-align: center; margin-bottom: 20px; }
+        .song-title  { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; }
+        .song-artist { font-size: 0.88rem; color: var(--text-mid); }
+        .progress-wrap {
+            height: 5px; background: rgba(196,168,232,0.22);
+            border-radius: 10px; cursor: pointer; margin-bottom: 6px; overflow: visible; position: relative;
+        }
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--lavender), var(--pink));
+            border-radius: 10px; transition: width 0.1s linear;
+        }
+        .progress-times { display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--text-light); font-weight: 700; margin-bottom: 18px; }
+        .controls { display: flex; align-items: center; justify-content: center; gap: 22px; }
+        .ctrl {
+            background: none; border: none; color: var(--text-mid); font-size: 1.05rem;
+            cursor: pointer; width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .ctrl:hover { color: var(--text-dark); background: rgba(196,168,232,0.18); }
+        .ctrl.play-btn {
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; font-size: 1.15rem; width: 52px; height: 52px;
+            box-shadow: 0 4px 20px rgba(196,168,232,0.55);
+        }
+        .ctrl.play-btn:hover { transform: scale(1.1); box-shadow: 0 7px 28px rgba(196,168,232,0.65); }
+        .playlist-card { padding: 14px 10px; }
+        .pl-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 12px; border-radius: 14px; cursor: pointer; transition: all 0.2s;
+        }
+        .pl-item:hover  { background: rgba(196,168,232,0.1); }
+        .pl-item.active { background: linear-gradient(135deg,rgba(196,168,232,0.18),rgba(245,184,200,0.18)); }
+        .pl-num { font-size: 0.78rem; color: var(--text-light); width: 18px; text-align: center; font-weight: 800; }
+        .pl-item.active .pl-num { color: var(--lavender); }
+        .pl-thumb {
+            width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+        .pl-info { flex: 1; }
+        .pl-song   { font-size: 0.88rem; font-weight: 800; }
+        .pl-artist { font-size: 0.76rem; color: var(--text-mid); }
+        .music-hint {
+            text-align: center; margin-top: 14px;
+            font-size: 0.8rem; color: var(--text-light); font-style: italic;
+        }
+
+        /* ── GALLERY ── */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px; }
+        .gal-item { border-radius: 18px; overflow: hidden; aspect-ratio: 1; cursor: pointer; position: relative; }
+        .gal-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; display: block; }
+        .gal-item:hover img { transform: scale(1.07); }
+        .gal-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(61,44,92,0.68) 0%, transparent 55%);
+            opacity: 0; transition: opacity 0.28s;
+            display: flex; align-items: flex-end; padding: 14px;
+        }
+        .gal-item:hover .gal-overlay { opacity: 1; }
+        .gal-caption { color: white; font-size: 0.82rem; font-weight: 800; }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 3000;
+            background: rgba(30,20,50,0.93); backdrop-filter: blur(12px);
+            display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .lb-close {
+            position: absolute; top: 20px; right: 24px;
+            background: rgba(255,255,255,0.14); border: none; color: white;
+            font-size: 1.2rem; width: 44px; height: 44px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .lb-close:hover { background: rgba(255,255,255,0.26); }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center; padding: 40px 48px;
+            color: var(--text-light); font-size: 0.86rem; font-weight: 600;
+            border-top: 1px solid rgba(196,168,232,0.18);
+        }
+        .footer-social { display: flex; justify-content: center; gap: 14px; margin-bottom: 14px; }
+        .footer-social a {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(196,168,232,0.12); border: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-mid); text-decoration: none; font-size: 0.95rem; transition: all 0.22s;
+        }
+        .footer-social a:hover {
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; border-color: transparent; transform: translateY(-2px);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            nav { padding: 14px 20px; }
+            .nav-links { display: none; }
+            .site-section { padding: 60px 20px; }
+            #home { padding: 100px 20px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+    <div class="nav-logo">Jeffi ✦</div>
+    <ul class="nav-links">
+        <li><a href="#home"     class="active">🏠 Home</a></li>
+        <li><a href="#projects">🎮 Projects</a></li>
+        <li><a href="#music">   🎵 Music</a></li>
+        <li><a href="#gallery"> 🖼️ Gallery</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+    <div class="particles-container" id="particles"></div>
+    <div class="hero-content">
+        <div class="hero-badge">✨ Welcome to my little corner of the internet</div>
+        <h1 class="hero-name">Jeffi</h1>
+        <p class="hero-tagline">Developer · Gamer · Music Lover · Anime Fan</p>
+        <div class="hero-tags">
+            <span class="hero-tag">🎮 Game Dev</span>
+            <span class="hero-tag">🎵 maimai</span>
+            <span class="hero-tag">🌸 Anime</span>
+            <span class="hero-tag">💻 Web Dev</span>
+        </div>
+        <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> View Projects</a>
+            <a href="#music"    class="btn btn-secondary"><i class="fa-solid fa-music"></i> My Music</a>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<div class="site-section" id="projects">
+    <div class="section-header">
+        <div class="section-label">What I've Built</div>
+        <h2 class="section-title">Projects</h2>
+        <p class="section-sub">Things I've created and am proud of</p>
+    </div>
+    <div class="projects-grid" id="projectsGrid"></div>
+</div>
+
+<!-- MUSIC -->
+<div class="site-section" id="music">
+    <div class="section-header">
+        <div class="section-label">Things I Listen To</div>
+        <h2 class="section-title">Music</h2>
+        <p class="section-sub">Songs I've been enjoying lately</p>
+    </div>
+    <div class="music-wrap">
+        <div class="now-playing card">
+            <div class="album-art" id="albumArt">🎵</div>
+            <div class="song-info">
+                <div class="song-title"  id="songTitle">Select a song</div>
+                <div class="song-artist" id="songArtist">—</div>
+            </div>
+            <div class="progress-wrap" id="progressWrap">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-times">
+                <span id="currentTime">0:00</span>
+                <span id="totalTime">0:00</span>
+            </div>
+            <div class="controls">
+                <button class="ctrl" id="prevBtn"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="ctrl play-btn" id="playBtn"><i class="fa-solid fa-play" id="playIcon"></i></button>
+                <button class="ctrl" id="nextBtn"><i class="fa-solid fa-forward-step"></i></button>
+            </div>
+        </div>
+        <div class="card playlist-card" id="playlistEl"></div>
+        <p class="music-hint">💡 Replace the audio src URLs in the source code with your own music files or links</p>
+    </div>
+    <audio id="audio"></audio>
+</div>
+
+<!-- GALLERY -->
+<div class="site-section" id="gallery">
+    <div class="section-header">
+        <div class="section-label">Visual Diary</div>
+        <h2 class="section-title">Gallery</h2>
+        <p class="section-sub">Moments, art, and things that caught my eye</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lbClose"><i class="fa-solid fa-xmark"></i></button>
+    <img id="lbImg" src="" alt="">
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-social">
+        <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="#" title="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" title="Discord"><i class="fa-brands fa-discord"></i></a>
+        <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+    </div>
+    <p>Made with 💜 by Jeffi &nbsp;·&nbsp; 2026</p>
+</footer>
+
+<script>
+/* ───────────────── PARTICLES ───────────────── */
+const container = document.getElementById('particles');
+const emojis = ['🌸','✨','⭐','🌷','💫','🎵','♪','🎮','🎶','🌟'];
+function spawnParticle() {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration  = (Math.random() * 12 + 9) + 's';
+    el.style.animationDelay     = (Math.random() * 4)  + 's';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 26000);
+}
+for (let i = 0; i < 14; i++) setTimeout(spawnParticle, i * 450);
+setInterval(spawnParticle, 900);
+
+/* ───────────────── NAV ACTIVE ───────────────── */
+const allLinks    = document.querySelectorAll('.nav-links a');
+const allSections = document.querySelectorAll('#home, #projects, #music, #gallery');
+window.addEventListener('scroll', () => {
+    let cur = '';
+    allSections.forEach(s => { if (window.scrollY >= s.offsetTop - 220) cur = s.id; });
+    allLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+
+/* ───────────────── PROJECTS ───────────────── */
+const projects = [
+    {
+        title:  'maimai Fan Hub',
+        desc:   'A fan website for maimai DX players — rating optimizer, song catalog, personalized stats, and a maimai Wrapped feature.',
+        emoji:  '🎮',
+        grad:   'linear-gradient(135deg,#C4A8E8,#F5B8C8)',
+        tags:   ['React','JavaScript','CSS','Public API'],
+        live:   '#', github: '#'
+    },
+    {
+        title:  'Project Two',
+        desc:   'Your next creation goes here. Add a short description and relevant links once it is ready.',
+        emoji:  '🌟',
+        grad:   'linear-gradient(135deg,#A8DDD0,#C4A8E8)',
+        tags:   ['Coming Soon'],
+        live:   '#', github: '#'
+    },
+    {
+        title:  'Project Three',
+        desc:   'Another slot for future work. Your portfolio grows as you ship more things.',
+        emoji:  '🎵',
+        grad:   'linear-gradient(135deg,#F5B8C8,#FFE4A0)',
+        tags:   ['Coming Soon'],
+        live:   '#', github: '#'
+    }
+];
+const grid = document.getElementById('projectsGrid');
+projects.forEach(p => {
+    grid.innerHTML += `
+    <div class="card project-card">
+        <div class="project-preview" style="background:${p.grad}">${p.emoji}</div>
+        <div class="project-body">
+            <div class="project-title">${p.title}</div>
+            <div class="project-desc">${p.desc}</div>
+            <div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+            <div class="project-links">
+                <a href="${p.live}"   class="project-link main"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live</a>
+                <a href="${p.github}" class="project-link alt"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+        </div>
+    </div>`;
+});
+
+/* ───────────────── MUSIC PLAYER ───────────────── */
+// 🎵 Replace src values below with your own audio file URLs or direct mp3 links
+const playlist = [
+    { title: 'Your Favourite Song',    artist: 'Artist Name',  emoji: '🎵', src: '' },
+    { title: 'Anime OST Pick',         artist: 'Composer',     emoji: '🌸', src: '' },
+    { title: 'maimai Song Favourite',  artist: 'Artist Name',  emoji: '🎮', src: '' },
+    { title: 'Chill Track',            artist: 'Artist Name',  emoji: '🎶', src: '' },
+];
+
+let cur = 0, playing = false;
+const audio       = document.getElementById('audio');
+const playBtn     = document.getElementById('playBtn');
+const playIcon    = document.getElementById('playIcon');
+const albumArt    = document.getElementById('albumArt');
+const songTitle   = document.getElementById('songTitle');
+const songArtist  = document.getElementById('songArtist');
+const progressFill= document.getElementById('progressFill');
+const progressWrap= document.getElementById('progressWrap');
+const currentTimeEl = document.getElementById('currentTime');
+const totalTimeEl   = document.getElementById('totalTime');
+const playlistEl    = document.getElementById('playlistEl');
+
+const fmt = s => isNaN(s) ? '0:00' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+function loadTrack(i) {
+    const t = playlist[i];
+    songTitle.textContent  = t.title;
+    songArtist.textContent = t.artist;
+    albumArt.textContent   = t.emoji;
+    audio.src = t.src || '';
+    document.querySelectorAll('.pl-item').forEach((el,idx) => {
+        el.classList.toggle('active', idx === i);
+        el.querySelector('.pl-num').textContent = (idx === i && playing) ? '▶' : (idx + 1);
+    });
+}
+
+function setPlaying(state) {
+    playing = state;
+    playIcon.className = state ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    albumArt.classList.toggle('spin', state);
+    document.querySelectorAll('.pl-item').forEach((el,i) => {
+        el.querySelector('.pl-num').textContent = (i === cur && state) ? '▶' : (i + 1);
+    });
+}
+
+function renderPlaylist() {
+    playlistEl.innerHTML = playlist.map((t,i) => `
+    <div class="pl-item ${i===cur?'active':''}" data-i="${i}">
+        <div class="pl-num">${i+1}</div>
+        <div class="pl-thumb">${t.emoji}</div>
+        <div class="pl-info">
+            <div class="pl-song">${t.title}</div>
+            <div class="pl-artist">${t.artist}</div>
+        </div>
+    </div>`).join('');
+    document.querySelectorAll('.pl-item').forEach(el => {
+        el.addEventListener('click', () => {
+            cur = +el.dataset.i;
+            loadTrack(cur);
+            if (audio.src && audio.src !== window.location.href) {
+                audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+            }
+        });
+    });
+}
+
+playBtn.addEventListener('click', () => {
+    if (!audio.src || audio.src === window.location.href) {
+        songTitle.textContent  = '🎵 Add your audio files!';
+        songArtist.textContent = 'Edit the playlist src values in the code';
+        return;
+    }
+    playing ? (audio.pause(), setPlaying(false)) : audio.play().then(()=>setPlaying(true)).catch(()=>{});
+});
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+    cur = (cur - 1 + playlist.length) % playlist.length; loadTrack(cur);
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+    cur = (cur + 1) % playlist.length; loadTrack(cur);
+});
+
+audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    currentTimeEl.textContent = fmt(audio.currentTime);
+    totalTimeEl.textContent   = fmt(audio.duration);
+});
+
+audio.addEventListener('ended', () => {
+    cur = (cur + 1) % playlist.length;
+    loadTrack(cur);
+    audio.play().catch(()=>{});
+});
+
+progressWrap.addEventListener('click', e => {
+    if (!audio.duration) return;
+    const r = progressWrap.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+});
+
+renderPlaylist();
+loadTrack(0);
+
+/* ───────────────── GALLERY ───────────────── */
+// 🖼️ Replace src values with your own image URLs or relative paths
+const galleryData = [
+    { src: 'https://picsum.photos/seed/maimaidx/400/400',  caption: 'maimai moment'      },
+    { src: 'https://picsum.photos/seed/anime77/400/400',   caption: 'Favourite anime'     },
+    { src: 'https://picsum.photos/seed/pixel23/400/400',   caption: 'Art I love'          },
+    { src: 'https://picsum.photos/seed/music88/400/400',   caption: 'Music vibes'         },
+    { src: 'https://picsum.photos/seed/pastel9/400/400',   caption: 'Something beautiful' },
+    { src: 'https://picsum.photos/seed/gamer5/400/400',    caption: 'Gaming memory'       },
+];
+
+const galGrid = document.getElementById('galleryGrid');
+galleryData.forEach(g => {
+    galGrid.innerHTML += `
+    <div class="gal-item card" data-src="${g.src}">
+        <img src="${g.src}" alt="${g.caption}" loading="lazy">
+        <div class="gal-overlay"><span class="gal-caption">${g.caption}</span></div>
+    </div>`;
+});
+
+const lightbox = document.getElementById('lightbox');
+const lbImg    = document.getElementById('lbImg');
+document.querySelectorAll('.gal-item').forEach(el => {
+    el.addEventListener('click', () => { lbImg.src = el.dataset.src; lightbox.classList.add('open'); });
+});
+document.getElementById('lbClose').addEventListener('click', () => lightbox.classList.remove('open'));
+lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
+</script>
+</body>
+</html>
