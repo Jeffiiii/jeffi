@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects & Games · Jeffi ✦</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --lavender:    #C4A8E8;
+            --pink:        #F5B8C8;
+            --mint:        #A8DDD0;
+            --yellow:      #FFE4A0;
+            --sky:         #A8C8F0;
+            --text-dark:   #3D2E5C;
+            --text-mid:    #7A6898;
+            --text-light:  #B8A8D0;
+            --card-bg:     rgba(255, 255, 255, 0.60);
+            --card-border: rgba(196, 168, 232, 0.35);
+            --shadow:      0 8px 40px rgba(196, 168, 232, 0.22);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(150deg, #FDF5FF 0%, #FFF0F8 50%, #EFF9FF 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FDF5FF; }
+        ::-webkit-scrollbar-thumb { background: var(--lavender); border-radius: 10px; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 15px 48px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(196,168,232,0.22);
+            gap: 12px;
+        }
+        .nav-logo {
+            font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #9B72CF, #E8709A);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            flex-shrink: 0; text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 4px; list-style: none; flex: 1; justify-content: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-mid);
+            font-weight: 700; font-size: 0.88rem;
+            padding: 8px 18px; border-radius: 20px; transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .nav-links a:hover  { background: rgba(196,168,232,0.18); color: var(--text-dark); }
+        .nav-links a.active { background: linear-gradient(135deg,rgba(196,168,232,0.28),rgba(245,184,200,0.28)); color: var(--text-dark); }
+
+        .lang-btn {
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+            border: 1.5px solid var(--card-border); color: var(--text-mid);
+            font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 800;
+            padding: 7px 14px; border-radius: 20px; cursor: pointer;
+            transition: all 0.25s; display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
+        }
+        .lang-btn:hover {
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 16px rgba(196,168,232,0.4);
+        }
+
+        /* ── PAGE HERO ── */
+        .page-hero {
+            padding: 120px 48px 60px;
+            text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .particles-container { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        .particle {
+            position: absolute; font-size: 1.2rem;
+            animation: floatUp linear infinite; opacity: 0;
+        }
+        @keyframes floatUp {
+            0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+            8%   { opacity: 0.85; }
+            92%  { opacity: 0.85; }
+            100% { transform: translateY(-120px) rotate(540deg); opacity: 0; }
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(196,168,232,0.18); border: 1px solid rgba(196,168,232,0.38);
+            color: var(--text-mid); padding: 6px 20px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 700; margin-bottom: 22px;
+            backdrop-filter: blur(8px);
+        }
+        .page-title {
+            font-size: clamp(2.6rem, 7vw, 5rem); font-weight: 900; line-height: 1.08;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #9B72CF 0%, #E8709A 55%, #72C5CF 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .page-sub {
+            font-size: clamp(0.95rem, 2vw, 1.15rem); color: var(--text-mid);
+            font-weight: 600; max-width: 500px; margin: 0 auto 36px;
+        }
+        .hero-stats {
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px;
+        }
+        .stat-pill {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border); border-radius: 16px;
+            padding: 10px 24px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+        }
+        .stat-num  { font-size: 1.5rem; font-weight: 900; color: var(--text-dark); }
+        .stat-lbl  { font-size: 0.72rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px; text-transform: uppercase; }
+
+        /* ── SHARED SECTION ── */
+        .site-section { padding: 70px 48px; max-width: 1160px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 44px; }
+        .section-label {
+            display: inline-block; font-size: 0.75rem; font-weight: 800;
+            letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--lavender); margin-bottom: 8px;
+        }
+        .section-title { font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 900; color: var(--text-dark); }
+        .section-sub { color: var(--text-mid); font-size: 0.97rem; margin-top: 8px; }
+
+        /* ── GLASS CARD ── */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px; box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 18px 52px rgba(196,168,232,0.32); }
+
+        /* ── FILTER TABS ── */
+        .filter-bar {
+            display: flex; gap: 8px; justify-content: center;
+            flex-wrap: wrap; margin-bottom: 36px;
+        }
+        .filter-btn {
+            padding: 9px 22px; border-radius: 22px; border: 1.5px solid var(--card-border);
+            background: rgba(255,255,255,0.65); backdrop-filter: blur(8px);
+            color: var(--text-mid); font-family: 'Nunito', sans-serif;
+            font-size: 0.84rem; font-weight: 800; cursor: pointer; transition: all 0.22s;
+        }
+        .filter-btn:hover { background: rgba(196,168,232,0.14); color: var(--text-dark); }
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 18px rgba(196,168,232,0.42);
+        }
+
+        /* ── PROJECT CARDS ── */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 24px; }
+        .project-card { overflow: hidden; }
+        .project-preview {
+            height: 180px; display: flex; align-items: center; justify-content: center;
+            font-size: 3.8rem; border-radius: 18px 18px 0 0; position: relative;
+        }
+        .project-status {
+            position: absolute; top: 14px; right: 14px;
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase;
+            padding: 4px 11px; border-radius: 10px; border: 1px solid;
+        }
+        .status-live    { background: rgba(72,199,142,0.18); color: #2e8f67; border-color: rgba(72,199,142,0.4); }
+        .status-wip     { background: rgba(255,200,60,0.2);  color: #a07a00; border-color: rgba(255,200,60,0.45); }
+        .status-soon    { background: rgba(196,168,232,0.2); color: var(--text-mid); border-color: rgba(196,168,232,0.4); }
+
+        .project-body { padding: 22px 26px 26px; }
+        .project-title { font-size: 1.12rem; font-weight: 800; margin-bottom: 7px; }
+        .project-desc  { font-size: 0.87rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 16px; }
+        .project-tags  { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+        .tag {
+            font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 10px;
+            background: rgba(196,168,232,0.12); color: var(--lavender);
+            border: 1px solid rgba(196,168,232,0.3);
+        }
+        .tag.game-tag  { background: rgba(168,221,208,0.15); color: #3a9a8a; border-color: rgba(168,221,208,0.4); }
+        .tag.web-tag   { background: rgba(245,184,200,0.15); color: #c05070; border-color: rgba(245,184,200,0.4); }
+        .project-links { display: flex; gap: 10px; }
+        .project-link {
+            font-size: 0.8rem; font-weight: 800; padding: 7px 16px; border-radius: 12px;
+            text-decoration: none; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
+        .project-link.main { background: linear-gradient(135deg, var(--lavender), var(--pink)); color: white; }
+        .project-link.alt  { background: rgba(196,168,232,0.1); color: var(--text-mid); border: 1px solid var(--card-border); }
+        .project-link:hover { transform: translateY(-2px); opacity: 0.88; }
+
+        /* ── FEATURED CARD (wide) ── */
+        .project-card.featured {
+            grid-column: 1 / -1;
+            display: flex; flex-direction: row; overflow: hidden;
+        }
+        .project-card.featured .project-preview {
+            width: 280px; min-width: 280px; height: auto; border-radius: 18px 0 0 18px;
+        }
+        .project-card.featured .project-body { flex: 1; padding: 30px 32px; display: flex; flex-direction: column; justify-content: center; }
+        .project-card.featured .project-title { font-size: 1.35rem; }
+        .project-card.featured .project-desc  { font-size: 0.92rem; }
+
+        /* ── GAME CORNER ── */
+        .game-corner-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .game-card { padding: 28px; }
+        .game-card-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+        }
+        .game-icon {
+            width: 52px; height: 52px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            flex-shrink: 0;
+        }
+        .game-card-title   { font-size: 1.1rem; font-weight: 900; }
+        .game-card-sub     { font-size: 0.8rem; color: var(--text-mid); font-weight: 600; }
+        .game-card p       { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 12px; }
+        .game-card p:last-child { margin-bottom: 0; }
+
+        /* Stat rows inside game cards */
+        .stat-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 9px 0; border-bottom: 1px solid rgba(196,168,232,0.15);
+        }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-row-label { font-size: 0.83rem; color: var(--text-mid); font-weight: 700; }
+        .stat-row-val   { font-size: 0.9rem; font-weight: 900; color: var(--text-dark); }
+        .stat-row-badge {
+            font-size: 0.72rem; font-weight: 800; padding: 3px 9px; border-radius: 8px;
+            background: linear-gradient(135deg, rgba(196,168,232,0.22), rgba(245,184,200,0.22));
+            color: var(--text-mid); border: 1px solid rgba(196,168,232,0.3);
+        }
+
+        /* Mini game list */
+        .game-list { display: flex; flex-direction: column; gap: 10px; }
+        .game-list-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 12px; border-radius: 12px;
+            background: rgba(255,255,255,0.45); border: 1px solid rgba(196,168,232,0.2);
+            transition: all 0.2s;
+        }
+        .game-list-item:hover { background: rgba(255,255,255,0.7); transform: translateX(4px); }
+        .gli-emoji { font-size: 1.4rem; flex-shrink: 0; }
+        .gli-info  { flex: 1; }
+        .gli-name  { font-size: 0.88rem; font-weight: 800; }
+        .gli-genre { font-size: 0.75rem; color: var(--text-light); font-weight: 600; }
+        .gli-hr    { font-size: 0.78rem; font-weight: 800; color: var(--text-mid); white-space: nowrap; }
+
+        /* Wish list / goals */
+        .goal-list { display: flex; flex-direction: column; gap: 12px; }
+        .goal-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 14px; border-radius: 14px;
+            background: rgba(255,255,255,0.45); border: 1px solid rgba(196,168,232,0.2);
+        }
+        .goal-check {
+            width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0; margin-top: 1px;
+            display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+        }
+        .goal-check.done { background: rgba(72,199,142,0.2); border: 1.5px solid rgba(72,199,142,0.5); }
+        .goal-check.todo { background: rgba(196,168,232,0.15); border: 1.5px solid rgba(196,168,232,0.4); }
+        .goal-text { font-size: 0.86rem; font-weight: 700; line-height: 1.5; }
+        .goal-text span { display: block; font-size: 0.76rem; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+
+        /* ── TECH STACK ── */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 14px;
+        }
+        .tech-card {
+            padding: 18px 14px; text-align: center;
+            border-radius: 16px;
+        }
+        .tech-card:hover { transform: translateY(-4px); }
+        .tech-icon { font-size: 2rem; margin-bottom: 8px; }
+        .tech-name { font-size: 0.83rem; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
+        .tech-level {
+            font-size: 0.7rem; font-weight: 700; color: var(--text-light);
+            text-transform: uppercase; letter-spacing: 0.8px;
+        }
+
+        /* ── BACK BUTTON ── */
+        .btn {
+            padding: 12px 28px; border-radius: 25px;
+            font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 800;
+            cursor: pointer; transition: all 0.28s; border: none; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; box-shadow: 0 4px 22px rgba(196,168,232,0.5);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(196,168,232,0.6); }
+        .btn-secondary {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+            border: 1.5px solid var(--card-border); color: var(--text-dark);
+        }
+        .btn-secondary:hover { transform: translateY(-3px); background: white; }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center; padding: 40px 48px;
+            color: var(--text-light); font-size: 0.86rem; font-weight: 600;
+            border-top: 1px solid rgba(196,168,232,0.18);
+        }
+        .footer-social { display: flex; justify-content: center; gap: 14px; margin-bottom: 14px; }
+        .footer-social a {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(196,168,232,0.12); border: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-mid); text-decoration: none; font-size: 0.95rem; transition: all 0.22s;
+        }
+        .footer-social a:hover {
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; border-color: transparent; transform: translateY(-2px);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            nav { padding: 14px 16px; gap: 8px; }
+            .nav-links { display: none; }
+            .site-section { padding: 50px 20px; }
+            .page-hero { padding: 100px 20px 50px; }
+            .project-card.featured { flex-direction: column; }
+            .project-card.featured .project-preview { width: 100%; height: 160px; border-radius: 18px 18px 0 0; }
+            .game-corner-grid { grid-template-columns: 1fr; }
+            .hero-stats { gap: 12px; }
+        }
+        @media (max-width: 500px) {
+            .tech-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="index.html" class="nav-logo">Jeffi ✦</a>
+    <ul class="nav-links">
+        <li><a href="index.html"               data-en="🏠 Home"         data-zh="🏠 首页">🏠 Home</a></li>
+        <li><a href="projects.html" class="active" data-en="🎮 Projects"     data-zh="🎮 项目">🎮 Projects</a></li>
+        <li><a href="index.html#music"         data-en="🎵 Music"         data-zh="🎵 音乐">🎵 Music</a></li>
+        <li><a href="index.html#gallery"       data-en="🖼️ Gallery"       data-zh="🖼️ 相册">🖼️ Gallery</a></li>
+    </ul>
+    <button class="lang-btn" id="langBtn">🌐 中文</button>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="particles-container" id="particles"></div>
+    <div class="hero-content">
+        <div class="hero-badge"
+             data-en="🎮 Things I've built &amp; played"
+             data-zh="🎮 我构建和玩过的东西">
+            🎮 Things I've built &amp; played
+        </div>
+        <h1 class="page-title"
+            data-en="Projects &amp; Games"
+            data-zh="项目 &amp; 游戏">
+            Projects &amp; Games
+        </h1>
+        <p class="page-sub"
+           data-en="From web apps to rhythm games — a look at what I make and what I love."
+           data-zh="从 Web 应用到音游——看看我做的和爱玩的。">
+            From web apps to rhythm games — a look at what I make and what I love.
+        </p>
+        <div class="hero-stats">
+            <div class="stat-pill">
+                <span class="stat-num" id="statProjects">3</span>
+                <span class="stat-lbl" data-en="Projects" data-zh="项目">Projects</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-num">🎮</span>
+                <span class="stat-lbl" data-en="Gamer" data-zh="玩家">Gamer</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-num">💻</span>
+                <span class="stat-lbl" data-en="Dev" data-zh="开发者">Dev</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ALL PROJECTS -->
+<div class="site-section" id="projects-section">
+    <div class="section-header">
+        <div class="section-label" data-en="My Work" data-zh="我的作品">My Work</div>
+        <h2 class="section-title" data-en="All Projects" data-zh="全部项目">All Projects</h2>
+        <p class="section-sub" data-en="Filter by category below" data-zh="在下方按分类筛选">Filter by category below</p>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-filter="all"  data-en="✦ All"   data-zh="✦ 全部">✦ All</button>
+        <button class="filter-btn" data-filter="web"         data-en="🌐 Web"   data-zh="🌐 网页">🌐 Web</button>
+        <button class="filter-btn" data-filter="game"        data-en="🎮 Games" data-zh="🎮 游戏">🎮 Games</button>
+        <button class="filter-btn" data-filter="tool"        data-en="🔧 Tools" data-zh="🔧 工具">🔧 Tools</button>
+    </div>
+
+    <div class="projects-grid" id="projectsGrid"></div>
+</div>
+
+<!-- GAME CORNER -->
+<div class="site-section" id="game-corner">
+    <div class="section-header">
+        <div class="section-label" data-en="Gaming Life" data-zh="游戏生活">Gaming Life</div>
+        <h2 class="section-title" data-en="Game Corner 🕹️" data-zh="游戏角 🕹️">Game Corner 🕹️</h2>
+        <p class="section-sub" data-en="What I play, what I'm obsessed with, and what's on my list" data-zh="我玩的、我痴迷的、以及我想玩的">What I play, what I'm obsessed with, and what's on my list</p>
+    </div>
+
+    <div class="game-corner-grid" id="gameCornerGrid">
+
+        <!-- maimai card -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon">🎵</div>
+                <div>
+                    <div class="game-card-title">maimai DX</div>
+                    <div class="game-card-sub" data-en="Rhythm · Arcade · SEGA" data-zh="音游 · 街机 · SEGA">Rhythm · Arcade · SEGA</div>
+                </div>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Status" data-zh="状态">Status</span>
+                <span class="stat-row-badge" data-en="🔥 Main Game" data-zh="🔥 主要游戏">🔥 Main Game</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Rating" data-zh="Rating">Rating</span>
+                <span class="stat-row-val" id="maimaiRating">—</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Fav. Genre" data-zh="最喜欢的类型">Fav. Genre</span>
+                <span class="stat-row-badge" data-en="Touhou / Anime" data-zh="东方 / 动漫">Touhou / Anime</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Since" data-zh="开始玩">Since</span>
+                <span class="stat-row-val" data-en="2023" data-zh="2023 年">2023</span>
+            </div>
+            <p style="margin-top:14px" data-en="maimai is where rhythm meets chaos — giant circular touchscreen, spinning notes, and absolute vibes. It's also the inspiration behind one of my biggest side projects." data-zh="maimai 是节奏与混沌的碰撞——巨大的圆形触摸屏、旋转的音符，氛围绝了。它也是我最大的副业项目的灵感来源。">
+                maimai is where rhythm meets chaos — giant circular touchscreen, spinning notes, and absolute vibes. It's also the inspiration behind one of my biggest side projects.
+            </p>
+        </div>
+
+        <!-- Games I love -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon" style="background:linear-gradient(135deg,#A8DDD0,#C4A8E8)">🕹️</div>
+                <div>
+                    <div class="game-card-title" data-en="Games I Love" data-zh="我爱玩的游戏">Games I Love</div>
+                    <div class="game-card-sub" data-en="Rhythm · RPG · Action" data-zh="音游 · RPG · 动作">Rhythm · RPG · Action</div>
+                </div>
+            </div>
+            <div class="game-list" id="gameList"></div>
+        </div>
+
+        <!-- Goals / Wishlist -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon" style="background:linear-gradient(135deg,#FFE4A0,#F5B8C8)">🎯</div>
+                <div>
+                    <div class="game-card-title" data-en="Dev Goals" data-zh="开发目标">Dev Goals</div>
+                    <div class="game-card-sub" data-en="Things I'm working toward" data-zh="我正在努力的事">Things I'm working toward</div>
+                </div>
+            </div>
+            <div class="goal-list" id="goalList"></div>
+        </div>
+
+        <!-- Stack card -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon" style="background:linear-gradient(135deg,#A8C8F0,#A8DDD0)">💻</div>
+                <div>
+                    <div class="game-card-title" data-en="Tech I Use" data-zh="我用的技术">Tech I Use</div>
+                    <div class="game-card-sub" data-en="Languages & tools" data-zh="语言与工具">Languages & tools</div>
+                </div>
+            </div>
+            <div class="tech-grid" id="techGrid"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-social">
+        <a href="#" title="GitHub">GH</a>
+        <a href="#" title="Twitter/X">𝕏</a>
+        <a href="#" title="Discord">DC</a>
+        <a href="#" title="YouTube">▶</a>
+    </div>
+    <p id="footerText"
+       data-en="Made with 💜 by Jeffi &nbsp;·&nbsp; 2026"
+       data-zh="由 Jeffi 用 💜 制作 &nbsp;·&nbsp; 2026">
+        Made with 💜 by Jeffi &nbsp;·&nbsp; 2026
+    </p>
+</footer>
+
+<script>
+/* ───────────────── PARTICLES ───────────────── */
+const container = document.getElementById('particles');
+const emojis = ['🎮','✨','⭐','🎵','💫','🌸','♪','🕹️','🎶','🌟','🎯'];
+function spawnParticle() {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (Math.random() * 12 + 9) + 's';
+    el.style.animationDelay    = (Math.random() * 4) + 's';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 26000);
+}
+for (let i = 0; i < 14; i++) setTimeout(spawnParticle, i * 450);
+setInterval(spawnParticle, 900);
+
+/* ───────────────── LANGUAGE ───────────────── */
+let lang = 'en';
+const langBtn = document.getElementById('langBtn');
+
+function applyLang(l) {
+    document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+        el.innerHTML = el.getAttribute('data-' + l);
+    });
+    renderProjects(activeFilter);
+    renderGameList();
+    renderGoals();
+    renderTech();
+    langBtn.innerHTML = l === 'en' ? '🌐 中文' : '🌐 EN';
+    document.documentElement.lang = l === 'zh' ? 'zh' : 'en';
+}
+
+langBtn.addEventListener('click', () => {
+    lang = lang === 'en' ? 'zh' : 'en';
+    applyLang(lang);
+});
+
+/* ───────────────── PROJECTS DATA ───────────────── */
+const projects = [
+    {
+        category: 'web',
+        featured: true,
+        status: 'wip',
+        en: {
+            title: 'maimai Fan Hub',
+            desc:  'A fan website for maimai DX players — featuring a real-time rating optimizer, full song catalog with difficulty filters, personalized player stats, custom achievements, and a maimai Wrapped year-in-review feature. Built with a friend who handles the art and mascot design.',
+            statusLabel: 'In Progress'
+        },
+        zh: {
+            title: 'maimai 粉丝站',
+            desc:  '专为 maimai DX 玩家打造的粉丝网站——包含实时 Rating 优化器、带难度筛选的完整歌曲库、个性化玩家数据统计、自定义成就系统以及年度回顾功能。与负责美术和吉祥物设计的朋友合作开发。',
+            statusLabel: '开发中'
+        },
+        emoji: '🎵',
+        grad: 'linear-gradient(135deg,#C4A8E8,#F5B8C8)',
+        tags: ['React', 'JavaScript', 'CSS', 'Public API'],
+        tagTypes: ['web', 'web', 'web', 'tool'],
+        live: '#', github: '#'
+    },
+    {
+        category: 'web',
+        featured: false,
+        status: 'live',
+        en: {
+            title: 'This Portfolio Website',
+            desc:  'The site you\'re on right now! A single-file portfolio with a music player, gallery, bilingual support, and pastel glassmorphism aesthetic. Deployed on GitHub Pages.',
+            statusLabel: 'Live'
+        },
+        zh: {
+            title: '这个作品集网站',
+            desc:  '就是你现在正在浏览的网站！一个包含音乐播放器、图库、双语支持和柔和玻璃拟态风格的单文件作品集，部署在 GitHub Pages 上。',
+            statusLabel: '已上线'
+        },
+        emoji: '🌸',
+        grad: 'linear-gradient(135deg,#F5B8C8,#FFE4A0)',
+        tags: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'],
+        tagTypes: ['web', 'web', 'web', 'tool'],
+        live: 'index.html', github: '#'
+    },
+    {
+        category: 'game',
+        featured: false,
+        status: 'soon',
+        en: {
+            title: 'Fan Game Project',
+            desc:  'A 2D fan game inspired by a favourite anime — combining platformer mechanics with custom art from a collaborator. Built with Godot 4 and distributed on itch.io.',
+            statusLabel: 'Coming Soon'
+        },
+        zh: {
+            title: '同人游戏项目',
+            desc:  '一款受最爱动漫启发的 2D 同人游戏——将横版平台机制与合作者的原创美术结合，使用 Godot 4 开发并在 itch.io 发布。',
+            statusLabel: '即将推出'
+        },
+        emoji: '🎮',
+        grad: 'linear-gradient(135deg,#A8DDD0,#A8C8F0)',
+        tags: ['Godot 4', 'GDScript', 'Game Dev', 'Collab'],
+        tagTypes: ['game', 'game', 'game', 'tool'],
+        live: '#', github: '#'
+    },
+    {
+        category: 'tool',
+        featured: false,
+        status: 'soon',
+        en: {
+            title: 'Project Slot — TBD',
+            desc:  'Something new is cooking. This slot will be filled as more ideas come to life. Check back later!',
+            statusLabel: 'Coming Soon'
+        },
+        zh: {
+            title: '项目坑 — 待定',
+            desc:  '新东西正在酝酿中。随着更多想法付诸实践，这个位置将会被填满。待续！',
+            statusLabel: '即将推出'
+        },
+        emoji: '🔧',
+        grad: 'linear-gradient(135deg,#FFE4A0,#C4A8E8)',
+        tags: ['Coming Soon'],
+        tagTypes: ['tool'],
+        live: '#', github: '#'
+    }
+];
+
+let activeFilter = 'all';
+
+function statusClass(s)  { return { live: 'status-live', wip: 'status-wip', soon: 'status-soon' }[s] || 'status-soon'; }
+function tagClass(t)     { return { web: 'web-tag', game: 'game-tag' }[t] || ''; }
+
+function renderProjects(filter = 'all') {
+    activeFilter = filter;
+    const grid = document.getElementById('projectsGrid');
+    const liveLabel   = lang === 'zh' ? '演示'   : 'Live';
+    const githubLabel = lang === 'zh' ? '代码'   : 'Code';
+
+    const filtered = projects.filter(p => filter === 'all' || p.category === filter);
+    document.getElementById('statProjects').textContent = projects.length;
+
+    grid.innerHTML = filtered.map(p => {
+        const d = p[lang];
+        const tagHtml = p.tags.map((t, i) =>
+            `<span class="tag ${tagClass(p.tagTypes[i])}">${t}</span>`
+        ).join('');
+
+        if (p.featured && filter === 'all') {
+            return `
+            <div class="card project-card featured">
+                <div class="project-preview" style="background:${p.grad}">
+                    <span>${p.emoji}</span>
+                    <div class="project-status ${statusClass(p.status)}">${d.statusLabel}</div>
+                </div>
+                <div class="project-body">
+                    <div class="project-title">${d.title}</div>
+                    <div class="project-desc">${d.desc}</div>
+                    <div class="project-tags">${tagHtml}</div>
+                    <div class="project-links">
+                        <a href="${p.live}"   class="project-link main">↗ ${liveLabel}</a>
+                        <a href="${p.github}" class="project-link alt">⌥ ${githubLabel}</a>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        return `
+        <div class="card project-card">
+            <div class="project-preview" style="background:${p.grad}">
+                <span>${p.emoji}</span>
+                <div class="project-status ${statusClass(p.status)}">${d.statusLabel}</div>
+            </div>
+            <div class="project-body">
+                <div class="project-title">${d.title}</div>
+                <div class="project-desc">${d.desc}</div>
+                <div class="project-tags">${tagHtml}</div>
+                <div class="project-links">
+                    <a href="${p.live}"   class="project-link main">↗ ${liveLabel}</a>
+                    <a href="${p.github}" class="project-link alt">⌥ ${githubLabel}</a>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// Filter button clicks
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProjects(btn.dataset.filter);
+    });
+});
+
+renderProjects();
+
+/* ───────────────── MAIMAI RATING ───────────────── */
+// Replace with your actual maimai DX rating!
+const maimaiRating = null; // e.g. 14500
+document.getElementById('maimaiRating').textContent =
+    maimaiRating ? maimaiRating.toLocaleString() : (lang === 'zh' ? '填入你的 Rating' : 'Add yours here');
+
+/* ───────────────── GAMES I LOVE ───────────────── */
+const gamesData = [
+    { emoji: '🎵', en: { name: 'maimai DX',       genre: 'Rhythm Game'    }, zh: { name: 'maimai DX',     genre: '音游'    }, hrs: '★ Main' },
+    { emoji: '⚔️', en: { name: 'Genshin Impact',  genre: 'Open World RPG' }, zh: { name: '原神',           genre: '开放世界 RPG'}, hrs: '800+ h' },
+    { emoji: '🌊', en: { name: 'WUTHERING WAVES', genre: 'Action RPG'     }, zh: { name: '鸣潮',           genre: '动作 RPG'  }, hrs: '200+ h' },
+    { emoji: '🎮', en: { name: 'Your Game Here',  genre: 'Add a favourite' }, zh: { name: '你的游戏',       genre: '添加最爱'   }, hrs: '??' },
+];
+
+function renderGameList() {
+    document.getElementById('gameList').innerHTML = gamesData.map(g => `
+    <div class="game-list-item">
+        <span class="gli-emoji">${g.emoji}</span>
+        <div class="gli-info">
+            <div class="gli-name">${g[lang].name}</div>
+            <div class="gli-genre">${g[lang].genre}</div>
+        </div>
+        <span class="gli-hr">${g.hrs}</span>
+    </div>`).join('');
+}
+renderGameList();
+
+/* ───────────────── GOALS ───────────────── */
+const goalsData = [
+    { done: true,  en: { text: 'Launch personal portfolio',   sub: 'jeffiiii.github.io/jeffi' }, zh: { text: '上线个人作品集网站',  sub: 'jeffiiii.github.io/jeffi' } },
+    { done: false, en: { text: 'Ship maimai Fan Hub v1.0',    sub: 'Rating optimizer + song catalog' }, zh: { text: '发布 maimai 粉丝站 v1.0', sub: 'Rating 优化器 + 歌曲库' } },
+    { done: false, en: { text: 'Release first fan game demo', sub: 'Built with Godot 4' }, zh: { text: '发布第一个同人游戏 Demo', sub: '使用 Godot 4 开发' } },
+    { done: false, en: { text: 'Reach 15000 maimai Rating',   sub: 'Current goal' }, zh: { text: 'maimai Rating 达到 15000', sub: '当前目标' } },
+    { done: false, en: { text: 'Learn backend development',   sub: 'Node.js / Python' }, zh: { text: '学习后端开发', sub: 'Node.js / Python' } },
+];
+
+function renderGoals() {
+    document.getElementById('goalList').innerHTML = goalsData.map(g => `
+    <div class="goal-item">
+        <div class="goal-check ${g.done ? 'done' : 'todo'}">${g.done ? '✓' : '○'}</div>
+        <div class="goal-text">
+            ${g[lang].text}
+            <span>${g[lang].sub}</span>
+        </div>
+    </div>`).join('');
+}
+renderGoals();
+
+/* ───────────────── TECH STACK ───────────────── */
+const techData = [
+    { icon: '🌐', en: { name: 'HTML / CSS', level: 'Comfortable' }, zh: { name: 'HTML / CSS', level: '较熟练' } },
+    { icon: '⚡', en: { name: 'JavaScript', level: 'Comfortable' }, zh: { name: 'JavaScript', level: '较熟练' } },
+    { icon: '⚛️', en: { name: 'React',       level: 'Learning'    }, zh: { name: 'React',       level: '学习中'  } },
+    { icon: '🐍', en: { name: 'Python',      level: 'Comfortable' }, zh: { name: 'Python',      level: '较熟练' } },
+    { icon: '🎮', en: { name: 'Godot 4',     level: 'Learning'    }, zh: { name: 'Godot 4',     level: '学习中'  } },
+    { icon: '🐙', en: { name: 'Git / GitHub',level: 'Comfortable' }, zh: { name: 'Git / GitHub',level: '较熟练' } },
+];
+
+function renderTech() {
+    document.getElementById('techGrid').innerHTML = techData.map(t => `
+    <div class="card tech-card">
+        <div class="tech-icon">${t.icon}</div>
+        <div class="tech-name">${t[lang].name}</div>
+        <div class="tech-level">${t[lang].level}</div>
+    </div>`).join('');
+}
+renderTech();
+</script>
+</body>
+</html>
