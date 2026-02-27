@@ -265,24 +265,6 @@
         }
         .spotify-wrap iframe { display: block; border-radius: 14px; }
 
-        /* ── BILIBILI AUDIO CROP (Option B) ── */
-        /* Clips the iframe so only the bottom controls bar (~48px) is visible.
-           Works because: controls stay visible while paused, and pointer events
-           on the visible strip map correctly to the controls inside the iframe. */
-        .bilibili-crop {
-            height: 48px !important;
-            overflow: hidden;
-            position: relative;
-            border-radius: 12px;
-            background: #000;
-        }
-        .bilibili-crop iframe {
-            position: absolute;
-            top: -252px !important; /* 300px iframe - 48px visible = push up 252px */
-            left: 0;
-            width: 100%;
-            height: 300px !important;
-        }
         .no-spotify {
             text-align: center; padding: 18px 0 8px;
             font-size: 0.82rem; color: var(--text-light); font-style: italic;
@@ -356,10 +338,10 @@
 <nav id="navbar">
     <div class="nav-logo">Jeffi ✦</div>
     <ul class="nav-links">
-        <li><a href="#home"     class="active" data-en="🏠 Home"     data-zh="🏠 首页">🏠 Home</a></li>
-        <li><a href="#projects"               data-en="🎮 Projects"  data-zh="🎮 项目">🎮 Projects</a></li>
-        <li><a href="#music"                  data-en="🎵 Music"     data-zh="🎵 音乐">🎵 Music</a></li>
-        <li><a href="#gallery"                data-en="🖼️ Gallery"   data-zh="🖼️ 相册">🖼️ Gallery</a></li>
+        <li><a href="#home"          class="active" data-en="🏠 Home"        data-zh="🏠 首页">🏠 Home</a></li>
+        <li><a href="projects.html"               data-en="🎮 Projects"     data-zh="🎮 项目">🎮 Projects</a></li>
+        <li><a href="#music"                       data-en="🎵 Music"        data-zh="🎵 音乐">🎵 Music</a></li>
+        <li><a href="#gallery"                     data-en="🖼️ Gallery"      data-zh="🖼️ 相册">🖼️ Gallery</a></li>
     </ul>
     <button class="lang-btn" id="langBtn">🌐 中文</button>
 </nav>
@@ -408,6 +390,13 @@
         <p class="section-sub"    data-en="Things I've created and am proud of" data-zh="我创作并引以为傲的作品">Things I've created and am proud of</p>
     </div>
     <div class="projects-grid" id="projectsGrid"></div>
+    <div style="text-align:center;margin-top:36px">
+        <a href="projects.html" class="btn btn-primary"
+           data-en="🎮 View All Projects &amp; Game Corner"
+           data-zh="🎮 查看全部项目 &amp; 游戏角">
+            🎮 View All Projects &amp; Game Corner
+        </a>
+    </div>
 </div>
 
 <!-- MUSIC -->
@@ -618,8 +607,8 @@ const playlist = [
         title:  '铁花飞',
         artist: 'Mili',
         emoji:  '🌺',
-        source: 'bilibili',
-        id:     'BV1BqFZzVEYJ'   // Arknights Ch'en the Dawnstreak EP
+        source: 'netease',
+        id:     '3342981041'   // Arknights Ch'en the Dawnstreak EP
     },
     {
         title:  'NetEase Example',
@@ -644,8 +633,8 @@ const platforms = {
     },
     bilibili: {
         icon:   '<span style="font-size:0.75rem;font-weight:800;color:#00AEEC;background:rgba(0,174,236,0.1);padding:2px 7px;border-radius:8px">BILIBILI</span>',
-        height: 300, // full iframe height; CSS crop will clip it to 48px (controls only)
-        url:    id => `https://player.bilibili.com/player.html?bvid=${id}&page=1&high_quality=1&danmaku=0&autoplay=0`
+        height: 200,
+        url:    id => `https://player.bilibili.com/player.html?bvid=${id}&page=1&high_quality=1&danmaku=0`
     },
     netease:  {
         icon:   '<span style="font-size:0.75rem;font-weight:800;color:#C20C0C;background:rgba(194,12,12,0.1);padding:2px 7px;border-radius:8px">NETEASE</span>',
@@ -677,12 +666,6 @@ function loadTrack(i) {
         spotifyFrame.height       = pl.height;
         spotifyWrap.style.display = 'block';
         noSpotify.style.display   = 'none';
-        // Apply audio-crop for Bilibili (hides video, shows only controls bar)
-        if (t.source === 'bilibili') {
-            spotifyWrap.classList.add('bilibili-crop');
-        } else {
-            spotifyWrap.classList.remove('bilibili-crop');
-        }
     } else {
         spotifyFrame.src          = '';
         spotifyWrap.style.display = 'none';
