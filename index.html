@@ -161,32 +161,6 @@
         }
         .card:hover { transform: translateY(-6px); box-shadow: 0 18px 52px rgba(196,168,232,0.32); }
 
-        /* ── PROJECTS ── */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; }
-        .project-card { overflow: hidden; }
-        .project-preview {
-            height: 170px; display: flex; align-items: center; justify-content: center;
-            font-size: 3.2rem; border-radius: 18px 18px 0 0;
-        }
-        .project-body { padding: 20px 24px 24px; }
-        .project-title { font-size: 1.08rem; font-weight: 800; margin-bottom: 7px; }
-        .project-desc { font-size: 0.87rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 14px; }
-        .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-        .tag {
-            font-size: 0.73rem; font-weight: 800; padding: 3px 10px; border-radius: 10px;
-            background: rgba(196,168,232,0.12); color: var(--lavender);
-            border: 1px solid rgba(196,168,232,0.3);
-        }
-        .project-links { display: flex; gap: 10px; }
-        .project-link {
-            font-size: 0.8rem; font-weight: 800; padding: 6px 14px; border-radius: 12px;
-            text-decoration: none; transition: all 0.2s;
-            display: inline-flex; align-items: center; gap: 5px;
-        }
-        .project-link.main { background: linear-gradient(135deg, var(--lavender), var(--pink)); color: white; }
-        .project-link.alt  { background: rgba(196,168,232,0.1); color: var(--text-mid); border: 1px solid var(--card-border); }
-        .project-link:hover { transform: translateY(-1px); opacity: 0.88; }
-
         /* ── MUSIC PLAYER ── */
         .music-wrap { max-width: 680px; margin: 0 auto; }
         .now-playing {
@@ -338,10 +312,11 @@
 <nav id="navbar">
     <div class="nav-logo">Jeffi ✦</div>
     <ul class="nav-links">
-        <li><a href="#home"          class="active" data-en="🏠 Home"        data-zh="🏠 首页">🏠 Home</a></li>
-        <li><a href="projects.html"               data-en="🎮 Projects"     data-zh="🎮 项目">🎮 Projects</a></li>
-        <li><a href="#music"                       data-en="🎵 Music"        data-zh="🎵 音乐">🎵 Music</a></li>
-        <li><a href="#gallery"                     data-en="🖼️ Gallery"      data-zh="🖼️ 相册">🖼️ Gallery</a></li>
+        <li><a href="#home"          class="active" data-en="🏠 Home"       data-zh="🏠 首页">🏠 Home</a></li>
+        <li><a href="projects.html"               data-en="🚀 Projects"    data-zh="🚀 项目">🚀 Projects</a></li>
+        <li><a href="games.html"                  data-en="🎮 Games"       data-zh="🎮 游戏">🎮 Games</a></li>
+        <li><a href="#music"                      data-en="🎵 Music"       data-zh="🎵 音乐">🎵 Music</a></li>
+        <li><a href="#gallery"                    data-en="🖼️ Gallery"     data-zh="🖼️ 相册">🖼️ Gallery</a></li>
     </ul>
     <button class="lang-btn" id="langBtn">🌐 中文</button>
 </nav>
@@ -368,36 +343,24 @@
             <span class="hero-tag" data-en="💻 Web Dev"   data-zh="💻 网页开发">💻 Web Dev</span>
         </div>
         <div class="hero-buttons">
-            <a href="#projects" class="btn btn-primary"
-               data-en="🚀 View Projects"
-               data-zh="🚀 查看项目">
-                🚀 View Projects
+            <a href="projects.html" class="btn btn-primary"
+               data-en="🚀 Projects"
+               data-zh="🚀 项目">
+                🚀 Projects
+            </a>
+            <a href="games.html" class="btn btn-secondary"
+               data-en="🎮 Games"
+               data-zh="🎮 游戏">
+                🎮 Games
             </a>
             <a href="#music" class="btn btn-secondary"
-               data-en="🎵 My Music"
-               data-zh="🎵 我的音乐">
-                🎵 My Music
+               data-en="🎵 Music"
+               data-zh="🎵 音乐">
+                🎵 Music
             </a>
         </div>
     </div>
 </section>
-
-<!-- PROJECTS -->
-<div class="site-section" id="projects">
-    <div class="section-header">
-        <div class="section-label" data-en="What I've Built" data-zh="我的作品">What I've Built</div>
-        <h2 class="section-title" data-en="Projects" data-zh="项目">Projects</h2>
-        <p class="section-sub"    data-en="Things I've created and am proud of" data-zh="我创作并引以为傲的作品">Things I've created and am proud of</p>
-    </div>
-    <div class="projects-grid" id="projectsGrid"></div>
-    <div style="text-align:center;margin-top:36px">
-        <a href="projects.html" class="btn btn-primary"
-           data-en="🎮 View All Projects &amp; Game Corner"
-           data-zh="🎮 查看全部项目 &amp; 游戏角">
-            🎮 View All Projects &amp; Game Corner
-        </a>
-    </div>
-</div>
 
 <!-- MUSIC -->
 <div class="site-section" id="music">
@@ -490,8 +453,8 @@ for (let i = 0; i < 14; i++) setTimeout(spawnParticle, i * 450);
 setInterval(spawnParticle, 900);
 
 /* ───────────────── NAV ACTIVE ───────────────── */
-const allLinks    = document.querySelectorAll('.nav-links a');
-const allSections = document.querySelectorAll('#home, #projects, #music, #gallery');
+const allLinks    = document.querySelectorAll('.nav-links a[href^="#"]');
+const allSections = document.querySelectorAll('#home, #music, #gallery');
 window.addEventListener('scroll', () => {
     let cur = '';
     allSections.forEach(s => { if (window.scrollY >= s.offsetTop - 220) cur = s.id; });
@@ -507,8 +470,7 @@ function applyLang(l) {
     document.querySelectorAll('[data-en][data-zh]').forEach(el => {
         el.innerHTML = el.getAttribute('data-' + l);
     });
-    // Re-render dynamic sections (projects & gallery use lang-aware data)
-    renderProjects();
+    // Re-render dynamic sections (gallery uses lang-aware data)
     renderGallery();
     // Update song title placeholder if no track loaded
     const titleEl = document.getElementById('songTitle');
@@ -525,50 +487,6 @@ langBtn.addEventListener('click', () => {
     applyLang(lang);
 });
 
-/* ───────────────── PROJECTS ───────────────── */
-const projects = [
-    {
-        en: { title: 'maimai Fan Hub',  desc: 'A fan website for maimai DX players — rating optimizer, song catalog, personalized stats, and a maimai Wrapped feature.' },
-        zh: { title: 'maimai 粉丝站',   desc: '专为 maimai DX 玩家打造——含 Rating 优化器、歌曲库、个性化数据统计及年度回顾功能。' },
-        emoji: '🎮', grad: 'linear-gradient(135deg,#C4A8E8,#F5B8C8)',
-        tags: ['React','JavaScript','CSS','Public API'],
-        live: '#', github: '#'
-    },
-    {
-        en: { title: 'Project Two',    desc: 'Your next creation goes here. Add a short description and relevant links once it is ready.' },
-        zh: { title: '项目二',          desc: '你的下一个作品。准备好后添加简介和相关链接。' },
-        emoji: '🌟', grad: 'linear-gradient(135deg,#A8DDD0,#C4A8E8)',
-        tags: ['Coming Soon'],
-        live: '#', github: '#'
-    },
-    {
-        en: { title: 'Project Three',  desc: 'Another slot for future work. Your portfolio grows as you ship more things.' },
-        zh: { title: '项目三',          desc: '未来作品的占位。随着你不断创作，作品集也会持续成长。' },
-        emoji: '🎵', grad: 'linear-gradient(135deg,#F5B8C8,#FFE4A0)',
-        tags: ['Coming Soon'],
-        live: '#', github: '#'
-    }
-];
-
-function renderProjects() {
-    const grid = document.getElementById('projectsGrid');
-    const liveLabel   = lang === 'zh' ? '演示'   : 'Live';
-    const githubLabel = lang === 'zh' ? '代码'   : 'GitHub';
-    grid.innerHTML = projects.map(p => `
-    <div class="card project-card">
-        <div class="project-preview" style="background:${p.grad}">${p.emoji}</div>
-        <div class="project-body">
-            <div class="project-title">${p[lang].title}</div>
-            <div class="project-desc">${p[lang].desc}</div>
-            <div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-            <div class="project-links">
-                <a href="${p.live}"   class="project-link main">↗ ${liveLabel}</a>
-                <a href="${p.github}" class="project-link alt">⌥ ${githubLabel}</a>
-            </div>
-        </div>
-    </div>`).join('');
-}
-renderProjects();
 
 /* ───────────────── MUSIC PLAYER ───────────────── */
 /*

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games · Jeffi ✦</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --lavender:    #C4A8E8;
+            --pink:        #F5B8C8;
+            --mint:        #A8DDD0;
+            --yellow:      #FFE4A0;
+            --sky:         #A8C8F0;
+            --text-dark:   #3D2E5C;
+            --text-mid:    #7A6898;
+            --text-light:  #B8A8D0;
+            --card-bg:     rgba(255, 255, 255, 0.60);
+            --card-border: rgba(196, 168, 232, 0.35);
+            --shadow:      0 8px 40px rgba(196, 168, 232, 0.22);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(150deg, #F0F8FF 0%, #FDF5FF 50%, #FFF0F8 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F0F8FF; }
+        ::-webkit-scrollbar-thumb { background: var(--mint); border-radius: 10px; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 15px 48px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(196,168,232,0.22);
+            gap: 12px;
+        }
+        .nav-logo {
+            font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #9B72CF, #E8709A);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            flex-shrink: 0; text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 4px; list-style: none; flex: 1; justify-content: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-mid);
+            font-weight: 700; font-size: 0.88rem;
+            padding: 8px 18px; border-radius: 20px; transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .nav-links a:hover  { background: rgba(168,221,208,0.2); color: var(--text-dark); }
+        .nav-links a.active { background: linear-gradient(135deg,rgba(168,221,208,0.3),rgba(168,200,240,0.3)); color: var(--text-dark); }
+
+        .lang-btn {
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+            border: 1.5px solid var(--card-border); color: var(--text-mid);
+            font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 800;
+            padding: 7px 14px; border-radius: 20px; cursor: pointer;
+            transition: all 0.25s; display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
+        }
+        .lang-btn:hover {
+            background: linear-gradient(135deg, var(--mint), var(--sky));
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 16px rgba(168,221,208,0.5);
+        }
+
+        /* ── PAGE HERO ── */
+        .page-hero {
+            padding: 120px 48px 64px;
+            text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .particles-container { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        .particle {
+            position: absolute; font-size: 1.2rem;
+            animation: floatUp linear infinite; opacity: 0;
+        }
+        @keyframes floatUp {
+            0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+            8%   { opacity: 0.85; }
+            92%  { opacity: 0.85; }
+            100% { transform: translateY(-120px) rotate(540deg); opacity: 0; }
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(168,221,208,0.2); border: 1px solid rgba(168,221,208,0.45);
+            color: var(--text-mid); padding: 6px 20px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 700; margin-bottom: 22px;
+            backdrop-filter: blur(8px);
+        }
+        .page-title {
+            font-size: clamp(2.6rem, 7vw, 5rem); font-weight: 900; line-height: 1.08;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #72C5CF 0%, #9B72CF 55%, #72AACF 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .page-sub {
+            font-size: clamp(0.95rem, 2vw, 1.15rem); color: var(--text-mid);
+            font-weight: 600; max-width: 520px; margin: 0 auto 36px;
+        }
+        .hero-stats {
+            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+        }
+        .stat-pill {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border: 1px solid rgba(168,221,208,0.4); border-radius: 16px;
+            padding: 10px 26px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+        }
+        .stat-num { font-size: 1.5rem; font-weight: 900; color: var(--text-dark); }
+        .stat-lbl { font-size: 0.72rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px; text-transform: uppercase; }
+
+        /* ── SHARED SECTION ── */
+        .site-section { padding: 72px 48px; max-width: 1160px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 44px; }
+        .section-label {
+            display: inline-block; font-size: 0.75rem; font-weight: 800;
+            letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--mint); margin-bottom: 8px;
+        }
+        .section-title { font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 900; color: var(--text-dark); }
+        .section-sub { color: var(--text-mid); font-size: 0.97rem; margin-top: 8px; }
+
+        /* ── GLASS CARD ── */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px; box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 18px 52px rgba(168,221,208,0.35); }
+
+        /* ── 2-col grid ── */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+        /* ── GAME CARD ── */
+        .game-card { padding: 28px; }
+        .game-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+        .game-icon {
+            width: 54px; height: 54px; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.7rem;
+            background: linear-gradient(135deg, var(--mint), var(--sky)); flex-shrink: 0;
+        }
+        .game-card-title { font-size: 1.1rem; font-weight: 900; }
+        .game-card-sub   { font-size: 0.8rem; color: var(--text-mid); font-weight: 600; margin-top: 2px; }
+
+        /* stat rows */
+        .stat-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 9px 0; border-bottom: 1px solid rgba(168,221,208,0.18);
+        }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-row-label { font-size: 0.83rem; color: var(--text-mid); font-weight: 700; }
+        .stat-row-val   { font-size: 0.9rem;  font-weight: 900; color: var(--text-dark); }
+        .stat-row-badge {
+            font-size: 0.72rem; font-weight: 800; padding: 3px 9px; border-radius: 8px;
+            background: linear-gradient(135deg,rgba(168,221,208,0.22),rgba(168,200,240,0.22));
+            color: var(--text-mid); border: 1px solid rgba(168,221,208,0.35);
+        }
+
+        /* ── GAME LIST ── */
+        .game-list { display: flex; flex-direction: column; gap: 10px; }
+        .game-list-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 14px; border-radius: 13px;
+            background: rgba(255,255,255,0.45); border: 1px solid rgba(168,221,208,0.22);
+            transition: all 0.2s;
+        }
+        .game-list-item:hover { background: rgba(255,255,255,0.72); transform: translateX(4px); }
+        .gli-emoji { font-size: 1.5rem; flex-shrink: 0; }
+        .gli-info  { flex: 1; }
+        .gli-name  { font-size: 0.88rem; font-weight: 800; }
+        .gli-genre { font-size: 0.75rem; color: var(--text-light); font-weight: 600; }
+        .gli-hr    { font-size: 0.78rem; font-weight: 800; color: var(--text-mid); white-space: nowrap; }
+
+        /* ── GOALS ── */
+        .goal-list { display: flex; flex-direction: column; gap: 12px; }
+        .goal-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 14px; border-radius: 14px;
+            background: rgba(255,255,255,0.45); border: 1px solid rgba(168,221,208,0.22);
+        }
+        .goal-check {
+            width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0; margin-top: 1px;
+            display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+        }
+        .goal-check.done { background: rgba(72,199,142,0.2);  border: 1.5px solid rgba(72,199,142,0.5); }
+        .goal-check.todo { background: rgba(168,221,208,0.15); border: 1.5px solid rgba(168,221,208,0.45); }
+        .goal-text      { font-size: 0.86rem; font-weight: 700; line-height: 1.5; }
+        .goal-text span { display: block; font-size: 0.76rem; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+
+        /* ── TECH GRID ── */
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+        .tech-card { padding: 16px 12px; text-align: center; border-radius: 16px; }
+        .tech-card:hover { transform: translateY(-4px); }
+        .tech-icon  { font-size: 2rem; margin-bottom: 8px; }
+        .tech-name  { font-size: 0.82rem; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
+        .tech-level { font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px; }
+
+        /* ── NOW PLAYING MINI ── */
+        .currently-playing-row {
+            display: flex; align-items: center; gap: 10px; margin-top: 14px;
+            padding: 10px 14px; border-radius: 12px;
+            background: rgba(255,255,255,0.45); border: 1px solid rgba(168,221,208,0.22);
+            font-size: 0.84rem;
+        }
+        .cp-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #48C78E; flex-shrink: 0;
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center; padding: 40px 48px;
+            color: var(--text-light); font-size: 0.86rem; font-weight: 600;
+            border-top: 1px solid rgba(168,221,208,0.22);
+        }
+        .footer-social { display: flex; justify-content: center; gap: 14px; margin-bottom: 14px; }
+        .footer-social a {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(168,221,208,0.12); border: 1px solid rgba(168,221,208,0.35);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-mid); text-decoration: none; font-size: 0.95rem; transition: all 0.22s;
+        }
+        .footer-social a:hover {
+            background: linear-gradient(135deg, var(--mint), var(--sky));
+            color: white; border-color: transparent; transform: translateY(-2px);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            nav { padding: 14px 16px; gap: 8px; }
+            .nav-links { display: none; }
+            .site-section { padding: 50px 20px; }
+            .page-hero { padding: 100px 20px 52px; }
+            .two-col { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 500px) {
+            .tech-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="index.html" class="nav-logo">Jeffi ✦</a>
+    <ul class="nav-links">
+        <li><a href="index.html"               data-en="🏠 Home"      data-zh="🏠 首页">🏠 Home</a></li>
+        <li><a href="projects.html"            data-en="🚀 Projects"  data-zh="🚀 项目">🚀 Projects</a></li>
+        <li><a href="games.html" class="active" data-en="🎮 Games"     data-zh="🎮 游戏">🎮 Games</a></li>
+        <li><a href="index.html#music"         data-en="🎵 Music"     data-zh="🎵 音乐">🎵 Music</a></li>
+        <li><a href="index.html#gallery"       data-en="🖼️ Gallery"   data-zh="🖼️ 相册">🖼️ Gallery</a></li>
+    </ul>
+    <button class="lang-btn" id="langBtn">🌐 中文</button>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="particles-container" id="particles"></div>
+    <div class="hero-content">
+        <div class="hero-badge"
+             data-en="🕹️ What I play &amp; what drives me"
+             data-zh="🕹️ 我玩的游戏与驱动我的东西">
+            🕹️ What I play &amp; what drives me
+        </div>
+        <h1 class="page-title"
+            data-en="Games"
+            data-zh="游戏">
+            Games
+        </h1>
+        <p class="page-sub"
+           data-en="Rhythm games, RPGs, action — the games that shaped how I think about design and play."
+           data-zh="音游、RPG、动作游戏——这些游戏塑造了我对设计和玩法的思考方式。">
+            Rhythm games, RPGs, action — the games that shaped how I think about design and play.
+        </p>
+        <div class="hero-stats">
+            <div class="stat-pill">
+                <span class="stat-num">🎵</span>
+                <span class="stat-lbl" data-en="Rhythm Main" data-zh="音游主玩">Rhythm Main</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-num" id="statGames">—</span>
+                <span class="stat-lbl" data-en="Fav Games" data-zh="最爱游戏">Fav Games</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-num" id="statGoals">—</span>
+                <span class="stat-lbl" data-en="Goals" data-zh="目标">Goals</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MAIMAI + GAMES I LOVE -->
+<div class="site-section">
+    <div class="section-header">
+        <div class="section-label" data-en="Gaming Life" data-zh="游戏生活">Gaming Life</div>
+        <h2 class="section-title" data-en="What I Play" data-zh="我玩的游戏">What I Play</h2>
+        <p class="section-sub" data-en="My main games and current obsessions" data-zh="我的主要游戏和当前痴迷">My main games and current obsessions</p>
+    </div>
+    <div class="two-col">
+
+        <!-- maimai DX -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon">🎵</div>
+                <div>
+                    <div class="game-card-title" data-en="maimai DX" data-zh="舞萌 DX">maimai DX</div>
+                    <div class="game-card-sub" data-en="Rhythm · Arcade · SEGA" data-zh="音游 · 街机 · SEGA">Rhythm · Arcade · SEGA</div>
+                </div>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Status"        data-zh="状态">Status</span>
+                <span class="stat-row-badge" data-en="🔥 Main Game"  data-zh="🔥 主要游戏">🔥 Main Game</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Rating"        data-zh="Rating">Rating</span>
+                <span class="stat-row-val"   id="maimaiRating">—</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Fav. Genre"    data-zh="最喜欢的类型">Fav. Genre</span>
+                <span class="stat-row-badge" data-en="Touhou / Anime" data-zh="东方 / 动漫">Touhou / Anime</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Playing Since" data-zh="开始玩">Playing Since</span>
+                <span class="stat-row-val"   data-en="2023"          data-zh="2023 年">2023</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label" data-en="Platform"      data-zh="平台">Platform</span>
+                <span class="stat-row-badge" data-en="Arcade Cabinet" data-zh="街机台">Arcade Cabinet</span>
+            </div>
+            <div class="currently-playing-row">
+                <div class="cp-dot"></div>
+                <span data-en="Chasing that next rating milestone 🎯" data-zh="正在冲击下一个 Rating 里程碑 🎯">Chasing that next rating milestone 🎯</span>
+            </div>
+        </div>
+
+        <!-- Games I Love -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon" style="background:linear-gradient(135deg,#C4A8E8,#F5B8C8)">🕹️</div>
+                <div>
+                    <div class="game-card-title" data-en="Games I Love"      data-zh="我爱玩的游戏">Games I Love</div>
+                    <div class="game-card-sub"   data-en="Rhythm · RPG · Action" data-zh="音游 · RPG · 动作">Rhythm · RPG · Action</div>
+                </div>
+            </div>
+            <div class="game-list" id="gameList"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- GOALS + TECH -->
+<div class="site-section">
+    <div class="section-header">
+        <div class="section-label" data-en="Levelling Up" data-zh="不断提升">Levelling Up</div>
+        <h2 class="section-title" data-en="Goals &amp; Skills" data-zh="目标 &amp; 技能">Goals &amp; Skills</h2>
+        <p class="section-sub" data-en="What I'm working toward — in games and in dev" data-zh="游戏和开发双线并进的目标">What I'm working toward — in games and in dev</p>
+    </div>
+    <div class="two-col">
+
+        <!-- Dev Goals -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon" style="background:linear-gradient(135deg,#FFE4A0,#F5B8C8)">🎯</div>
+                <div>
+                    <div class="game-card-title" data-en="My Goals"                  data-zh="我的目标">My Goals</div>
+                    <div class="game-card-sub"   data-en="Games + dev milestones"    data-zh="游戏 + 开发里程碑">Games + dev milestones</div>
+                </div>
+            </div>
+            <div class="goal-list" id="goalList"></div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="card game-card">
+            <div class="game-card-header">
+                <div class="game-icon" style="background:linear-gradient(135deg,#A8C8F0,#A8DDD0)">💻</div>
+                <div>
+                    <div class="game-card-title" data-en="Tech I Use"         data-zh="我用的技术">Tech I Use</div>
+                    <div class="game-card-sub"   data-en="Languages &amp; tools" data-zh="语言与工具">Languages &amp; tools</div>
+                </div>
+            </div>
+            <div class="tech-grid" id="techGrid"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-social">
+        <a href="#" title="GitHub">GH</a>
+        <a href="#" title="Twitter/X">𝕏</a>
+        <a href="#" title="Discord">DC</a>
+        <a href="#" title="YouTube">▶</a>
+    </div>
+    <p data-en="Made with 💜 by Jeffi &nbsp;·&nbsp; 2026"
+       data-zh="由 Jeffi 用 💜 制作 &nbsp;·&nbsp; 2026">
+        Made with 💜 by Jeffi &nbsp;·&nbsp; 2026
+    </p>
+</footer>
+
+<script>
+/* ── PARTICLES ── */
+const container = document.getElementById('particles');
+const emojis = ['🎮','✨','⭐','🎵','💫','🌸','🕹️','🎯','🌟','♪','🏆'];
+function spawnParticle() {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (Math.random() * 12 + 9) + 's';
+    el.style.animationDelay    = (Math.random() * 4) + 's';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 26000);
+}
+for (let i = 0; i < 14; i++) setTimeout(spawnParticle, i * 450);
+setInterval(spawnParticle, 900);
+
+/* ── LANGUAGE ── */
+let lang = 'en';
+const langBtn = document.getElementById('langBtn');
+function applyLang(l) {
+    document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+        el.innerHTML = el.getAttribute('data-' + l);
+    });
+    renderGameList();
+    renderGoals();
+    renderTech();
+    langBtn.innerHTML = l === 'en' ? '🌐 中文' : '🌐 EN';
+    document.documentElement.lang = l === 'zh' ? 'zh' : 'en';
+}
+langBtn.addEventListener('click', () => { lang = lang === 'en' ? 'zh' : 'en'; applyLang(lang); });
+
+/* ── MAIMAI RATING ── */
+// ✏️ Replace null with your actual maimai DX rating number, e.g. 14500
+const maimaiRating = null;
+document.getElementById('maimaiRating').textContent =
+    maimaiRating ? maimaiRating.toLocaleString() : '✏️ Add yours';
+
+/* ── GAMES I LOVE ── */
+/*
+  ✏️ HOW TO EDIT:
+  Each entry:
+    emoji  : game icon
+    en/zh  : { name, genre } — bilingual name and genre label
+    hrs    : playtime badge, e.g. '800+ h' or '★ Main'
+*/
+const gamesData = [
+    { emoji: '🎵', en: { name: 'maimai DX',                    genre: 'Rhythm Game'   }, zh: { name: '舞萌 DX',                      genre: '音游'       }, hrs: '★ Main'  },
+    { emoji: '🎸', en: { name: 'Project Sekai: Colorful Stage', genre: 'Rhythm Game'   }, zh: { name: '世界计划：多彩舞台',              genre: '音游'       }, hrs: '★ Fav'   },
+    { emoji: '⚔️', en: { name: 'World of Warcraft',             genre: 'MMORPG'        }, zh: { name: '魔兽世界',                      genre: 'MMORPG'    }, hrs: '1000+ h' },
+    { emoji: '🎯', en: { name: 'Apex Legends',                  genre: 'Battle Royale' }, zh: { name: 'Apex 英雄',                     genre: '大逃杀'     }, hrs: '500+ h'  },
+];
+
+function renderGameList() {
+    document.getElementById('gameList').innerHTML = gamesData.map(g => `
+    <div class="game-list-item">
+        <span class="gli-emoji">${g.emoji}</span>
+        <div class="gli-info">
+            <div class="gli-name">${g[lang].name}</div>
+            <div class="gli-genre">${g[lang].genre}</div>
+        </div>
+        <span class="gli-hr">${g.hrs}</span>
+    </div>`).join('');
+    document.getElementById('statGames').textContent = gamesData.length;
+}
+
+/* ── GOALS ── */
+/*
+  ✏️ HOW TO EDIT:
+    done : true = checked (green), false = unchecked
+    en/zh: { text, sub } — bilingual goal text and sub-label
+*/
+const goalsData = [
+    { done: true,  en: { text: 'Launch personal portfolio',    sub: 'jeffiiii.github.io/jeffi'       }, zh: { text: '上线个人作品集网站',      sub: 'jeffiiii.github.io/jeffi'  } },
+    { done: false, en: { text: 'Ship maimai Fan Hub v1.0',     sub: 'Rating optimizer + song catalog' }, zh: { text: '发布 maimai 粉丝站 v1.0',  sub: 'Rating 优化器 + 歌曲库'    } },
+    { done: false, en: { text: 'Release first fan game demo',  sub: 'Built with Godot 4'             }, zh: { text: '发布第一个同人游戏 Demo',    sub: '使用 Godot 4 开发'          } },
+    { done: false, en: { text: 'Reach 15000 maimai Rating',    sub: 'Current in-game goal'           }, zh: { text: 'maimai Rating 达到 15000',  sub: '当前游戏内目标'             } },
+    { done: false, en: { text: 'Learn backend development',    sub: 'Node.js / Python'               }, zh: { text: '学习后端开发',              sub: 'Node.js / Python'          } },
+];
+
+function renderGoals() {
+    document.getElementById('goalList').innerHTML = goalsData.map(g => `
+    <div class="goal-item">
+        <div class="goal-check ${g.done ? 'done' : 'todo'}">${g.done ? '✓' : '○'}</div>
+        <div class="goal-text">
+            ${g[lang].text}
+            <span>${g[lang].sub}</span>
+        </div>
+    </div>`).join('');
+    document.getElementById('statGoals').textContent =
+        goalsData.filter(g => g.done).length + '/' + goalsData.length;
+}
+
+/* ── TECH STACK ── */
+/*
+  ✏️ HOW TO EDIT:
+    icon   : emoji for the technology
+    en/zh  : { name, level } — bilingual tech name and skill level label
+*/
+const techData = [
+    { icon: '🌐', en: { name: 'HTML / CSS',  level: 'Comfortable' }, zh: { name: 'HTML / CSS',   level: '较熟练' } },
+    { icon: '⚡', en: { name: 'JavaScript',  level: 'Comfortable' }, zh: { name: 'JavaScript',   level: '较熟练' } },
+    { icon: '⚛️', en: { name: 'React',        level: 'Learning'    }, zh: { name: 'React',         level: '学习中' } },
+    { icon: '🐍', en: { name: 'Python',       level: 'Comfortable' }, zh: { name: 'Python',        level: '较熟练' } },
+    { icon: '🎮', en: { name: 'Godot 4',      level: 'Learning'    }, zh: { name: 'Godot 4',       level: '学习中' } },
+    { icon: '🐙', en: { name: 'Git / GitHub', level: 'Comfortable' }, zh: { name: 'Git / GitHub',  level: '较熟练' } },
+];
+
+function renderTech() {
+    document.getElementById('techGrid').innerHTML = techData.map(t => `
+    <div class="card tech-card">
+        <div class="tech-icon">${t.icon}</div>
+        <div class="tech-name">${t[lang].name}</div>
+        <div class="tech-level">${t[lang].level}</div>
+    </div>`).join('');
+}
+
+renderGameList();
+renderGoals();
+renderTech();
+</script>
+</body>
+</html>
