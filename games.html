@@ -330,10 +330,7 @@
                 <a class="stat-row-badge" href="https://aquadx.net/u/Jeffi/mai2" target="_blank" rel="noopener"
                    style="text-decoration:none;" data-en="🔗 AquaDX Best 50" data-zh="🔗 AquaDX Best 50">🔗 AquaDX Best 50</a>
             </div>
-            <div class="stat-row">
-                <span class="stat-row-label" data-en="Fav. Genre"    data-zh="最喜欢的类型">Fav. Genre</span>
-                <span class="stat-row-badge" data-en="Touhou / Anime" data-zh="东方 / 动漫">Touhou / Anime</span>
-            </div>
+
             <div class="stat-row">
                 <span class="stat-row-label" data-en="Playing Since" data-zh="开始玩">Playing Since</span>
                 <span class="stat-row-val"   data-en="Winter 2024"   data-zh="2024 年冬">Winter 2024</span>
@@ -437,13 +434,13 @@ function applyLang(l) {
         el.innerHTML = el.getAttribute('data-' + l);
     });
     renderGameList();
-renderMaimaiSongs();
+    renderMaimaiSongs();
     renderGoals();
 
     langBtn.innerHTML = l === 'en' ? '🌐 中文' : '🌐 EN';
     document.documentElement.lang = l === 'zh' ? 'zh' : 'en';
 }
-langBtn.addEventListener('click', () => { lang = lang === 'en' ? 'zh' : 'en'; applyLang(lang); renderMaimaiSongs(); });
+langBtn.addEventListener('click', () => { lang = lang === 'en' ? 'zh' : 'en'; applyLang(lang); });
 
 /* ── MAIMAI RATING ── */
 // ✏️ Replace null with your actual maimai DX rating number, e.g. 14500
@@ -539,6 +536,10 @@ function renderGoals() {
         goalsData.filter(g => g.done).length + '/' + goalsData.length;
 }
 
+/* ── INITIAL RENDER ── */
+renderGameList();
+renderMaimaiSongs();
+renderGoals();
 </script>
 </body>
 </html>
