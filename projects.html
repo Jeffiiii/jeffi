@@ -363,41 +363,61 @@ const projects = [
     {
         category: 'web',
         featured: true,
-        status: 'wip',
-        en: { title: 'maimai Fan Hub',    statusLabel: 'In Progress',  desc: 'A fan website for maimai DX players — real-time rating optimizer, full song catalog with difficulty filters, personalized player stats, custom achievements, and a maimai Wrapped year-in-review feature. Co-built with a friend who handles art and mascot design.' },
-        zh: { title: 'maimai 粉丝站',      statusLabel: '开发中',        desc: '专为 maimai DX 玩家打造——实时 Rating 优化器、带难度筛选的完整歌曲库、个性化玩家数据统计、自定义成就系统及年度回顾功能。与负责美术设计的朋友合力开发。' },
-        emoji: '🎵', grad: 'linear-gradient(135deg,#C4A8E8,#F5B8C8)',
-        tags: ['React','JavaScript','CSS','Public API'], tagTypes: ['web','web','web','tool'],
-        live: '#', github: '#'
-    },
-    {
-        category: 'web',
-        featured: false,
         status: 'live',
-        en: { title: 'This Portfolio',    statusLabel: 'Live',          desc: 'The site you\'re on right now — a bilingual portfolio with a music player, photo gallery, and pastel glassmorphism aesthetic. Deployed on GitHub Pages.' },
-        zh: { title: '个人作品集网站',      statusLabel: '已上线',         desc: '就是你正在浏览的网站——含双语切换、音乐播放器、图库和玻璃拟态风格，部署在 GitHub Pages。' },
-        emoji: '🌸', grad: 'linear-gradient(135deg,#F5B8C8,#FFE4A0)',
-        tags: ['HTML','CSS','JavaScript','GitHub Pages'], tagTypes: ['web','web','web','tool'],
-        live: 'index.html', github: '#'
+        en: { title: 'UTMCSSA Web Platform', statusLabel: 'Live', desc: 'A full-stack platform built for the UTMCSSA student association to support incoming Chinese international students at UofT. Features Python-powered backend endpoints for course data and resources, a React + Node.js frontend, and an integrated DeepSeek AI assistant to answer questions about academics and campus life. Developed collaboratively using Git and Jira. Live at utmcssaaiagent.com.' },
+        zh: { title: 'UTMCSSA 网络平台',      statusLabel: '已上线',        desc: '为多伦多大学密西沙加分校中国学生学者联合会打造的全栈平台，专为新生提供支持。后端使用 Python 实现课程数据与学生资源接口，前端采用 React + Node.js，并集成 DeepSeek AI 助手解答学业与校园生活问题。团队协作使用 Git 与 Jira 进行版本管理和任务追踪。现已上线：utmcssaaiagent.com。' },
+        emoji: '🏫', grad: 'linear-gradient(135deg,#C4A8E8,#A8C8F0)',
+        tags: ['React', 'Node.js', 'Python', 'DeepSeek AI', 'Git', 'Jira'], tagTypes: ['web','web','web','tool','tool','tool'],
+        live: 'https://utmcssaaiagent.com/', github: '#'
     },
     {
         category: 'game',
         featured: false,
-        status: 'soon',
-        en: { title: 'Fan Game Project',  statusLabel: 'Coming Soon',   desc: 'A 2D fan game inspired by a favourite anime — combining platformer mechanics with original art from a collaborator. Built with Godot 4 and planned for release on itch.io.' },
-        zh: { title: '同人游戏项目',        statusLabel: '即将推出',        desc: '受最爱动漫启发的 2D 同人游戏——横版平台机制与合作者原创美术的结合，使用 Godot 4 开发，计划在 itch.io 发布。' },
-        emoji: '🎮', grad: 'linear-gradient(135deg,#A8DDD0,#A8C8F0)',
-        tags: ['Godot 4','GDScript','Game Dev','Collab'], tagTypes: ['game','game','game','tool'],
+        status: 'live',
+        en: { title: '2D Adventure Game',    statusLabel: 'Completed',    desc: 'A 2D adventure game built with Unity and JavaScript as part of a course project. Developed core gameplay logic and UI interactions in an agile workflow. Stepped up to ensure full feature delivery after much of the original team withdrew mid-project.' },
+        zh: { title: '2D 冒险游戏',           statusLabel: '已完成',         desc: '使用 Unity 和 JavaScript 开发的 2D 冒险游戏，为课程项目作品。负责核心游戏逻辑与 UI 交互开发，在团队大幅缩减的情况下主导完成了所有功能交付。' },
+        emoji: '⚔️', grad: 'linear-gradient(135deg,#A8DDD0,#A8C8F0)',
+        tags: ['Unity', 'JavaScript', 'Game Dev', 'Agile'], tagTypes: ['game','game','game','tool'],
         live: '#', github: '#'
     },
     {
         category: 'tool',
         featured: false,
+        status: 'live',
+        en: { title: 'Drone Survey Project', statusLabel: 'Completed',    desc: 'Captured high-resolution drone imagery of campus vegetation and buildings for remote sensing analysis. Produced 3D building models, vegetation maps, and spatial data layers. Performed land-cover and structural analysis using GIS workflows and delivered visualizations for environmental and campus-planning applications.' },
+        zh: { title: '无人机测绘项目',         statusLabel: '已完成',         desc: '使用无人机采集校园植被和建筑物的高分辨率影像，用于遥感分析。生成三维建筑模型、植被分布图和空间数据图层，并利用 GIS 工具进行地表覆盖与结构分析，输出适用于环境评估和校园规划的可视化成果。' },
+        emoji: '🛸', grad: 'linear-gradient(135deg,#FFE4A0,#A8DDD0)',
+        tags: ['ArcGIS Pro', 'ERDAS', 'Remote Sensing', 'GIS', 'DJI Mini 4 Pro'], tagTypes: ['tool','tool','tool','tool','tool'],
+        live: 'drone-project.html', github: '#'
+    },
+    {
+        category: 'web',
+        featured: false,
+        status: 'live',
+        en: { title: 'This Portfolio',       statusLabel: 'Live',          desc: 'The site you\'re on right now — a bilingual portfolio with a music player, photo gallery, and pastel glassmorphism aesthetic. Deployed on GitHub Pages.' },
+        zh: { title: '个人作品集网站',          statusLabel: '已上线',         desc: '就是你正在浏览的网站——含双语切换、音乐播放器、图库和玻璃拟态风格，部署在 GitHub Pages。' },
+        emoji: '🌸', grad: 'linear-gradient(135deg,#F5B8C8,#FFE4A0)',
+        tags: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'], tagTypes: ['web','web','web','tool'],
+        live: 'index.html', github: '#'
+    },
+    {
+        category: 'web',
+        featured: false,
+        status: 'wip',
+        en: { title: 'maimai Fan Hub',       statusLabel: 'In Progress',   desc: 'A fan website for maimai DX players — real-time rating optimizer, full song catalog with difficulty filters, personalized player stats, custom achievements, and a maimai Wrapped year-in-review feature. Co-built with a friend who handles art and mascot design.' },
+        zh: { title: 'maimai 粉丝站',          statusLabel: '开发中',         desc: '专为 maimai DX 玩家打造——实时 Rating 优化器、带难度筛选的完整歌曲库、个性化玩家数据统计、自定义成就系统及年度回顾功能。与负责美术设计的朋友合力开发。' },
+        emoji: '🎵', grad: 'linear-gradient(135deg,#C4A8E8,#F5B8C8)',
+        tags: ['React', 'JavaScript', 'CSS', 'Public API'], tagTypes: ['web','web','web','tool'],
+        live: '#', github: '#'
+    },
+    {
+        category: 'game',
+        featured: false,
         status: 'soon',
-        en: { title: 'Project Slot — TBD', statusLabel: 'Coming Soon',  desc: 'Something new is cooking. This slot will be filled as more ideas come to life. Check back later!' },
-        zh: { title: '项目坑 — 待定',       statusLabel: '即将推出',       desc: '新东西正在酝酿中，随着更多想法付诸实践，这里将会被填满。待续！' },
-        emoji: '🔧', grad: 'linear-gradient(135deg,#FFE4A0,#C4A8E8)',
-        tags: ['Coming Soon'], tagTypes: [''],
+        en: { title: 'Fan Game Project',     statusLabel: 'Coming Soon',   desc: 'A 2D fan game inspired by a favourite anime — combining platformer mechanics with original art from a collaborator. Built with Godot 4 and planned for release on itch.io.' },
+        zh: { title: '同人游戏项目',            statusLabel: '即将推出',        desc: '受最爱动漫启发的 2D 同人游戏——横版平台机制与合作者原创美术的结合，使用 Godot 4 开发，计划在 itch.io 发布。' },
+        emoji: '🎮', grad: 'linear-gradient(135deg,#A8DDD0,#C4A8E8)',
+        tags: ['Godot 4', 'GDScript', 'Game Dev', 'Collab'], tagTypes: ['game','game','game','tool'],
         live: '#', github: '#'
     },
 ];

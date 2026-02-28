@@ -203,13 +203,6 @@
         .goal-text      { font-size: 0.86rem; font-weight: 700; line-height: 1.5; }
         .goal-text span { display: block; font-size: 0.76rem; color: var(--text-light); font-weight: 600; margin-top: 2px; }
 
-        /* ── TECH GRID ── */
-        .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
-        .tech-card { padding: 16px 12px; text-align: center; border-radius: 16px; }
-        .tech-card:hover { transform: translateY(-4px); }
-        .tech-icon  { font-size: 2rem; margin-bottom: 8px; }
-        .tech-name  { font-size: 0.82rem; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
-        .tech-level { font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px; }
 
         /* ── NOW PLAYING MINI ── */
         .currently-playing-row {
@@ -251,7 +244,7 @@
             .two-col { grid-template-columns: 1fr; }
         }
         @media (max-width: 500px) {
-            .tech-grid { grid-template-columns: repeat(3, 1fr); }
+
         }
     </style>
 </head>
@@ -333,21 +326,36 @@
                 <span class="stat-row-val"   id="maimaiRating">—</span>
             </div>
             <div class="stat-row">
+                <span class="stat-row-label" data-en="Profile"       data-zh="档案">Profile</span>
+                <a class="stat-row-badge" href="https://aquadx.net/u/Jeffi/mai2" target="_blank" rel="noopener"
+                   style="text-decoration:none;" data-en="🔗 AquaDX Best 50" data-zh="🔗 AquaDX Best 50">🔗 AquaDX Best 50</a>
+            </div>
+            <div class="stat-row">
                 <span class="stat-row-label" data-en="Fav. Genre"    data-zh="最喜欢的类型">Fav. Genre</span>
                 <span class="stat-row-badge" data-en="Touhou / Anime" data-zh="东方 / 动漫">Touhou / Anime</span>
             </div>
             <div class="stat-row">
                 <span class="stat-row-label" data-en="Playing Since" data-zh="开始玩">Playing Since</span>
-                <span class="stat-row-val"   data-en="2023"          data-zh="2023 年">2023</span>
+                <span class="stat-row-val"   data-en="Winter 2024"   data-zh="2024 年冬">Winter 2024</span>
             </div>
-            <div class="stat-row">
-                <span class="stat-row-label" data-en="Platform"      data-zh="平台">Platform</span>
-                <span class="stat-row-badge" data-en="Arcade Cabinet" data-zh="街机台">Arcade Cabinet</span>
-            </div>
+
             <div class="currently-playing-row">
                 <div class="cp-dot"></div>
-                <span data-en="Chasing that next rating milestone 🎯" data-zh="正在冲击下一个 Rating 里程碑 🎯">Chasing that next rating milestone 🎯</span>
+                <span data-en="Rating 15303 achieved — aiming higher! 🚀" data-zh="Rating 15303 已达成——继续冲更高！🚀">Rating 15303 achieved — aiming higher! 🚀</span>
             </div>
+        </div>
+
+
+        <!-- maimai Favourite Songs -->
+        <div class="card game-card" style="grid-column: 1 / -1;">
+            <div class="game-card-header">
+                <div class="game-icon" style="background:linear-gradient(135deg,#FFB8D0,#C4A8E8)">🎼</div>
+                <div>
+                    <div class="game-card-title" data-en="Favourite Songs" data-zh="最爱曲目">Favourite Songs</div>
+                    <div class="game-card-sub"   data-en="maimai DX · Personal picks &amp; goal scores" data-zh="舞萌 DX · 个人挚爱与目标分数">maimai DX · Personal picks &amp; goal scores</div>
+                </div>
+            </div>
+            <div id="maimaiSongList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:4px;"></div>
         </div>
 
         <!-- Games I Love -->
@@ -386,17 +394,6 @@
             <div class="goal-list" id="goalList"></div>
         </div>
 
-        <!-- Tech Stack -->
-        <div class="card game-card">
-            <div class="game-card-header">
-                <div class="game-icon" style="background:linear-gradient(135deg,#A8C8F0,#A8DDD0)">💻</div>
-                <div>
-                    <div class="game-card-title" data-en="Tech I Use"         data-zh="我用的技术">Tech I Use</div>
-                    <div class="game-card-sub"   data-en="Languages &amp; tools" data-zh="语言与工具">Languages &amp; tools</div>
-                </div>
-            </div>
-            <div class="tech-grid" id="techGrid"></div>
-        </div>
 
     </div>
 </div>
@@ -440,16 +437,17 @@ function applyLang(l) {
         el.innerHTML = el.getAttribute('data-' + l);
     });
     renderGameList();
+renderMaimaiSongs();
     renderGoals();
-    renderTech();
+
     langBtn.innerHTML = l === 'en' ? '🌐 中文' : '🌐 EN';
     document.documentElement.lang = l === 'zh' ? 'zh' : 'en';
 }
-langBtn.addEventListener('click', () => { lang = lang === 'en' ? 'zh' : 'en'; applyLang(lang); });
+langBtn.addEventListener('click', () => { lang = lang === 'en' ? 'zh' : 'en'; applyLang(lang); renderMaimaiSongs(); });
 
 /* ── MAIMAI RATING ── */
 // ✏️ Replace null with your actual maimai DX rating number, e.g. 14500
-const maimaiRating = null;
+const maimaiRating = 15303;
 document.getElementById('maimaiRating').textContent =
     maimaiRating ? maimaiRating.toLocaleString() : '✏️ Add yours';
 
@@ -464,9 +462,42 @@ document.getElementById('maimaiRating').textContent =
 const gamesData = [
     { emoji: '🎵', en: { name: 'maimai DX',                    genre: 'Rhythm Game'   }, zh: { name: '舞萌 DX',                      genre: '音游'       }, hrs: '★ Main'  },
     { emoji: '🎸', en: { name: 'Project Sekai: Colorful Stage', genre: 'Rhythm Game'   }, zh: { name: '世界计划：多彩舞台',              genre: '音游'       }, hrs: '★ Fav'   },
-    { emoji: '⚔️', en: { name: 'World of Warcraft',             genre: 'MMORPG'        }, zh: { name: '魔兽世界',                      genre: 'MMORPG'    }, hrs: '1000+ h' },
-    { emoji: '🎯', en: { name: 'Apex Legends',                  genre: 'Battle Royale' }, zh: { name: 'Apex 英雄',                     genre: '大逃杀'     }, hrs: '500+ h'  },
+    { emoji: '⚔️', en: { name: 'WoW Classic',                   genre: 'MMORPG · TBC'  }, zh: { name: '魔兽世界·怀旧服',                genre: 'MMORPG·燃烧的远征' }, hrs: '⚔️ TBC' },
+    { emoji: '🎯', en: { name: 'Apex Legends',                  genre: 'Battle Royale' }, zh: { name: 'Apex 英雄',                     genre: '大逃杀'     }, hrs: '💎 Diamond' },
 ];
+
+
+/* ── MAIMAI FAVOURITE SONGS ── */
+/*
+  ✏️ HOW TO EDIT:
+    title   : song name
+    artist  : artist/composer
+    goal    : your target score (e.g. 'SSS+', '100.5000%') or null for no goal
+    achieved: true/false — whether you've hit the goal
+    note    : short personal note (optional)
+*/
+const maimaiSongs = [
+    { title: '幻想のサテライト',   artist: 'xi',                 goal: 'SSS+',      achieved: false, en: { note: 'Dream chart' },              zh: { note: '梦想的谱面' } },
+    { title: 'POP TEAM EPIC',      artist: '上坂すみれ',          goal: 'SSS',       achieved: false, en: { note: 'Fav anime banger' },          zh: { note: '最爱动漫神曲' } },
+    { title: '砂漠のハンター',     artist: 'DJ YOSHITAKA',       goal: 'SSS+',      achieved: false, en: { note: 'Satisfying taps' },           zh: { note: '打击感极佳' } },
+    { title: 'Brain Power',        artist: 'NOMA',               goal: '100.5000%', achieved: false, en: { note: 'Goal: full combo' },          zh: { note: '目标：全连击' } },
+    { title: 'Last Celebration',   artist: 'あよ',               goal: 'SSS+',      achieved: false, en: { note: 'Beautiful melody' },          zh: { note: '旋律绝美' } },
+    { title: 'ジングルベル',       artist: '初音ミク',            goal: 'SSS',       achieved: false, en: { note: 'Holiday classic' },           zh: { note: '节日经典' } },
+];
+
+function renderMaimaiSongs() {
+    const goalColors = { true: 'rgba(72,199,142,0.18)', false: 'rgba(168,139,250,0.12)' };
+    const goalBorderColors = { true: 'rgba(72,199,142,0.45)', false: 'rgba(168,139,250,0.35)' };
+    document.getElementById('maimaiSongList').innerHTML = maimaiSongs.map(s => `
+        <div style="background:${goalColors[s.achieved]};border:1.5px solid ${goalBorderColors[s.achieved]};border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;">
+            <div style="font-weight:800;font-size:0.9rem;color:var(--text-main);letter-spacing:-0.01em;">${s.title}</div>
+            <div style="font-size:0.78rem;color:var(--text-light);font-weight:600;">${s.artist}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+                <span style="font-size:0.75rem;color:var(--text-light);font-style:italic;">${s[lang].note}</span>
+                ${s.goal ? `<span style="font-size:0.78rem;font-weight:800;padding:2px 8px;border-radius:20px;background:${s.achieved ? 'rgba(72,199,142,0.3)' : 'rgba(168,139,250,0.25)'};color:${s.achieved ? '#3bb87a' : '#a88bfa'};">${s.achieved ? '✓ ' : '🎯 '}${s.goal}</span>` : ''}
+            </div>
+        </div>`).join('');
+}
 
 function renderGameList() {
     document.getElementById('gameList').innerHTML = gamesData.map(g => `
@@ -491,7 +522,7 @@ const goalsData = [
     { done: true,  en: { text: 'Launch personal portfolio',    sub: 'jeffiiii.github.io/jeffi'       }, zh: { text: '上线个人作品集网站',      sub: 'jeffiiii.github.io/jeffi'  } },
     { done: false, en: { text: 'Ship maimai Fan Hub v1.0',     sub: 'Rating optimizer + song catalog' }, zh: { text: '发布 maimai 粉丝站 v1.0',  sub: 'Rating 优化器 + 歌曲库'    } },
     { done: false, en: { text: 'Release first fan game demo',  sub: 'Built with Godot 4'             }, zh: { text: '发布第一个同人游戏 Demo',    sub: '使用 Godot 4 开发'          } },
-    { done: false, en: { text: 'Reach 15000 maimai Rating',    sub: 'Current in-game goal'           }, zh: { text: 'maimai Rating 达到 15000',  sub: '当前游戏内目标'             } },
+    { done: true,  en: { text: 'Reach 15000 maimai Rating',    sub: 'Achieved! Current: 15,303 ✨'    }, zh: { text: 'maimai Rating 达到 15000',  sub: '已达成！当前：15,303 ✨'    } },
     { done: false, en: { text: 'Learn backend development',    sub: 'Node.js / Python'               }, zh: { text: '学习后端开发',              sub: 'Node.js / Python'          } },
 ];
 
@@ -508,33 +539,6 @@ function renderGoals() {
         goalsData.filter(g => g.done).length + '/' + goalsData.length;
 }
 
-/* ── TECH STACK ── */
-/*
-  ✏️ HOW TO EDIT:
-    icon   : emoji for the technology
-    en/zh  : { name, level } — bilingual tech name and skill level label
-*/
-const techData = [
-    { icon: '🌐', en: { name: 'HTML / CSS',  level: 'Comfortable' }, zh: { name: 'HTML / CSS',   level: '较熟练' } },
-    { icon: '⚡', en: { name: 'JavaScript',  level: 'Comfortable' }, zh: { name: 'JavaScript',   level: '较熟练' } },
-    { icon: '⚛️', en: { name: 'React',        level: 'Learning'    }, zh: { name: 'React',         level: '学习中' } },
-    { icon: '🐍', en: { name: 'Python',       level: 'Comfortable' }, zh: { name: 'Python',        level: '较熟练' } },
-    { icon: '🎮', en: { name: 'Godot 4',      level: 'Learning'    }, zh: { name: 'Godot 4',       level: '学习中' } },
-    { icon: '🐙', en: { name: 'Git / GitHub', level: 'Comfortable' }, zh: { name: 'Git / GitHub',  level: '较熟练' } },
-];
-
-function renderTech() {
-    document.getElementById('techGrid').innerHTML = techData.map(t => `
-    <div class="card tech-card">
-        <div class="tech-icon">${t.icon}</div>
-        <div class="tech-name">${t[lang].name}</div>
-        <div class="tech-level">${t[lang].level}</div>
-    </div>`).join('');
-}
-
-renderGameList();
-renderGoals();
-renderTech();
 </script>
 </body>
 </html>

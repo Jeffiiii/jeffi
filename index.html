@@ -304,6 +304,19 @@
             .site-section { padding: 60px 20px; }
             #home { padding: 100px 20px 60px; }
         }
+
+        /* ── TECH GRID ── */
+        .tech-section { margin-top: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+        .tech-card { padding: 16px 12px; text-align: center; border-radius: 16px; cursor: default; }
+        .tech-card:hover { transform: translateY(-4px); }
+        .tech-icon  { font-size: 2rem; margin-bottom: 8px; }
+        .tech-name  { font-size: 0.82rem; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
+        .tech-level { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
+        .tech-level.proficient { color: #a78bfa; }
+        .tech-level.comfortable { color: #60c8a8; }
+        .tech-level.familiar { color: #93c5fd; }
+
     </style>
 </head>
 <body>
@@ -317,6 +330,7 @@
         <li><a href="games.html"                  data-en="🎮 Games"       data-zh="🎮 游戏">🎮 Games</a></li>
         <li><a href="#music"                      data-en="🎵 Music"       data-zh="🎵 音乐">🎵 Music</a></li>
         <li><a href="#gallery"                    data-en="🖼️ Gallery"     data-zh="🖼️ 相册">🖼️ Gallery</a></li>
+                <li><a href="#skills"                    data-en="💻 Skills"      data-zh="💻 技能">💻 Skills</a></li>
     </ul>
     <button class="lang-btn" id="langBtn">🌐 中文</button>
 </nav>
@@ -418,6 +432,17 @@
 <div class="lightbox" id="lightbox">
     <button class="lb-close" id="lbClose">✕</button>
     <img id="lbImg" src="" alt="">
+</div>
+
+
+<!-- TECH / SKILLS -->
+<div class="site-section tech-section" id="skills">
+    <div class="section-header">
+        <div class="section-label" data-en="What I Work With"  data-zh="我用的技术">What I Work With</div>
+        <h2 class="section-title"  data-en="Tech &amp; Tools"  data-zh="技术与工具">Tech &amp; Tools</h2>
+        <p  class="section-sub"    data-en="Languages, frameworks and tools from my projects and coursework" data-zh="项目与课程中积累的语言、框架和工具">Languages, frameworks and tools from my projects and coursework</p>
+    </div>
+    <div class="tech-grid" id="techGrid"></div>
 </div>
 
 <!-- FOOTER -->
@@ -658,6 +683,32 @@ const lbImg    = document.getElementById('lbImg');
 document.getElementById('lbClose').addEventListener('click', () => lightbox.classList.remove('open'));
 lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
+
+/* ───────────────── TECH STACK ───────────────── */
+const techData = [
+    { icon: '🐍', level: 'proficient',  en: { name: 'Python',       level: 'Proficient'  }, zh: { name: 'Python',       level: '熟练' } },
+    { icon: '☕', level: 'proficient',  en: { name: 'Java',         level: 'Proficient'  }, zh: { name: 'Java',         level: '熟练' } },
+    { icon: '⚡', level: 'comfortable', en: { name: 'JavaScript',   level: 'Comfortable' }, zh: { name: 'JavaScript',   level: '较熟练' } },
+    { icon: '🌐', level: 'comfortable', en: { name: 'HTML / CSS',   level: 'Comfortable' }, zh: { name: 'HTML / CSS',   level: '较熟练' } },
+    { icon: '🐙', level: 'comfortable', en: { name: 'Git / GitHub', level: 'Comfortable' }, zh: { name: 'Git / GitHub', level: '较熟练' } },
+    { icon: '⚛️', level: 'familiar',    en: { name: 'React',        level: 'Familiar'    }, zh: { name: 'React',        level: '了解中' } },
+    { icon: '🟢', level: 'familiar',    en: { name: 'Node.js',      level: 'Familiar'    }, zh: { name: 'Node.js',      level: '了解中' } },
+    { icon: '🗄️', level: 'familiar',    en: { name: 'SQL',          level: 'Familiar'    }, zh: { name: 'SQL',          level: '了解中' } },
+    { icon: '🍃', level: 'familiar',    en: { name: 'MongoDB',      level: 'Familiar'    }, zh: { name: 'MongoDB',      level: '了解中' } },
+    { icon: '🎮', level: 'familiar',    en: { name: 'Unity',        level: 'Familiar'    }, zh: { name: 'Unity',        level: '了解中' } },
+    { icon: '🗺️', level: 'familiar',    en: { name: 'ArcGIS Pro',   level: 'Familiar'    }, zh: { name: 'ArcGIS Pro',   level: '了解中' } },
+];
+
+function renderTech() {
+    document.getElementById('techGrid').innerHTML = techData.map(t => `
+    <div class="card tech-card">
+        <div class="tech-icon">${t.icon}</div>
+        <div class="tech-name">${t[lang].name}</div>
+        <div class="tech-level ${t.level}">${t[lang].level}</div>
+    </div>`).join('');
+}
+renderTech();
+
 </script>
 </body>
 </html>
