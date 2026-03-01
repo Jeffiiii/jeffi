@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime &amp; Gacha · Jeffi ✦</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            /* ── Site palette (default / no game selected) ── */
+            --lavender:    #C4A8E8;
+            --pink:        #F5B8C8;
+            --mint:        #A8DDD0;
+            --sky:         #A8C8F0;
+            --text-dark:   #3D2E5C;
+            --text-mid:    #7A6898;
+            --text-light:  #B8A8D0;
+            --card-bg:     rgba(255,255,255,0.60);
+            --card-border: rgba(196,168,232,0.35);
+            --shadow:      0 8px 40px rgba(196,168,232,0.22);
+
+            /* ── Theme accent (changes per game) ── */
+            --t-primary:   #C4A8E8;
+            --t-secondary: #A8DDD0;
+            --t-accent:    #F5B8C8;
+            --t-glow:      rgba(196,168,232,0.35);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(150deg, #F0F8FF 0%, #FDF5FF 50%, #FFF0F8 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: background 0.7s ease;
+        }
+
+        /* ── Theme overlays ── */
+        body.theme-pjsk   { background: linear-gradient(150deg, #FFF0FA 0%, #F8F0FF 40%, #F0F5FF 100%); }
+        body.theme-maimai { background: linear-gradient(150deg, #FFF0FF 0%, #F0FFFF 50%, #FFFDF0 100%); }
+        body.theme-arknights { background: linear-gradient(150deg, #0D1B2A 0%, #162535 50%, #1C2C3E 100%); }
+
+        body.theme-arknights { --text-dark: #E8EDF2; --text-mid: #9BAABB; --text-light: #5A7080; --card-bg: rgba(30,50,68,0.80); --card-border: rgba(230,126,34,0.30); --shadow: 0 8px 40px rgba(0,0,0,0.4); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F0F8FF; }
+        ::-webkit-scrollbar-thumb { background: var(--mint); border-radius: 10px; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 15px 48px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(196,168,232,0.22);
+            gap: 12px;
+            transition: background 0.5s, border-color 0.5s;
+        }
+        body.theme-arknights nav { background: rgba(13,27,42,0.88); border-color: rgba(230,126,34,0.25); }
+
+        .nav-logo {
+            font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #9B72CF, #E8709A);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            flex-shrink: 0; text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 4px; list-style: none; flex: 1; justify-content: center; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-mid);
+            font-weight: 700; font-size: 0.88rem;
+            padding: 8px 16px; border-radius: 20px; transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .nav-links a:hover  { background: rgba(168,221,208,0.2); color: var(--text-dark); }
+        .nav-links a.active { background: linear-gradient(135deg,rgba(196,168,232,0.3),rgba(245,184,200,0.3)); color: var(--text-dark); }
+
+        .lang-btn {
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+            border: 1.5px solid var(--card-border); color: var(--text-mid);
+            font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 800;
+            padding: 7px 14px; border-radius: 20px; cursor: pointer;
+            transition: all 0.25s;
+        }
+        .lang-btn:hover {
+            background: linear-gradient(135deg, var(--mint), var(--sky));
+            color: white; border-color: transparent;
+        }
+
+        /* ── PARTICLES ── */
+        .particles-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .particle { position: absolute; font-size: 1.2rem; animation: floatUp linear infinite; opacity: 0; }
+        @keyframes floatUp {
+            0%   { transform: translateY(100vh) rotate(0deg);    opacity: 0; }
+            8%   { opacity: 0.8; }
+            92%  { opacity: 0.8; }
+            100% { transform: translateY(-120px) rotate(540deg); opacity: 0; }
+        }
+
+        /* ── PAGE HERO ── */
+        .page-hero {
+            padding: 120px 48px 56px;
+            text-align: center; position: relative; z-index: 1;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(196,168,232,0.18); border: 1px solid rgba(196,168,232,0.4);
+            color: var(--text-mid); font-size: 0.78rem; font-weight: 800;
+            padding: 6px 16px; border-radius: 20px; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 18px;
+            transition: background 0.5s, border-color 0.5s, color 0.5s;
+        }
+        .hero-title {
+            font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 900;
+            letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px;
+            background: linear-gradient(135deg, var(--t-primary), var(--t-accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            transition: all 0.5s;
+        }
+        .hero-sub {
+            font-size: 1.05rem; color: var(--text-mid); font-weight: 600;
+            max-width: 480px; margin: 0 auto;
+        }
+
+        /* ── WRAPPER ── */
+        .page-wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px 80px; position: relative; z-index: 1; }
+
+        /* ── GAME SELECTOR ── */
+        .game-selector {
+            display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+        .game-tab {
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 28px; border-radius: 24px; cursor: pointer;
+            border: 2px solid var(--card-border);
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
+            color: var(--text-mid);
+            transition: all 0.35s ease;
+            position: relative; overflow: hidden;
+        }
+        .game-tab::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--t-primary), var(--t-accent));
+            opacity: 0; transition: opacity 0.35s;
+        }
+        .game-tab:hover::before, .game-tab.active::before { opacity: 0.12; }
+        .game-tab.active {
+            border-color: var(--t-primary);
+            color: var(--text-dark);
+            box-shadow: 0 4px 24px var(--t-glow);
+        }
+        .game-tab:hover { border-color: var(--t-primary); color: var(--text-dark); transform: translateY(-2px); }
+        .game-tab-icon { font-size: 1.4rem; position: relative; z-index: 1; }
+        .game-tab-label { position: relative; z-index: 1; }
+        .game-tab-sub { font-size: 0.72rem; font-weight: 600; color: var(--text-light); display: block; position: relative; z-index: 1; }
+
+        /* ── SECTION HEADER ── */
+        .section-header { text-align: center; margin-bottom: 32px; }
+        .section-label {
+            display: inline-block;
+            font-size: 0.72rem; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--text-light);
+            background: rgba(196,168,232,0.15); border: 1px solid var(--card-border);
+            padding: 5px 14px; border-radius: 20px; margin-bottom: 12px;
+        }
+        .section-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+        .section-sub { font-size: 0.9rem; color: var(--text-mid); font-weight: 600; }
+
+        /* ── CHARACTER GRID ── */
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        /* ── CHARACTER CARD ── */
+        .char-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 22px;
+            padding: 20px 14px 16px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            transition: all 0.35s ease;
+            cursor: default;
+            position: relative; overflow: hidden;
+        }
+        .char-card::before {
+            content: ''; position: absolute; inset: 0; border-radius: 22px;
+            background: linear-gradient(160deg, var(--t-primary), var(--t-accent));
+            opacity: 0.07; transition: opacity 0.35s;
+        }
+        .char-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px var(--t-glow); }
+        .char-card:hover::before { opacity: 0.15; }
+
+        /* Rarity border glow */
+        .char-card.rarity-6 { border-color: rgba(230,126,34,0.6); }
+        .char-card.rarity-5 { border-color: rgba(255,193,7,0.5); }
+        .char-card.rarity-4 { border-color: rgba(196,168,232,0.6); }
+        .char-card.rarity-3 { border-color: rgba(168,221,208,0.5); }
+        .char-card.rarity-2 { border-color: rgba(168,200,240,0.4); }
+        .char-card.rarity-1 { border-color: rgba(200,200,200,0.3); }
+
+        .char-art {
+            width: 88px; height: 88px; border-radius: 50%;
+            margin: 0 auto 12px;
+            background: linear-gradient(135deg, var(--t-primary), var(--t-accent));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem;
+            border: 2.5px solid rgba(255,255,255,0.5);
+            position: relative; z-index: 1;
+            overflow: hidden;
+            transition: background 0.5s;
+        }
+        .char-art img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+        .char-fav {
+            position: absolute; top: 10px; right: 12px;
+            font-size: 0.85rem; z-index: 2;
+        }
+        .char-name {
+            font-size: 0.9rem; font-weight: 900; color: var(--text-dark);
+            margin-bottom: 3px; position: relative; z-index: 1;
+            transition: color 0.5s;
+        }
+        .char-name-jp {
+            font-size: 0.75rem; color: var(--text-light); font-weight: 600;
+            margin-bottom: 6px; position: relative; z-index: 1;
+        }
+        .char-tag {
+            display: inline-block; font-size: 0.7rem; font-weight: 800;
+            padding: 3px 10px; border-radius: 12px;
+            background: rgba(196,168,232,0.2); color: var(--text-mid);
+            margin-bottom: 8px; position: relative; z-index: 1;
+            transition: background 0.5s;
+        }
+        .char-note {
+            font-size: 0.72rem; color: var(--text-light); font-style: italic;
+            font-weight: 600; position: relative; z-index: 1;
+            line-height: 1.4;
+        }
+        .rarity-stars {
+            font-size: 0.65rem; color: #FFD700; letter-spacing: 1px;
+            margin-bottom: 4px; position: relative; z-index: 1;
+        }
+
+        /* ── EMPTY / PLACEHOLDER CARD ── */
+        .char-card.placeholder {
+            border-style: dashed; opacity: 0.5;
+            cursor: pointer;
+        }
+        .char-card.placeholder:hover { opacity: 0.8; }
+
+        /* ── OWNED BADGE ── */
+        .owned-badge {
+            display: inline-block; font-size: 0.65rem; font-weight: 800;
+            padding: 2px 8px; border-radius: 10px;
+            background: rgba(72,199,142,0.2); color: #3bb87a;
+            border: 1px solid rgba(72,199,142,0.4);
+            margin-top: 4px; position: relative; z-index: 1;
+        }
+
+        /* ── CARD (generic glass card) ── */
+        .card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 22px;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            transition: all 0.35s;
+        }
+
+        /* ── GAME INFO BAR ── */
+        .game-info-bar {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            padding: 18px 24px; border-radius: 18px; margin-bottom: 32px;
+            background: var(--card-bg); border: 1.5px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            transition: all 0.5s;
+        }
+        .game-info-icon { font-size: 2.4rem; }
+        .game-info-name { font-size: 1.2rem; font-weight: 900; color: var(--text-dark); transition: color 0.5s; }
+        .game-info-desc { font-size: 0.82rem; color: var(--text-mid); font-weight: 600; }
+        .game-info-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+        .pill {
+            font-size: 0.72rem; font-weight: 800; padding: 5px 12px; border-radius: 14px;
+            background: rgba(196,168,232,0.15); color: var(--text-mid);
+            border: 1px solid var(--card-border);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center; padding: 40px 24px;
+            color: var(--text-light); font-size: 0.82rem; font-weight: 700;
+            border-top: 1px solid var(--card-border);
+        }
+        .footer-social { display: flex; gap: 12px; justify-content: center; margin-bottom: 10px; }
+        .footer-social a {
+            width: 36px; height: 36px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            background: var(--card-bg); border: 1.5px solid var(--card-border);
+            color: var(--text-mid); font-size: 0.78rem; font-weight: 800;
+            text-decoration: none; transition: all 0.25s;
+        }
+        .footer-social a:hover { background: var(--lavender); color: white; border-color: transparent; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            nav { padding: 12px 20px; }
+            .page-hero { padding: 100px 20px 40px; }
+            .page-wrap { padding: 0 16px 60px; }
+            .game-tab { padding: 12px 18px; font-size: 0.85rem; }
+            .char-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+        }
+        @media (max-width: 500px) {
+            .game-selector { gap: 8px; }
+            .game-tab { padding: 10px 14px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<div class="particles-container" id="particles"></div>
+
+<!-- NAV -->
+<nav>
+    <a href="index.html" class="nav-logo">Jeffi ✦</a>
+    <ul class="nav-links">
+        <li><a href="index.html"                data-en="🏠 Home"      data-zh="🏠 首页">🏠 Home</a></li>
+        <li><a href="projects.html"             data-en="🚀 Projects"  data-zh="🚀 项目">🚀 Projects</a></li>
+        <li><a href="games.html"                data-en="🎮 Games"     data-zh="🎮 游戏">🎮 Games</a></li>
+        <li><a href="anime.html"  class="active" data-en="✨ Anime"      data-zh="✨ 动漫">✨ Anime</a></li>
+        <li><a href="index.html#music"          data-en="🎵 Music"     data-zh="🎵 音乐">🎵 Music</a></li>
+        <li><a href="index.html#gallery"        data-en="🖼️ Gallery"   data-zh="🖼️ 相册">🖼️ Gallery</a></li>
+    </ul>
+    <button class="lang-btn" id="langBtn">🌐 中文</button>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+    <div class="hero-badge" data-en="✨ Anime &amp; Gacha" data-zh="✨ 动漫与手游">✨ Anime &amp; Gacha</div>
+    <h1 class="hero-title" data-en="Characters I Love" data-zh="我爱的角色">Characters I Love</h1>
+    <p class="hero-sub" data-en="Click a game to explore my roster and favourite picks" data-zh="点击游戏查看我的阵容和最爱角色">Click a game to explore my roster and favourite picks</p>
+</div>
+
+<!-- MAIN -->
+<div class="page-wrap">
+
+    <!-- GAME SELECTOR TABS -->
+    <div class="game-selector" id="gameTabs">
+        <button class="game-tab active" data-game="pjsk">
+            <span class="game-tab-icon">🌈</span>
+            <span class="game-tab-label">
+                Project Sekai
+                <span class="game-tab-sub" data-en="Colorful Stage" data-zh="多彩舞台">Colorful Stage</span>
+            </span>
+        </button>
+        <button class="game-tab" data-game="maimai">
+            <span class="game-tab-icon">🎵</span>
+            <span class="game-tab-label">
+                maimai DX
+                <span class="game-tab-sub" data-en="Rhythm Arcade" data-zh="音游街机">Rhythm Arcade</span>
+            </span>
+        </button>
+        <button class="game-tab" data-game="arknights">
+            <span class="game-tab-icon">⚔️</span>
+            <span class="game-tab-label">
+                Arknights
+                <span class="game-tab-sub" data-en="明日方舟" data-zh="明日方舟">明日方舟</span>
+            </span>
+        </button>
+    </div>
+
+    <!-- GAME INFO BAR -->
+    <div class="game-info-bar" id="gameInfoBar">
+        <div class="game-info-icon" id="infoIcon">🌈</div>
+        <div>
+            <div class="game-info-name" id="infoName">Project Sekai: Colorful Stage</div>
+            <div class="game-info-desc" id="infoDesc">feat. Hatsune Miku · Rhythm · Mobile</div>
+        </div>
+        <div class="game-info-pills" id="infoPills"></div>
+    </div>
+
+    <!-- CHARACTER GRID -->
+    <div class="section-header">
+        <div class="section-label" id="gridLabel" data-en="My Picks" data-zh="我的选择">My Picks</div>
+        <h2 class="section-title" id="gridTitle" data-en="Favourite Characters" data-zh="最爱角色">Favourite Characters</h2>
+        <p class="section-sub" id="gridSub" data-en="⭐ = Favourite  ·  Hover a card to feel the vibe" data-zh="⭐ = 最爱  ·  悬停角色卡感受氛围">⭐ = Favourite  ·  Hover a card to feel the vibe</p>
+    </div>
+    <div class="char-grid" id="charGrid"></div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-social">
+        <a href="#" title="GitHub">GH</a>
+        <a href="#" title="Twitter/X">𝕏</a>
+        <a href="#" title="Discord">DC</a>
+        <a href="#" title="YouTube">▶</a>
+    </div>
+    <p data-en="Made with 💜 by Jeffi &nbsp;·&nbsp; 2026" data-zh="由 Jeffi 用 💜 制作 &nbsp;·&nbsp; 2026">
+        Made with 💜 by Jeffi &nbsp;·&nbsp; 2026
+    </p>
+</footer>
+
+<script>
+/* ───────────────── PARTICLES ───────────────── */
+const PARTICLE_SETS = {
+    pjsk:      ['🌈','✨','🎸','🎤','🎶','⭐','🌟','💫','🎀'],
+    maimai:    ['🎵','🎶','⭐','💫','🌸','🎯','✨','🎪'],
+    arknights: ['⚔️','🛡️','🏹','💊','🔥','⭐','🌙','🦅'],
+    default:   ['✨','⭐','💫','🌟','🎀','🌸','🎵'],
+};
+let currentParticleSet = PARTICLE_SETS.default;
+const pCont = document.getElementById('particles');
+
+function spawnParticle() {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = currentParticleSet[Math.floor(Math.random() * currentParticleSet.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (8 + Math.random() * 10) + 's';
+    el.style.animationDelay = '0s';
+    el.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+    pCont.appendChild(el);
+    setTimeout(() => el.remove(), 20000);
+}
+setInterval(spawnParticle, 800);
+
+/* ───────────────── LANGUAGE ───────────────── */
+let lang = 'en';
+const langBtn = document.getElementById('langBtn');
+function applyLang(l) {
+    document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+        el.innerHTML = el.getAttribute('data-' + l);
+    });
+    langBtn.innerHTML = l === 'en' ? '🌐 中文' : '🌐 EN';
+    document.documentElement.lang = l === 'zh' ? 'zh' : 'en';
+    renderChars(activeGame);
+}
+langBtn.addEventListener('click', () => { lang = lang === 'en' ? 'zh' : 'en'; applyLang(lang); });
+
+/* ───────────────── THEMES ───────────────── */
+/*
+  ✏️ CUSTOMISE THEMES HERE
+  Each game can have its own colour palette.
+  These are placeholder themes — you can fully redesign them later!
+*/
+const themes = {
+    pjsk: {
+        primary:   '#FF7BAC',
+        secondary: '#9B72CF',
+        accent:    '#5BC8F5',
+        glow:      'rgba(255,123,172,0.30)',
+        bodyClass: 'theme-pjsk',
+        particles: PARTICLE_SETS.pjsk,
+    },
+    maimai: {
+        primary:   '#FF5BB5',
+        secondary: '#00C4C4',
+        accent:    '#FFD166',
+        glow:      'rgba(255,91,181,0.28)',
+        bodyClass: 'theme-maimai',
+        particles: PARTICLE_SETS.maimai,
+    },
+    arknights: {
+        primary:   '#E67E22',
+        secondary: '#2980B9',
+        accent:    '#BDC3C7',
+        glow:      'rgba(230,126,34,0.35)',
+        bodyClass: 'theme-arknights',
+        particles: PARTICLE_SETS.arknights,
+    },
+};
+
+function applyTheme(game) {
+    const t = themes[game];
+    if (!t) return;
+    // Remove all theme classes
+    document.body.classList.remove('theme-pjsk', 'theme-maimai', 'theme-arknights');
+    document.body.classList.add(t.bodyClass);
+    // Update CSS variables
+    const r = document.documentElement;
+    r.style.setProperty('--t-primary',   t.primary);
+    r.style.setProperty('--t-secondary', t.secondary);
+    r.style.setProperty('--t-accent',    t.accent);
+    r.style.setProperty('--t-glow',      t.glow);
+    // Swap particles
+    currentParticleSet = t.particles;
+}
+
+/* ───────────────── GAME DATA ───────────────── */
+/*
+  ✏️ HOW TO EDIT CHARACTERS:
+    name     : English name
+    nameJp   : Japanese / original name (or leave '')
+    emoji    : emoji avatar (until you add a real image URL)
+    imgUrl   : optional — URL to character art/icon (set to '' to use emoji)
+    tag      : unit, faction, or role label
+    rarity   : number 1–6 (controls border glow)
+    fav      : true = ⭐ favourite
+    owned    : true = green "Owned" badge
+    note     : short personal note (optional, leave '' to hide)
+    en/zh    : { tag, note } — bilingual labels
+*/
+const gameData = {
+
+    /* ════════════════════════════════════════
+       PROJECT SEKAI: COLORFUL STAGE
+       ✏️ To add a real character image:
+          Set imgUrl to a direct image URL, e.g.:
+          imgUrl: 'https://example.com/mafuyu.png'
+       ════════════════════════════════════════ */
+    pjsk: {
+        icon:  '🌈',
+        en: { name: 'Project Sekai: Colorful Stage', desc: 'feat. Hatsune Miku · Rhythm · Mobile',
+              pills: ['Gacha', 'Rhythm', 'Mobile'], label: 'My Picks',
+              title: 'Favourite Characters', sub: '⭐ = Favourite' },
+        zh: { name: 'Project Sekai：多彩舞台',         desc: 'feat.初音未来 · 音游 · 手游',
+              pills: ['手游','音游','手机'], label: '我的最爱',
+              title: '最爱角色', sub: '⭐ = 最爱' },
+        characters: [
+            {
+                emoji: '🌙',
+                avatarBg: 'linear-gradient(135deg, #2E1A5C, #7B4FA0)',
+                name: 'Asahina Mafuyu', nameJp: '朝比奈まふゆ',
+                rarity: 4, fav: true, owned: false,
+                imgUrl: '', // ✏️ Add image URL here
+                en: { tag: '25-ji, Nightcord de.', note: 'lyricist · lost in her own world' },
+                zh: { tag: '25时，夜晚绳结。',      note: '作词人 · 迷失在自己世界里' },
+            },
+            {
+                emoji: '🎤',
+                avatarBg: 'linear-gradient(135deg, #FF7BAC, #FF4D9A)',
+                name: 'Azusawa Kohane', nameJp: '小豆沢こはね',
+                rarity: 4, fav: true, owned: false,
+                imgUrl: '', // ✏️ Add image URL here
+                en: { tag: 'Vivid BAD SQUAD', note: 'vocals · timid girl who found her voice' },
+                zh: { tag: 'Vivid BAD SQUAD', note: '歌手 · 找到声音的腼腆少女' },
+            },
+            {
+                emoji: '💙',
+                avatarBg: 'linear-gradient(135deg, #39C5BB, #0099CC)',
+                name: 'Hatsune Miku', nameJp: '初音ミク',
+                rarity: 4, fav: true, owned: false,
+                imgUrl: '', // ✏️ Add image URL here
+                en: { tag: 'Virtual Singer', note: 'she\'s different for every unit ♡' },
+                zh: { tag: '虚拟歌手',        note: '在每个队伍里都有不同的她 ♡' },
+            },
+        ],
+    },
+
+    /* ════════════════════════════════════════
+       MAIMAI DX — SALT (ソルト)
+       Salt is a partner character from CAFE MiLK.
+       Festival version: white turtleneck dress,
+       blue coat, cat ears, twintails, lantern.
+
+       ✏️ To add her official art:
+          Visit https://maimai.fandom.com/wiki/Salt
+          and copy the image URL into imgUrl below.
+       ════════════════════════════════════════ */
+    maimai: {
+        icon:  '🎵',
+        en: { name: 'maimai DX', desc: 'Rhythm Arcade · SEGA · Partner System',
+              pills: ['Arcade', 'Rhythm', 'SEGA'], label: 'Partner Character',
+              title: 'Salt (ソルト)', sub: 'My favourite partner — especially her Festival outfit' },
+        zh: { name: '舞萌 DX', desc: '音游街机 · SEGA · 搭档系统',
+              pills: ['街机','音游','SEGA'], label: '搭档角色',
+              title: 'Salt（ソルト）', sub: '最喜欢的搭档 — 尤其是祭典版本' },
+        characters: [
+            {
+                emoji: '🐱',
+                avatarBg: 'linear-gradient(135deg, #FFD6E8, #B8E0FF)',
+                name: 'Salt', nameJp: 'ソルト',
+                rarity: 4, fav: true, owned: true,
+                imgUrl: '', // ✏️ Add standard outfit image URL here
+                en: { tag: 'CAFE MiLK · Partner', note: 'chibi kitty · travelled the world for Fantasmic Blue Wheat Flour' },
+                zh: { tag: 'CAFE MiLK · 搭档',    note: '猫猫 · 为了寻找幻想蓝色小麦粉而旅行' },
+            },
+            {
+                emoji: '🏮',
+                avatarBg: 'linear-gradient(135deg, #D4EAF7, #FAFAFF, #C8DCEF)',
+                name: 'Salt — Festival', nameJp: 'ソルト（ふぇすてぃばる）',
+                rarity: 4, fav: true, owned: true,
+                imgUrl: '', // ✏️ Add Festival outfit image URL here
+                en: { tag: 'FESTiVAL Outfit', note: 'white dress · blue coat · holding a lantern 🏮' },
+                zh: { tag: '祭典版本',           note: '白色连衣裙 · 蓝色外套 · 手提灯笼 🏮' },
+            },
+        ],
+    },
+
+    /* ════════════════════════════════════════
+       ARKNIGHTS (明日方舟)
+       ✏️ To add operator portraits from the official
+          arknights wiki, visit arknights.wiki.gg
+          and copy portrait image URLs into imgUrl.
+       ════════════════════════════════════════ */
+    arknights: {
+        icon:  '⚔️',
+        en: { name: 'Arknights', desc: '明日方舟 · Tower Defence · Mobile',
+              pills: ['Gacha', 'Strategy', 'Mobile'], label: 'My Operators',
+              title: 'Operator Roster', sub: '⭐ = Favourite  ·  Stars = rarity' },
+        zh: { name: '明日方舟', desc: 'Arknights · 塔防 · 手游',
+              pills: ['手游','塔防','策略'], label: '我的干员',
+              title: '干员阵容', sub: '⭐ = 最爱  ·  星级 = 稀有度' },
+        characters: [
+            {
+                emoji: '🐰',
+                avatarBg: 'linear-gradient(135deg, #3A5EA8, #6A9BD4)',
+                name: 'Amiya', nameJp: '阿米娅',
+                rarity: 5, fav: true, owned: true,
+                imgUrl: '', // ✏️ char_002_amiya — add portrait URL
+                en: { tag: 'Guard · Rhodes Island', note: 'the OG protagonist · never letting her go ♡' },
+                zh: { tag: '近卫 · 罗德岛',         note: '主角 · 永远的守护对象 ♡' },
+            },
+            {
+                emoji: '🔥',
+                avatarBg: 'linear-gradient(135deg, #8B1A1A, #E03030, #FF7020)',
+                name: 'Reed the Flameshadow', nameJp: '焰影苇草',
+                rarity: 6, fav: true, owned: false,
+                imgUrl: '', // ✏️ char_1020_reed2 — add portrait URL
+                en: { tag: 'Guard · 6★ Alter', note: 'flames and grief — stunning design' },
+                zh: { tag: '近卫 · 6★ 异格',   note: '火焰与悲怆 — 设计绝美' },
+            },
+            {
+                emoji: '💀',
+                avatarBg: 'linear-gradient(135deg, #1A1A2E, #4A2060, #7A3A90)',
+                name: 'Necrass', nameJp: '涅克拉斯',
+                rarity: 6, fav: true, owned: false,
+                imgUrl: '', // ✏️ add portrait URL from arknights.wiki.gg
+                en: { tag: 'Caster · 6★  Shaper', note: 'Eblana reanimated · Reed\'s twin · hauntingly beautiful' },
+                zh: { tag: '术师 · 6★ 构形',       note: 'Eblana复活体 · 苇草的双胞胎 · 美得令人心碎' },
+            },
+        ],
+    },
+
+};
+
+/* ───────────────── RENDER ───────────────── */
+let activeGame = 'pjsk';
+
+function renderChars(game) {
+    const data = gameData[game];
+    if (!data) return;
+
+    // Info bar
+    document.getElementById('infoIcon').textContent  = data.icon;
+    document.getElementById('infoName').textContent  = data[lang].name;
+    document.getElementById('infoDesc').textContent  = data[lang].desc;
+    document.getElementById('infoPills').innerHTML   = data[lang].pills.map(p => `<span class="pill">${p}</span>`).join('');
+
+    // Section header
+    document.getElementById('gridLabel').textContent = data[lang].label;
+    document.getElementById('gridTitle').textContent = data[lang].title;
+    document.getElementById('gridSub').textContent   = data[lang].sub;
+
+    // Character cards
+    document.getElementById('charGrid').innerHTML = data.characters.map(c => `
+    <div class="char-card rarity-${c.rarity}" data-avatarbg="${c.avatarBg || ''}">
+        ${c.fav ? '<div class="char-fav">⭐</div>' : ''}
+        <div class="char-art" style="${c.avatarBg ? 'background:'+c.avatarBg : ''}">
+            ${c.imgUrl ? `<img src="${c.imgUrl}" alt="${c.name}">` : c.emoji}
+        </div>
+        <div class="rarity-stars">${'★'.repeat(c.rarity)}${'☆'.repeat(Math.max(0,6-c.rarity))}</div>
+        <div class="char-name">${c.name}</div>
+        ${c.nameJp ? `<div class="char-name-jp">${c.nameJp}</div>` : ''}
+        <div class="char-tag">${c[lang].tag}</div>
+        ${c[lang].note ? `<div class="char-note">${c[lang].note}</div>` : ''}
+    </div>`).join('');
+    attachCardHover();
+}
+
+/* ───────────────── GAME TAB INTERACTION ───────────────── */
+const tabs = document.querySelectorAll('.game-tab');
+
+tabs.forEach(tab => {
+    const game = tab.dataset.game;
+
+    // Click: lock in game + apply theme
+    tab.addEventListener('click', () => {
+        activeGame = game;
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        applyTheme(game);
+        renderChars(game);
+    });
+});
+
+// Character card hover: shift accent to character's avatar colours
+function attachCardHover() {
+    document.querySelectorAll('.char-card').forEach(card => {
+        const bg = card.dataset.avatarbg;
+        if (!bg) return;
+        // Extract first and last colour stops from the gradient
+        const stops = bg.match(/#[0-9A-Fa-f]{3,6}/g);
+        if (!stops || stops.length < 2) return;
+        card.addEventListener('mouseenter', () => {
+            document.documentElement.style.setProperty('--t-primary', stops[0]);
+            document.documentElement.style.setProperty('--t-accent',  stops[stops.length - 1]);
+            document.documentElement.style.setProperty('--t-glow',    stops[0] + '55');
+        });
+        card.addEventListener('mouseleave', () => {
+            applyTheme(activeGame); // restore game theme on leave
+        });
+    });
+}
+
+/* ───────────────── INIT ───────────────── */
+applyTheme('pjsk');
+renderChars('pjsk');
+applyLang('en');
+
+</script>
+</body>
+</html>
