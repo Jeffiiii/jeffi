@@ -158,7 +158,7 @@
             box-shadow: 0 4px 24px var(--t-glow);
         }
         .game-tab:hover { border-color: var(--t-primary); color: var(--text-dark); transform: translateY(-2px); }
-        .game-tab-icon { font-size: 1.4rem; position: relative; z-index: 1; }
+        .game-tab-icon { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; position: relative; z-index: 1; flex-shrink: 0; display: block; }
         .game-tab-label { position: relative; z-index: 1; }
         .game-tab-sub { font-size: 0.72rem; font-weight: 600; color: var(--text-light); display: block; position: relative; z-index: 1; }
 
@@ -325,6 +325,18 @@
             .game-selector { gap: 8px; }
             .game-tab { padding: 10px 14px; font-size: 0.8rem; }
         }
+
+        body.theme-wuwa     { background: linear-gradient(150deg, #071520 0%, #0C2535 50%, #0A1A28 100%); }
+        body.theme-hsr      { background: linear-gradient(150deg, #0A0420 0%, #180842 50%, #100520 100%); }
+        body.theme-endfield { background: linear-gradient(150deg, #060E14 0%, #0A1E2C 50%, #071520 100%); }
+
+        body.theme-wuwa     { --text-dark: #C8F0EE; --text-mid: #7ABEBA; --text-light: #3A7070; --card-bg: rgba(10,30,45,0.82); --card-border: rgba(0,212,200,0.28); --shadow: 0 8px 40px rgba(0,0,0,0.45); }
+        body.theme-hsr      { --text-dark: #F0E8FF; --text-mid: #A890C8; --text-light: #685888; --card-bg: rgba(15,5,35,0.82); --card-border: rgba(255,184,48,0.28); --shadow: 0 8px 40px rgba(0,0,0,0.5); }
+        body.theme-endfield { --text-dark: #C0E8F0; --text-mid: #7AAABB; --text-light: #3A6878; --card-bg: rgba(8,18,28,0.82); --card-border: rgba(0,180,196,0.28); --shadow: 0 8px 40px rgba(0,0,0,0.5); }
+
+        body.theme-wuwa nav     { background: rgba(7,21,32,0.90); border-color: rgba(0,212,200,0.22); }
+        body.theme-hsr nav      { background: rgba(10,4,28,0.90); border-color: rgba(255,184,48,0.22); }
+        body.theme-endfield nav { background: rgba(6,14,20,0.90); border-color: rgba(0,180,196,0.22); }
     </style>
 </head>
 <body>
@@ -359,24 +371,45 @@
     <!-- GAME SELECTOR TABS -->
     <div class="game-selector" id="gameTabs">
         <button class="game-tab active" data-game="pjsk">
-            <span class="game-tab-icon">🌈</span>
+            <img class="game-tab-icon" src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22pjsk-bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231a0a3e%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%232d1060%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22pjsk-prism%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20%20%20stop-color%3D%22%23FF6EC7%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2233%25%22%20%20stop-color%3D%22%23A78BFA%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2266%25%22%20%20stop-color%3D%22%2338BDF8%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2334D399%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23pjsk-bg%29%22/%3E%0A%20%20%3Cpolygon%20points%3D%2250%2C12%2084%2C75%2016%2C75%22%20fill%3D%22url%28%23pjsk-prism%29%22%20opacity%3D%220.92%22/%3E%0A%20%20%3Cpolygon%20points%3D%2250%2C12%2050%2C75%2030%2C65%22%20fill%3D%22white%22%20opacity%3D%220.18%22/%3E%0A%20%20%3Cpolygon%20points%3D%2250%2C12%2070%2C65%2050%2C75%22%20fill%3D%22white%22%20opacity%3D%220.08%22/%3E%0A%20%20%3Cline%20x1%3D%2250%22%20y1%3D%2275%22%20x2%3D%2250%22%20y2%3D%2288%22%20stroke%3D%22url%28%23pjsk-prism%29%22%20stroke-width%3D%223%22%20opacity%3D%220.7%22/%3E%0A%20%20%3Ccircle%20cx%3D%2220%22%20cy%3D%2222%22%20r%3D%223%22%20fill%3D%22%23FFE66D%22/%3E%0A%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2216%22%20r%3D%222%22%20fill%3D%22%23FFE66D%22/%3E%0A%20%20%3Ccircle%20cx%3D%2210%22%20cy%3D%2255%22%20r%3D%222%22%20fill%3D%22white%22%20opacity%3D%220.6%22/%3E%0A%20%20%3Ccircle%20cx%3D%2288%22%20cy%3D%2242%22%20r%3D%221.5%22%20fill%3D%22%23A78BFA%22/%3E%0A%3C/svg%3E" alt="Project Sekai"/>
             <span class="game-tab-label">
                 Project Sekai
                 <span class="game-tab-sub" data-en="Colorful Stage" data-zh="多彩舞台">Colorful Stage</span>
             </span>
         </button>
         <button class="game-tab" data-game="maimai">
-            <span class="game-tab-icon">🎵</span>
+            <img class="game-tab-icon" src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22%23FF1483%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2237%22%20fill%3D%22none%22%20stroke%3D%22rgba%28255%2C255%2C255%2C0.85%29%22%20stroke-width%3D%224.5%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2221%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.12%29%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2211%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.92%29%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2213%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2276%22%20cy%3D%2224%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2287%22%20cy%3D%2250%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2276%22%20cy%3D%2276%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2287%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2276%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2213%22%20cy%3D%2250%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%3C/svg%3E" alt="maimai DX"/>
             <span class="game-tab-label">
                 maimai DX
                 <span class="game-tab-sub" data-en="Rhythm Arcade" data-zh="音游街机">Rhythm Arcade</span>
             </span>
         </button>
         <button class="game-tab" data-game="arknights">
-            <span class="game-tab-icon">⚔️</span>
+            <img class="game-tab-icon" src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22%230D1B2A%22/%3E%0A%20%20%3Cpath%20d%3D%22M50%209%20L70%2052%20L83%2052%20L62%2074%20L70%2091%20L50%2076%20L30%2091%20L38%2074%20L17%2052%20L30%2052%20Z%22%0A%20%20%20%20%20%20%20%20fill%3D%22%23E8820A%22/%3E%0A%20%20%3Cellipse%20cx%3D%2250%22%20cy%3D%2246%22%20rx%3D%2212%22%20ry%3D%2212%22%20fill%3D%22%230D1B2A%22/%3E%0A%20%20%3Cline%20x1%3D%2238%22%20y1%3D%2224%22%20x2%3D%2262%22%20y2%3D%2224%22%20stroke%3D%22%23E8820A%22%20stroke-width%3D%222.5%22%20opacity%3D%220.4%22/%3E%0A%20%20%3Crect%20x%3D%2244%22%20y%3D%226%22%20width%3D%2212%22%20height%3D%225%22%20rx%3D%222%22%20fill%3D%22%23E8820A%22%20opacity%3D%220.6%22/%3E%0A%3C/svg%3E" alt="Arknights"/>
             <span class="game-tab-label">
                 Arknights
                 <span class="game-tab-sub" data-en="明日方舟" data-zh="明日方舟">明日方舟</span>
+            </span>
+        </button>
+        <button class="game-tab" data-game="wuwa">
+            <img class="game-tab-icon" src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22ww-g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23071520%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230C2535%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23ww-g%29%22%2F%3E%3Cpath%20d%3D%22M50%2020%20L50%2055%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M33%2036%20L50%2020%20L67%2036%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%223%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%224%22%20fill%3D%22%2300D4C8%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%221.5%22%20opacity%3D%220.38%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%2230%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%221%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2222%22%20r%3D%222%22%20fill%3D%22%2300D4C8%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2282%22%20cy%3D%2218%22%20r%3D%221.5%22%20fill%3D%22%23C0F0EE%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E" alt="Wuthering Waves"/>
+            <span class="game-tab-label">
+                Wuthering Waves
+                <span class="game-tab-sub" data-en="Open World Gacha" data-zh="开放世界手游">Open World Gacha</span>
+            </span>
+        </button>
+        <button class="game-tab" data-game="hsr">
+            <img class="game-tab-icon" src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22hsr-g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23070318%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23170840%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23hsr-g%29%22%2F%3E%3Cpolygon%20points%3D%2250%2C10%2057%2C34%2082%2C34%2062%2C50%2070%2C74%2050%2C58%2030%2C74%2038%2C50%2018%2C34%2043%2C34%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.92%22%2F%3E%3Cpolygon%20points%3D%2250%2C22%2055%2C38%2072%2C38%2058%2C48%2063%2C64%2050%2C55%2037%2C64%2042%2C48%2028%2C38%2045%2C38%22%20fill%3D%22%23070318%22%20opacity%3D%220.78%22%2F%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2218%22%20r%3D%222%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.72%22%2F%3E%3Ccircle%20cx%3D%2284%22%20cy%3D%2224%22%20r%3D%221.5%22%20fill%3D%22white%22%20opacity%3D%220.58%22%2F%3E%3Ccircle%20cx%3D%2288%22%20cy%3D%2260%22%20r%3D%221.5%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.5%22%2F%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2274%22%20r%3D%221.5%22%20fill%3D%22white%22%20opacity%3D%220.4%22%2F%3E%3Ccircle%20cx%3D%2276%22%20cy%3D%2283%22%20r%3D%222%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.62%22%2F%3E%3C%2Fsvg%3E" alt="Honkai: Star Rail"/>
+            <span class="game-tab-label">
+                Honkai: Star Rail
+                <span class="game-tab-sub" data-en="Turn-Based RPG" data-zh="回合制RPG">Turn-Based RPG</span>
+            </span>
+        </button>
+        <button class="game-tab" data-game="endfield">
+            <img class="game-tab-icon" src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22ef-g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23060E14%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230A1E2C%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23ef-g%29%22%2F%3E%3Cpolygon%20points%3D%2250%2C10%2079%2C27%2079%2C59%2050%2C76%2021%2C59%2021%2C27%22%20fill%3D%22none%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%222.5%22%2F%3E%3Cpolygon%20points%3D%2250%2C22%2067%2C32%2067%2C50%2050%2C60%2033%2C50%2033%2C32%22%20fill%3D%22rgba%280%2C180%2C196%2C0.07%29%22%2F%3E%3Cpath%20d%3D%22M50%2028%20L50%2062%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%2244%22%20x2%3D%2262%22%20y2%3D%2244%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%3Cline%20x1%3D%2241%22%20y1%3D%2228%22%20x2%3D%2259%22%20y2%3D%2228%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cline%20x1%3D%2241%22%20y1%3D%2262%22%20x2%3D%2259%22%20y2%3D%2262%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2281%22%20r%3D%223%22%20fill%3D%22%2300B4C4%22%20opacity%3D%220.72%22%2F%3E%3C%2Fsvg%3E" alt="Arknights: Endfield"/>
+            <span class="game-tab-label">
+                Arknights: Endfield
+                <span class="game-tab-sub" data-en="Action RPG" data-zh="动作RPG">Action RPG</span>
             </span>
         </button>
     </div>
@@ -420,6 +453,9 @@ const PARTICLE_SETS = {
     pjsk:      ['🌈','✨','🎸','🎤','🎶','⭐','🌟','💫','🎀'],
     maimai:    ['🎵','🎶','⭐','💫','🌸','🎯','✨','🎪'],
     arknights: ['⚔️','🛡️','🏹','💊','🔥','⭐','🌙','🦅'],
+    wuwa:      ['🌊','⚡','🌀','💎','✨','🌙','🔮','🌿'],
+    hsr:       ['⭐','🌟','💫','🚀','✨','🌙','💜','🪐'],
+    endfield:  ['⚙️','🔬','💡','⚡','🛡️','🌊','✨','🔷'],
     default:   ['✨','⭐','💫','🌟','🎀','🌸','🎵'],
 };
 let currentParticleSet = PARTICLE_SETS.default;
@@ -482,13 +518,37 @@ const themes = {
         bodyClass: 'theme-arknights',
         particles: PARTICLE_SETS.arknights,
     },
+    wuwa: {
+        primary:   '#00D4C8',
+        secondary: '#1A8CFF',
+        accent:    '#A0F0EC',
+        glow:      'rgba(0,212,200,0.35)',
+        bodyClass: 'theme-wuwa',
+        particles: PARTICLE_SETS.wuwa,
+    },
+    hsr: {
+        primary:   '#FFB830',
+        secondary: '#8B5CF6',
+        accent:    '#F0D8FF',
+        glow:      'rgba(255,184,48,0.38)',
+        bodyClass: 'theme-hsr',
+        particles: PARTICLE_SETS.hsr,
+    },
+    endfield: {
+        primary:   '#00B4C4',
+        secondary: '#1A6080',
+        accent:    '#A0E8F0',
+        glow:      'rgba(0,180,196,0.35)',
+        bodyClass: 'theme-endfield',
+        particles: PARTICLE_SETS.endfield,
+    },
 };
 
 function applyTheme(game) {
     const t = themes[game];
     if (!t) return;
     // Remove all theme classes
-    document.body.classList.remove('theme-pjsk', 'theme-maimai', 'theme-arknights');
+    document.body.classList.remove('theme-pjsk', 'theme-maimai', 'theme-arknights', 'theme-wuwa', 'theme-hsr', 'theme-endfield');
     document.body.classList.add(t.bodyClass);
     // Update CSS variables
     const r = document.documentElement;
@@ -514,6 +574,16 @@ function applyTheme(game) {
     note     : short personal note (optional, leave '' to hide)
     en/zh    : { tag, note } — bilingual labels
 */
+
+/* ── GAME ICONS ── */
+const gameIcons = {
+    pjsk:      'data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22pjsk-bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231a0a3e%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%232d1060%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22pjsk-prism%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20%20%20stop-color%3D%22%23FF6EC7%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2233%25%22%20%20stop-color%3D%22%23A78BFA%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2266%25%22%20%20stop-color%3D%22%2338BDF8%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2334D399%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23pjsk-bg%29%22/%3E%0A%20%20%3Cpolygon%20points%3D%2250%2C12%2084%2C75%2016%2C75%22%20fill%3D%22url%28%23pjsk-prism%29%22%20opacity%3D%220.92%22/%3E%0A%20%20%3Cpolygon%20points%3D%2250%2C12%2050%2C75%2030%2C65%22%20fill%3D%22white%22%20opacity%3D%220.18%22/%3E%0A%20%20%3Cpolygon%20points%3D%2250%2C12%2070%2C65%2050%2C75%22%20fill%3D%22white%22%20opacity%3D%220.08%22/%3E%0A%20%20%3Cline%20x1%3D%2250%22%20y1%3D%2275%22%20x2%3D%2250%22%20y2%3D%2288%22%20stroke%3D%22url%28%23pjsk-prism%29%22%20stroke-width%3D%223%22%20opacity%3D%220.7%22/%3E%0A%20%20%3Ccircle%20cx%3D%2220%22%20cy%3D%2222%22%20r%3D%223%22%20fill%3D%22%23FFE66D%22/%3E%0A%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2216%22%20r%3D%222%22%20fill%3D%22%23FFE66D%22/%3E%0A%20%20%3Ccircle%20cx%3D%2210%22%20cy%3D%2255%22%20r%3D%222%22%20fill%3D%22white%22%20opacity%3D%220.6%22/%3E%0A%20%20%3Ccircle%20cx%3D%2288%22%20cy%3D%2242%22%20r%3D%221.5%22%20fill%3D%22%23A78BFA%22/%3E%0A%3C/svg%3E',
+    maimai:    'data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22%23FF1483%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2237%22%20fill%3D%22none%22%20stroke%3D%22rgba%28255%2C255%2C255%2C0.85%29%22%20stroke-width%3D%224.5%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2221%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.12%29%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2211%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.92%29%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2213%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2276%22%20cy%3D%2224%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2287%22%20cy%3D%2250%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2276%22%20cy%3D%2276%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2287%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2276%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2213%22%20cy%3D%2250%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%20%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%225.5%22%20fill%3D%22white%22/%3E%0A%3C/svg%3E',
+    arknights: 'data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22%230D1B2A%22/%3E%0A%20%20%3Cpath%20d%3D%22M50%209%20L70%2052%20L83%2052%20L62%2074%20L70%2091%20L50%2076%20L30%2091%20L38%2074%20L17%2052%20L30%2052%20Z%22%0A%20%20%20%20%20%20%20%20fill%3D%22%23E8820A%22/%3E%0A%20%20%3Cellipse%20cx%3D%2250%22%20cy%3D%2246%22%20rx%3D%2212%22%20ry%3D%2212%22%20fill%3D%22%230D1B2A%22/%3E%0A%20%20%3Cline%20x1%3D%2238%22%20y1%3D%2224%22%20x2%3D%2262%22%20y2%3D%2224%22%20stroke%3D%22%23E8820A%22%20stroke-width%3D%222.5%22%20opacity%3D%220.4%22/%3E%0A%20%20%3Crect%20x%3D%2244%22%20y%3D%226%22%20width%3D%2212%22%20height%3D%225%22%20rx%3D%222%22%20fill%3D%22%23E8820A%22%20opacity%3D%220.6%22/%3E%0A%3C/svg%3E',
+    wuwa:      'data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22ww-g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23071520%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230C2535%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23ww-g%29%22%2F%3E%3Cpath%20d%3D%22M50%2020%20L50%2055%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M33%2036%20L50%2020%20L67%2036%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%223%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%224%22%20fill%3D%22%2300D4C8%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%221.5%22%20opacity%3D%220.38%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2264%22%20r%3D%2230%22%20fill%3D%22none%22%20stroke%3D%22%2300D4C8%22%20stroke-width%3D%221%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2222%22%20r%3D%222%22%20fill%3D%22%2300D4C8%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2282%22%20cy%3D%2218%22%20r%3D%221.5%22%20fill%3D%22%23C0F0EE%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E',
+    hsr:       'data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22hsr-g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23070318%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23170840%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23hsr-g%29%22%2F%3E%3Cpolygon%20points%3D%2250%2C10%2057%2C34%2082%2C34%2062%2C50%2070%2C74%2050%2C58%2030%2C74%2038%2C50%2018%2C34%2043%2C34%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.92%22%2F%3E%3Cpolygon%20points%3D%2250%2C22%2055%2C38%2072%2C38%2058%2C48%2063%2C64%2050%2C55%2037%2C64%2042%2C48%2028%2C38%2045%2C38%22%20fill%3D%22%23070318%22%20opacity%3D%220.78%22%2F%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2218%22%20r%3D%222%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.72%22%2F%3E%3Ccircle%20cx%3D%2284%22%20cy%3D%2224%22%20r%3D%221.5%22%20fill%3D%22white%22%20opacity%3D%220.58%22%2F%3E%3Ccircle%20cx%3D%2288%22%20cy%3D%2260%22%20r%3D%221.5%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.5%22%2F%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2274%22%20r%3D%221.5%22%20fill%3D%22white%22%20opacity%3D%220.4%22%2F%3E%3Ccircle%20cx%3D%2276%22%20cy%3D%2283%22%20r%3D%222%22%20fill%3D%22%23FFB830%22%20opacity%3D%220.62%22%2F%3E%3C%2Fsvg%3E',
+    endfield:  'data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22ef-g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23060E14%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230A1E2C%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22url%28%23ef-g%29%22%2F%3E%3Cpolygon%20points%3D%2250%2C10%2079%2C27%2079%2C59%2050%2C76%2021%2C59%2021%2C27%22%20fill%3D%22none%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%222.5%22%2F%3E%3Cpolygon%20points%3D%2250%2C22%2067%2C32%2067%2C50%2050%2C60%2033%2C50%2033%2C32%22%20fill%3D%22rgba%280%2C180%2C196%2C0.07%29%22%2F%3E%3Cpath%20d%3D%22M50%2028%20L50%2062%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%2244%22%20x2%3D%2262%22%20y2%3D%2244%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%3Cline%20x1%3D%2241%22%20y1%3D%2228%22%20x2%3D%2259%22%20y2%3D%2228%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cline%20x1%3D%2241%22%20y1%3D%2262%22%20x2%3D%2259%22%20y2%3D%2262%22%20stroke%3D%22%2300B4C4%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2281%22%20r%3D%223%22%20fill%3D%22%2300B4C4%22%20opacity%3D%220.72%22%2F%3E%3C%2Fsvg%3E',
+};
 const gameData = {
 
     /* ════════════════════════════════════════
@@ -646,6 +716,136 @@ const gameData = {
         ],
     },
 
+    /* ════════════════════════════════════════
+       WUTHERING WAVES (鸣潮)
+       ✏️ Add character art URLs from Kuro Games official site
+       ════════════════════════════════════════ */
+    wuwa: {
+        icon:  '🌊',
+        en: { name: 'Wuthering Waves', desc: '鸣潮 · Open World · Action · Kuro Games',
+              pills: ['Gacha', 'Open World', 'Action'], label: 'My Resonators',
+              title: 'Resonator Roster', sub: '⭐ = Favourite  ·  Hover a card to feel the vibe' },
+        zh: { name: '鸣潮', desc: 'Wuthering Waves · 开放世界 · 动作 · 库洛游戏',
+              pills: ['手游','开放世界','动作'], label: '我的共鸣者',
+              title: '共鸣者阵容', sub: '⭐ = 最爱  ·  悬停感受氛围' },
+        characters: [
+            {
+                emoji: '🌊',
+                avatarBg: 'linear-gradient(135deg, #0A3A4A, #00B4C4, #006080)',
+                name: 'Rover', nameJp: '漂泊者',
+                rarity: 5, fav: true, owned: true,
+                imgUrl: '',
+                en: { tag: 'Protagonist · Havoc/Spectro', note: 'the wanderer who woke to silence' },
+                zh: { tag: '主角 · 湮灭/衍射',            note: '在寂静中苏醒的流浪者' },
+            },
+            {
+                emoji: '✨',
+                avatarBg: 'linear-gradient(135deg, #C8A030, #F0D060, #FFFAE0)',
+                name: 'Jinhsi', nameJp: '今汐',
+                rarity: 5, fav: true, owned: false,
+                imgUrl: '',
+                en: { tag: 'Spectro · Magistrate', note: 'golden radiance · graceful and resolute' },
+                zh: { tag: '衍射 · 今汐',          note: '金色光辉 · 优雅而坚定' },
+            },
+            {
+                emoji: '🌸',
+                avatarBg: 'linear-gradient(135deg, #6A0A20, #C02040, #FF6080)',
+                name: 'Camellya', nameJp: '卡卡罗',
+                rarity: 5, fav: true, owned: false,
+                imgUrl: '',
+                en: { tag: 'Havoc · The Blooming', note: 'crimson petals · beautiful and deadly' },
+                zh: { tag: '湮灭 · 花开',          note: '绯红花瓣 · 美丽而致命' },
+            },
+        ],
+    },
+
+    /* ════════════════════════════════════════
+       HONKAI: STAR RAIL (崩坏：星穹铁道)
+       ✏️ Add character art from Honkai Star Rail wiki
+       ════════════════════════════════════════ */
+    hsr: {
+        icon:  '⭐',
+        en: { name: 'Honkai: Star Rail', desc: '崩坏：星穹铁道 · Turn-Based RPG · HoYoverse',
+              pills: ['Gacha', 'Turn-Based', 'Sci-Fi'], label: 'My Trailblazers',
+              title: 'Character Roster', sub: '⭐ = Favourite  ·  Hover a card to feel the vibe' },
+        zh: { name: '崩坏：星穹铁道', desc: 'Honkai: Star Rail · 回合制RPG · 米哈游',
+              pills: ['手游','回合制','科幻'], label: '我的开拓者',
+              title: '角色阵容', sub: '⭐ = 最爱  ·  悬停感受氛围' },
+        characters: [
+            {
+                emoji: '⚡',
+                avatarBg: 'linear-gradient(135deg, #1A0830, #6A1A8A, #9A30B0)',
+                name: 'Acheron', nameJp: '黄泉',
+                rarity: 5, fav: true, owned: false,
+                imgUrl: '',
+                en: { tag: 'Nihility · Lightning', note: 'the galaxy ranger · cold and magnificent' },
+                zh: { tag: '虚无 · 雷',            note: '银河巡逻员 · 冷峻而璀璨' },
+            },
+            {
+                emoji: '🃏',
+                avatarBg: 'linear-gradient(135deg, #A0205A, #E04080, #FF80B0)',
+                name: 'Sparkle', nameJp: '花火',
+                rarity: 5, fav: true, owned: false,
+                imgUrl: '',
+                en: { tag: 'Harmony · Quantum', note: 'the trickster · all the world\'s a stage' },
+                zh: { tag: '同谐 · 量子',       note: '戏法师 · 世界即舞台' },
+            },
+            {
+                emoji: '🎵',
+                avatarBg: 'linear-gradient(135deg, #F8F0FF, #E8C8F8, #D0A0F0)',
+                name: 'Robin', nameJp: '知更鸟',
+                rarity: 5, fav: true, owned: false,
+                imgUrl: '',
+                en: { tag: 'Harmony · Physical', note: 'the songbird of Penacony · light and warmth' },
+                zh: { tag: '同谐 · 物理',       note: '匹诺康尼的歌姬 · 光与温暖' },
+            },
+        ],
+    },
+
+    /* ════════════════════════════════════════
+       ARKNIGHTS: ENDFIELD (明日方舟：终末地)
+       ✏️ Character art from official Endfield site
+       ════════════════════════════════════════ */
+    endfield: {
+        icon:  '⚙️',
+        en: { name: 'Arknights: Endfield', desc: '明日方舟：终末地 · Action RPG · Hypergryph',
+              pills: ['Gacha', 'Action RPG', 'Sci-Fi'], label: 'My Operators',
+              title: 'Endfield Roster', sub: '⭐ = Favourite  ·  Hover a card to feel the vibe' },
+        zh: { name: '明日方舟：终末地', desc: 'Arknights: Endfield · 动作RPG · 鹰角网络',
+              pills: ['手游','动作RPG','科幻'], label: '我的干员',
+              title: '终末地阵容', sub: '⭐ = 最爱  ·  悬停感受氛围' },
+        characters: [
+            {
+                emoji: '🔷',
+                avatarBg: 'linear-gradient(135deg, #003A5A, #00708A, #00B4C4)',
+                name: 'Perlica', nameJp: '佩利卡',
+                rarity: 6, fav: true, owned: false,
+                imgUrl: '',
+                en: { tag: 'Main Character · Executor', note: 'the Endfield engineer who holds the line' },
+                zh: { tag: '主角 · 执行者',             note: '坚守防线的终末地工程师' },
+            },
+            {
+                emoji: '❄️',
+                avatarBg: 'linear-gradient(135deg, #FAFAFF, #C8D8F0, #A0B8E8)',
+                name: 'Endministrator', nameJp: '终末管理员',
+                rarity: 6, fav: false, owned: false,
+                imgUrl: '',
+                en: { tag: 'Administrator · Support', note: 'the AI guardian of Endfield facility' },
+                zh: { tag: '管理员 · 支援',           note: '终末地设施的AI守护者' },
+            },
+            {
+                emoji: '🌿',
+                avatarBg: 'linear-gradient(135deg, #1A3A20, #2A6030, #4A9848)',
+                name: 'Shining (Endfield)', nameJp: '闪灵（终末地）',
+                rarity: 5, fav: true, owned: false,
+                imgUrl: '',
+                en: { tag: 'Medic · Returned', note: 'old friend, new battlefield' },
+                zh: { tag: '医疗 · 归来',     note: '老朋友，新战场' },
+            },
+        ],
+    },
+
+
 };
 
 /* ───────────────── RENDER ───────────────── */
@@ -656,7 +856,7 @@ function renderChars(game) {
     if (!data) return;
 
     // Info bar
-    document.getElementById('infoIcon').textContent  = data.icon;
+    document.getElementById('infoIcon').innerHTML = '<img src="' + gameIcons[game] + '" style="width:48px;height:48px;border-radius:12px;object-fit:cover;">';
     document.getElementById('infoName').textContent  = data[lang].name;
     document.getElementById('infoDesc').textContent  = data[lang].desc;
     document.getElementById('infoPills').innerHTML   = data[lang].pills.map(p => `<span class="pill">${p}</span>`).join('');
