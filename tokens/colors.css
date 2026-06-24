@@ -1,0 +1,142 @@
+/* ─────────────────────────────────────────────────────────────
+   COLORS — Elysia × Jeffi
+   Elysia is the "Miss Pink Elf": her palette is drawn directly from
+   her avatar (aivtuber/avatar/web/face.html) — signature magenta-pink
+   #d6337a, soft sakura pinks, and a deep plum used for eyes & text.
+   Jeffi's prior site contributed the lavender & mint supporting hues.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* ── Elysia core (primary) ── */
+  --elysia-50:  #fff2f8;   /* lightest petal wash */
+  --elysia-100: #ffe1ef;
+  --elysia-200: #ffd9ec;   /* petal — avatar hair fill */
+  --elysia-300: #ff9ecb;   /* sakura — avatar hair stroke */
+  --elysia-400: #ff7fb8;
+  --elysia-500: #f25a9e;
+  --elysia-600: #d6337a;   /* ★ Elysia signature pink (brand primary) */
+  --elysia-700: #b62268;
+  --elysia-800: #8e1b52;
+  --elysia-900: #5b2a4a;   /* deep plum — avatar eyes */
+
+  /* ── Plum (ink / text) ── */
+  --plum-900: #3a1f38;     /* darkest ink */
+  --plum-800: #4a2746;
+  --plum-700: #5b2a4a;
+  --plum-600: #7a4d6e;
+  --plum-500: #9a6f90;     /* muted */
+  --plum-400: #b89bb0;     /* faint */
+
+  /* ── Supporting accents (from Jeffi) ── */
+  --lavender: #c4a8e8;
+  --lavender-soft: #e7d9f7;
+  --elysia-lilac: #9f7ae4;  /* canonical: Elysia's in-game name colour / Ego form purple */
+  --mint:     #a8ddd0;
+  --mint-soft: #d8f0ea;
+  --crystal:  #8fd3e8;     /* elf / aqua crystal accent */
+  --gold:     #ffe4a0;     /* warm sparkle */
+
+  /* ── Jeffi accent (PERSONAL SITE) ── */
+  /* Teal/cyan — Jeffi's own identity. Pink/purple stays reserved for Elysia. */
+  --jeffi-300: #5eead4;
+  --jeffi-400: #2dd4bf;
+  --jeffi-500: #14b8a6;
+  --jeffi-600: #0d9488;    /* ★ Jeffi site primary */
+  --jeffi-700: #0f766e;
+  --jeffi-800: #115e59;
+  --jeffi-gradient: linear-gradient(135deg, #2dd4bf 0%, #0d9488 60%, #0f766e 100%); /* @kind color */
+  --jeffi-gradient-soft: linear-gradient(135deg, #8fd3e8 0%, #2dd4bf 100%); /* @kind color */
+  --jeffi-hero: linear-gradient(135deg, #8fd3e8 0%, #2dd4bf 42%, #0d9488 78%, #14b8a6 110%); /* @kind color */
+  --jeffi-glow: 0 6px 26px rgba(13, 148, 136, 0.45); /* @kind other */
+
+  /* ── Neutrals ── */
+  --white:    #ffffff;
+  --pearl:    #fffafd;     /* warm off-white page base */
+  --cloud:    #fdf3f9;     /* tinted surface */
+  --mist:     #f6e9f2;     /* hairline / divider tint */
+  --ash:      #e6d6e2;
+
+  /* ── Dark surfaces (stream / chat overlay) ── */
+  --night-900: #1a1020;    /* deepest plum-black */
+  --night-800: #241630;
+  --night-700: #2f1d3e;
+  --night-600: #3d2750;
+
+  /* ── Emotion accents (Elysia's expression set) ── */
+  --emo-happy:     #f25a9e;
+  --emo-playful:   #d6337a;
+  --emo-shy:       #ff9ec2;
+  --emo-sad:       #9a4a6a;
+  --emo-surprised: #ff7fb8;
+  --emo-neutral:   #c0305f;
+
+  /* ── Semantic ── */
+  --success: #3fb98a;
+  --warning: #f0a93a;
+  --danger:  #e2516b;
+  --info:    #5aa9e6;
+
+  /* ─────────── SEMANTIC ALIASES ─────────── */
+  /* surfaces */
+  --bg-page:        var(--pearl);
+  --bg-page-grad:   linear-gradient(155deg, #fff5fb 0%, #fff0f7 48%, #f3f7ff 100%); /* @kind color */
+  --surface-card:   rgba(255, 255, 255, 0.66);
+  --surface-solid:  var(--white);
+  --surface-tint:   var(--cloud);
+  --surface-sunken: var(--mist);
+  --surface-dark:   var(--night-800);
+
+  /* text */
+  --text-strong:  var(--plum-900);
+  --text-body:    var(--plum-700);
+  --text-muted:   var(--plum-500);
+  --text-faint:   var(--plum-400);
+  --text-on-dark: #ffe9f4;
+  --text-on-accent: #ffffff;
+
+  /* brand */
+  --brand:          var(--elysia-600);
+  --brand-hover:    var(--elysia-700);
+  --brand-press:    var(--elysia-800);
+  --brand-soft:     var(--elysia-100);
+  --brand-on:       #ffffff;
+  --brand-gradient: linear-gradient(135deg, #f25a9e 0%, #d6337a 55%, #b62268 100%); /* @kind color */
+  --brand-gradient-soft: linear-gradient(135deg, var(--lavender) 0%, var(--elysia-300) 100%); /* @kind color */
+  --hero-gradient:  linear-gradient(135deg, #c4a8e8 0%, #f25a9e 45%, #d6337a 75%, #8fd3e8 110%); /* @kind color */
+
+  /* lines */
+  --border-soft:   rgba(214, 51, 122, 0.14);
+  --border-card:   rgba(214, 51, 122, 0.16);
+  --border-strong: rgba(214, 51, 122, 0.32);
+  --focus-ring:    rgba(214, 51, 122, 0.45);
+
+  /* ─────────── SITE THEME (DARK = default) ─────────── */
+  /* Theme-aware aliases the personal-site kit reads so it can flip
+     between the dark plum hub (laplace-style) and the light pastel theme. */
+  --site-text:        #ffffff;
+  --site-text-soft:   rgba(255, 233, 244, 0.72);
+  --site-text-muted:  rgba(255, 233, 244, 0.58);
+  --site-text-faint:  rgba(255, 233, 244, 0.45);
+  --site-nav-bg:      rgba(26, 16, 32, 0.72);
+  --site-hairline:    rgba(255, 255, 255, 0.08);
+  --site-card-bg:     rgba(36, 22, 48, 0.55);
+  --site-card-border: rgba(255, 255, 255, 0.10);
+  --site-chip-bg:     rgba(255, 255, 255, 0.07);
+  --site-chip-border: rgba(255, 255, 255, 0.14);
+  --site-row-hover:   rgba(255, 255, 255, 0.05);
+  --site-accent:      var(--elysia-400);
+}
+
+/* ─────────── SITE THEME (LIGHT PASTEL) ─────────── */
+:root[data-theme="light"] {
+  --site-text:        var(--plum-900);
+  --site-text-soft:   var(--plum-600);
+  --site-text-muted:  var(--plum-500);
+  --site-text-faint:  var(--plum-400);
+  --site-nav-bg:      rgba(255, 255, 255, 0.78);
+  --site-hairline:    var(--border-card);
+  --site-card-bg:     var(--surface-card);
+  --site-card-border: var(--border-card);
+  --site-chip-bg:     var(--glass-bg);
+  --site-chip-border: var(--border-card);
+  --site-row-hover:   rgba(214, 51, 122, 0.07);
+  --site-accent:      var(--elysia-600);

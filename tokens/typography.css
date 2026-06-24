@@ -1,0 +1,42 @@
+/* ─────────────────────────────────────────────────────────────
+   TYPOGRAPHY — Elysia × Jeffi
+   Display & body share Nunito (rounded, warm, bilingual). Heavy
+   weights (800/900) carry headings; mono is DM Mono for code/AI.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --font-display: 'Bricolage Grotesque', 'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Zen Kaku Gothic New', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-rounded: 'Zen Kaku Gothic New', ui-rounded, system-ui, sans-serif; /* legacy alias */
+
+  /* weights */
+  --w-light:    400; /* @kind font */
+  --w-regular:  400; /* @kind font */
+  --w-medium:   500; /* @kind font */
+  --w-bold:     700; /* @kind font */
+  --w-heavy:    700; /* @kind font */
+  --w-black:    800; /* @kind font */
+
+  /* type scale (fluid where it matters) */
+  --fs-display: clamp(3rem, 8vw, 5.5rem); /* @kind font */
+  --fs-h1:      clamp(2rem, 4.5vw, 3rem); /* @kind font */
+  --fs-h2:      clamp(1.6rem, 3.2vw, 2.25rem); /* @kind font */
+  --fs-h3:      1.5rem; /* @kind font */
+  --fs-title:   1.15rem; /* @kind font */
+  --fs-body:    1rem; /* @kind font */
+  --fs-small:   0.875rem; /* @kind font */
+  --fs-tiny:    0.78rem; /* @kind font */
+  --fs-micro:   0.7rem; /* @kind font */
+
+  /* line heights */
+  --lh-tight:  1.05; /* @kind font */
+  --lh-snug:   1.25; /* @kind font */
+  --lh-normal: 1.5; /* @kind font */
+  --lh-loose:  1.7; /* @kind font */
+
+  /* tracking */
+  --ls-tight:  -0.04em; /* @kind font */
+  --ls-normal: -0.005em; /* @kind font */
+  --ls-wide:   0.04em; /* @kind font */
+  --ls-label:  0.26em; /* @kind font */
+}

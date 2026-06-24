@@ -1,0 +1,51 @@
+<!-- @dsCard group="Components" viewport="700x440" name="Chat — Elysia avatar, bubbles, emotions" subtitle="Avatar window, chat bubbles, emotion pills, composer" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-page-grad); padding: 24px; }
+  .wrap { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start; max-width: 660px; }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  .lbl { font-family: var(--font-display); font-size: var(--fs-micro); font-weight: 800; letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js?v=restraint"></script>
+<script type="text/babel">
+const { AvatarStage, ChatBubble, EmotionPill, ChatComposer } = window.ElysiaJeffiDesignSystem_f13e8e;
+function Demo() {
+  return (
+    <div className="wrap">
+      <div>
+        <div className="lbl">AvatarStage</div>
+        <AvatarStage poster="../../assets/live2d/icon.png" speaking name="Elysia" live height={250} />
+      </div>
+      <div className="stack">
+        <div className="lbl">Bubbles · Emotions · Composer</div>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+          <EmotionPill emotion="happy" />
+          <EmotionPill emotion="playful" />
+          <EmotionPill emotion="shy" />
+          <EmotionPill emotion="sad" />
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+          <ChatBubble from="user">hi elysia!</ChatBubble>
+          <ChatBubble from="elysia" name="Elysia ♪">Ah, you came to see me ♪ Welcome, dear.</ChatBubble>
+          <ChatBubble from="elysia" typing />
+        </div>
+        <ChatComposer value="" placeholder="Say something to Elysia…" />
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

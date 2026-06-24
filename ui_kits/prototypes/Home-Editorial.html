@@ -1,0 +1,90 @@
+<!-- @dsCard group="Home Concepts" viewport="1280x900" name="Concept B — Editorial Magazine" subtitle="Fewer, larger asymmetric spreads; flowing long-read" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jeffi · Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin:0; }
+  :root { --ink:#0e0a12; --acc:var(--jeffi-500); }
+  body { font-family:'Zen Kaku Gothic New',sans-serif; color:#fff; background:
+    radial-gradient(60% 40% at 88% -8%, rgba(13,148,136,.22), transparent 55%), var(--ink); }
+  h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.04em;margin:0;color:inherit;}
+  .mono{font-family:'DM Mono',monospace;}
+  .ey{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);}
+  .nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:16px clamp(16px,5vw,60px);
+    background:rgba(14,10,18,.6);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);}
+  .nav .lg{font-family:'Bricolage Grotesque';font-weight:800;font-size:1.35rem;letter-spacing:-.04em;}
+  .nav nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;}
+  .nav a{font-family:'DM Mono';font-size:.74rem;color:rgba(255,233,244,.6);text-decoration:none;padding:7px 12px;}
+  .nav a:hover{color:#fff;}
+  .spread{max-width:1180px;margin:0 auto;padding:clamp(50px,9vh,110px) clamp(16px,5vw,60px);}
+  .lead{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,5vw,60px);align-items:center;}
+  .num{font-family:'DM Mono';font-size:.8rem;color:var(--acc);}
+  .rule{height:1px;background:rgba(255,255,255,.1);margin:0 0 34px;}
+  .drop{font-size:clamp(2.4rem,6vw,4.6rem);line-height:.98;}
+  .body{font-size:1.06rem;line-height:1.7;color:rgba(255,233,244,.72);max-width:46ch;}
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px;}
+  .fcard{border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px;background:rgba(255,255,255,.025);transition:.25s;}
+  .fcard:hover{border-color:rgba(13,148,136,.5);transform:translateY(-3px);}
+  .fcard h3{font-size:1.3rem;margin-bottom:8px;}
+  .big{grid-column:1/-1;display:flex;gap:28px;align-items:center;flex-wrap:wrap;}
+  @media(max-width:820px){.lead{grid-template-columns:1fr;}.feat{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="nav"><span class="lg">Jeffi<span style="color:var(--acc)">.</span></span><nav><a href="#">about</a><a href="#">work</a><a href="#">play</a><a href="#">elysia</a></nav></div>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js?v=restraint"></script>
+<script src="../personal-site/judgement-cursor.js"></script>
+<script type="text/babel">
+const { Live2DStage } = window.ElysiaJeffiDesignSystem_f13e8e;
+function App(){
+  return (
+    <React.Fragment>
+      <section className="spread lead">
+        <div>
+          <div className="ey">Toronto · Developer / Gamer</div>
+          <h1 className="drop" style={{margin:'14px 0 22px'}}>I build things,<br/>and I built <span style={{color:'var(--acc)'}}>her.</span></h1>
+          <p className="body">A student developer who blends code, rhythm games, and anime. Full-stack web by day, maimai by night — and lately, an AI VTuber named Elysia who lives on this very site.</p>
+        </div>
+        <div style={{position:'relative'}}>
+          <Live2DStage emotion="happy" speaking live name="Elysia" height={420} modelUrl="../../assets/live2d/changli.model3.json" frameBg="radial-gradient(120% 95% at 50% 12%, #3a2470 0%, #1a0f44 52%, #0a0822 100%)" />
+        </div>
+      </section>
+
+      <section className="spread">
+        <div style={{display:'flex',alignItems:'baseline',gap:14}}><span className="num">01</span><div className="ey">Selected Work</div></div>
+        <div className="rule" style={{marginTop:14}}></div>
+        <div className="feat">
+          <div className="fcard big">
+            <div style={{flex:'1 1 320px'}}><div className="ey" style={{color:'var(--success)'}}>Live</div><h3 style={{fontSize:'1.7rem',margin:'8px 0'}}>UTMCSSA Web Platform</h3><p className="body" style={{fontSize:'.95rem'}}>A full-stack platform for incoming international students — Python backend, React + Node front, an integrated DeepSeek AI assistant. Built with Git & Jira.</p></div>
+            <div className="mono" style={{fontSize:'.72rem',color:'rgba(255,233,244,.5)',lineHeight:2}}>React<br/>Node.js<br/>Python<br/>DeepSeek AI</div>
+          </div>
+          <div className="fcard"><div className="ey" style={{color:'#f0a93a'}}>In progress</div><h3>maimai Fan Hub</h3><p className="body" style={{fontSize:'.9rem'}}>Rating optimizer, song catalog, year-in-review.</p></div>
+          <div className="fcard"><div className="ey" style={{color:'rgba(255,233,244,.5)'}}>Soon</div><h3>Fan Game</h3><p className="body" style={{fontSize:'.9rem'}}>A 2D platformer built in Godot 4.</p></div>
+        </div>
+      </section>
+
+      <section className="spread">
+        <div style={{display:'flex',alignItems:'baseline',gap:14}}><span className="num">02</span><div className="ey">What I Play & Hear</div></div>
+        <div className="rule" style={{marginTop:14}}></div>
+        <div className="lead" style={{gridTemplateColumns:'1fr 1fr'}}>
+          <div><h2 style={{fontSize:'2rem',marginBottom:14}}>maimai DX <span style={{color:'var(--acc)',fontSize:'1.2rem'}}>· 15,303</span></h2><p className="body" style={{fontSize:'.95rem'}}>Rhythm is the throughline — maimai since Winter 2024, plus Apex, Path of Exile, Monster Hunter. On repeat: Kenshi Yonezu, Mili, sasakure.UK.</p></div>
+          <div style={{display:'flex',flexDirection:'column',gap:8}}>{[['JANE DOE','Kenshi Yonezu'],['铁花飞','Mili'],['the EmpErroR','sasakure.UK']].map(s=><div key={s[0]} style={{display:'flex',justifyContent:'space-between',padding:'10px 0',borderBottom:'1px solid rgba(255,255,255,.08)'}}><span style={{fontFamily:'Bricolage Grotesque',fontWeight:700}}>{s[0]}</span><span className="mono" style={{fontSize:'.74rem',color:'rgba(255,233,244,.5)'}}>{s[1]}</span></div>)}</div>
+        </div>
+      </section>
+    </React.Fragment>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+/* ─────────────────────────────────────────────────────────────
+   SPACING & RADIUS — Elysia × Jeffi
+   4px base grid. Generous, soft radii (the brand is rounded & gentle).
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* radii — soft & pill-friendly */
+  --radius-xs:   8px;
+  --radius-sm:   12px;
+  --radius-md:   16px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-2xl:  36px;
+  --radius-pill: 999px;
+  --radius-full: 50%;
+
+  /* layout */
+  --container:   1120px; /* @kind spacing */
+  --container-wide: 1280px; /* @kind spacing */
+  --gutter:      clamp(20px, 5vw, 48px); /* @kind spacing */
+  --nav-h:       64px; /* @kind spacing */
+}

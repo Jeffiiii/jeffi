@@ -1,0 +1,1 @@
+{ "Type": "Live2D Expression", "Parameters": [ { "Id": "Button4", "Value": 1.0, "Blend": "Add" }, { "Id": "ParamEyeExpression1", "Value": 1.0, "Blend": "Add" } ] }

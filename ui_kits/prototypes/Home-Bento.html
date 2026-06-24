@@ -1,0 +1,110 @@
+<!-- @dsCard group="Home Concepts" viewport="1280x900" name="Concept A — Bento Dashboard" subtitle="One composed surface; tiles instead of stacked sections" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jeffi · Bento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin: 0; }
+  :root { --ink:#0e0a12; --acc: var(--jeffi-500); }
+  body {
+    font-family: 'Zen Kaku Gothic New', sans-serif; color: #fff; min-height: 100vh;
+    background:
+      radial-gradient(60% 50% at 90% -10%, rgba(13,148,136,.26), transparent 55%),
+      radial-gradient(50% 50% at 0% 100%, rgba(143,211,232,.12), transparent 60%),
+      var(--ink);
+  }
+  h1,h2,h3 { font-family:'Bricolage Grotesque',sans-serif; letter-spacing:-.035em; margin:0; color:inherit; }
+  .mono { font-family:'DM Mono',monospace; }
+  .ey { font-family:'DM Mono',monospace; font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; color:rgba(255,233,244,.45); }
+  .wrap { max-width:1240px; margin:0 auto; padding:22px clamp(14px,3vw,30px) 40px; }
+  .topbar { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .logo { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:1.4rem; letter-spacing:-.04em; }
+  .navm { display:flex; gap:4px; margin-left:auto; flex-wrap:wrap; }
+  .navm a { font-family:'DM Mono',monospace; font-size:.74rem; letter-spacing:.04em; color:rgba(255,233,244,.6); text-decoration:none; padding:7px 12px; border-radius:8px; }
+  .navm a:hover { color:#fff; background:rgba(255,255,255,.06); }
+  .bento { display:grid; gap:14px; grid-template-columns:repeat(4,1fr); grid-auto-rows:minmax(120px,auto);
+    grid-template-areas:
+      "id id ely ely"
+      "now rate ely ely"
+      "proj proj ely ely"
+      "games games git skills"; }
+  .tile { background:var(--glass-bg-dark); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:20px 22px;
+    backdrop-filter:blur(14px); position:relative; overflow:hidden; transition:transform .25s, border-color .25s; }
+  .tile:hover { transform:translateY(-3px); border-color:rgba(13,148,136,.5); }
+  .a-id{grid-area:id} .a-ely{grid-area:ely} .a-now{grid-area:now} .a-rate{grid-area:rate}
+  .a-proj{grid-area:proj} .a-games{grid-area:games} .a-git{grid-area:git} .a-skills{grid-area:skills}
+  .a-ely{padding:0;border:none;background:none}
+  @media(max-width:900px){ .bento{grid-template-columns:repeat(2,1fr);grid-template-areas:"id id" "ely ely" "now rate" "proj proj" "games git" "skills skills";} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="logo">Jeffi<span style="color:var(--acc)">.</span></span>
+    <nav class="navm">
+      <a href="#">about</a><a href="#">projects</a><a href="#">games</a><a href="#">music</a><a href="#">anime</a>
+    </nav>
+  </div>
+  <div id="root"></div>
+</div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js?v=restraint"></script>
+<script src="../personal-site/judgement-cursor.js"></script>
+<script type="text/babel" src="../personal-site/Icons.jsx"></script>
+<script type="text/babel">
+const { Live2DStage, Badge } = window.ElysiaJeffiDesignSystem_f13e8e;
+function App() {
+  const I = window.Icon;
+  return (
+    <div className="bento">
+      <div className="tile a-id">
+        <div className="ey">Personal Site / 2026</div>
+        <h1 style={{fontSize:'clamp(2rem,4.5vw,3.2rem)',lineHeight:.95,margin:'10px 0 8px'}}>Developer,<br/>Gamer, <span style={{color:'var(--acc)'}}>VTuber maker.</span></h1>
+        <p style={{color:'rgba(255,233,244,.62)',fontSize:'.92rem',maxWidth:420,margin:0}}>Student dev building full-stack web, maining maimai, and hand-crafting an AI VTuber — Elysia.</p>
+      </div>
+      <div className="tile a-ely">
+        <Live2DStage emotion="happy" speaking live name="Elysia" height={'100%'} modelUrl="../../assets/live2d/changli.model3.json" frameBg="radial-gradient(120% 95% at 50% 12%, #3a2470 0%, #1a0f44 52%, #0a0822 100%)" style={{height:'100%',minHeight:300}} />
+      </div>
+      <div className="tile a-now">
+        <div className="ey">Now playing</div>
+        <div style={{display:'flex',alignItems:'center',gap:10,marginTop:10}}>{I&&<I name="music" size={20} style={{color:'var(--acc)'}}/>}<div><div style={{fontWeight:700,fontFamily:'Bricolage Grotesque'}}>JANE DOE</div><div style={{fontSize:'.76rem',color:'rgba(255,233,244,.5)'}}>Kenshi Yonezu</div></div></div>
+      </div>
+      <div className="tile a-rate">
+        <div className="ey">maimai rating</div>
+        <div style={{fontFamily:'Bricolage Grotesque',fontWeight:800,fontSize:'2.1rem',marginTop:6}}>15,303</div>
+        <div style={{fontSize:'.72rem',color:'var(--acc)'}}>↑ aiming higher</div>
+      </div>
+      <div className="tile a-proj">
+        <div className="ey">Featured · live</div>
+        <h3 style={{fontSize:'1.2rem',margin:'8px 0 6px'}}>UTMCSSA Web Platform</h3>
+        <p style={{fontSize:'.84rem',color:'rgba(255,233,244,.6)',margin:'0 0 12px'}}>Full-stack student platform — Python backend, React + Node, DeepSeek AI assistant.</p>
+        <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>{['React','Python','DeepSeek AI'].map(t=><span key={t} className="mono" style={{fontSize:'.66rem',padding:'3px 9px',border:'1px solid rgba(255,255,255,.16)',borderRadius:7,color:'rgba(255,233,244,.7)'}}>{t}</span>)}</div>
+      </div>
+      <div className="tile a-games">
+        <div className="ey">Games I main</div>
+        <div style={{display:'flex',gap:16,marginTop:12,flexWrap:'wrap'}}>
+          {[['music','maimai DX'],['crosshair','Apex'],['dice','PoE 2'],['swords','MonHun']].map(g=><div key={g[1]} style={{display:'flex',alignItems:'center',gap:7,color:'rgba(255,233,244,.8)'}}>{I&&<I name={g[0]} size={16}/>}<span style={{fontSize:'.82rem',fontWeight:600}}>{g[1]}</span></div>)}
+        </div>
+      </div>
+      <div className="tile a-git">
+        <div className="ey">GitHub</div>
+        <div style={{display:'flex',alignItems:'center',gap:9,marginTop:12}}>{I&&<I name="github" size={20}/>}<span className="mono" style={{fontWeight:500}}>@Jeffiiii</span></div>
+      </div>
+      <div className="tile a-skills">
+        <div className="ey">Stack</div>
+        <div style={{display:'flex',gap:14,marginTop:12,flexWrap:'wrap',color:'rgba(255,233,244,.75)'}}>{['code','coffee','braces','git','atom','box'].map(n=>I&&<I key={n} name={n} size={20}/>)}</div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

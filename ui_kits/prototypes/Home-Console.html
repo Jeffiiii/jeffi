@@ -1,0 +1,88 @@
+<!-- @dsCard group="Home Concepts" viewport="1280x860" name="Concept C — Arcade Console" subtitle="Single-screen tabbed hub; no long scroll, app-like" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jeffi · Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html,body{margin:0;height:100%;}
+  :root{--ink:#0b0710;--acc:var(--jeffi-500);}
+  body{font-family:'Zen Kaku Gothic New',sans-serif;color:#fff;height:100vh;overflow:hidden;
+    background:radial-gradient(70% 60% at 85% 0%, rgba(13,148,136,.2), transparent 55%), var(--ink);}
+  h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.035em;margin:0;color:inherit;}
+  .mono{font-family:'DM Mono',monospace;}
+  .ey{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,233,244,.45);}
+  .shell{height:100vh;display:grid;grid-template-columns:230px 1fr;gap:0;}
+  .rail{border-right:1px solid rgba(255,255,255,.08);padding:24px 18px;display:flex;flex-direction:column;gap:6px;background:rgba(255,255,255,.015);}
+  .brand{font-family:'Bricolage Grotesque';font-weight:800;font-size:1.5rem;letter-spacing:-.04em;margin-bottom:24px;}
+  .tab{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:10px;cursor:pointer;border:none;background:none;width:100%;text-align:left;
+    font-family:'DM Mono';font-size:.82rem;letter-spacing:.04em;color:rgba(255,233,244,.55);transition:.2s;}
+  .tab:hover{color:#fff;background:rgba(255,255,255,.05);}
+  .tab.on{color:var(--ink);background:var(--acc);font-weight:500;}
+  .tab .n{opacity:.5;font-size:.7rem;}
+  .stage{position:relative;overflow:hidden;padding:clamp(20px,3vw,40px);}
+  .panel{position:absolute;inset:0;padding:clamp(24px,3.5vw,48px);opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .35s,transform .35s;overflow:auto;}
+  .panel.on{opacity:1;transform:none;pointer-events:auto;}
+  .card2{border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px;background:rgba(255,255,255,.025);}
+  .railfoot{margin-top:auto;font-size:.66rem;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js?v=restraint"></script>
+<script src="../personal-site/judgement-cursor.js"></script>
+<script type="text/babel" src="../personal-site/Icons.jsx"></script>
+<script type="text/babel">
+const { Live2DStage } = window.ElysiaJeffiDesignSystem_f13e8e;
+const TABS=[['home','Home','01'],['work','Projects','02'],['play','Games','03'],['hear','Music','04'],['elysia','Elysia','05']];
+function App(){
+  const [tab,setTab]=React.useState('home'); const I=window.Icon;
+  return (
+    <div className="shell">
+      <div className="rail">
+        <div className="brand">Jeffi<span style={{color:'var(--acc)'}}>.</span></div>
+        {TABS.map(t=><button key={t[0]} className={'tab'+(tab===t[0]?' on':'')} onClick={()=>setTab(t[0])}><span className="n">{t[2]}</span>{t[1]}</button>)}
+        <div className="railfoot ey">Toronto · 2026<br/><span style={{color:'var(--acc)'}}>● now building</span></div>
+      </div>
+      <div className="stage">
+        <div className={'panel'+(tab==='home'?' on':'')}>
+          <div className="ey">Welcome</div>
+          <h1 style={{fontSize:'clamp(2.4rem,5vw,4rem)',lineHeight:.96,margin:'12px 0 18px'}}>Developer, gamer,<br/><span style={{color:'var(--acc)'}}>VTuber maker.</span></h1>
+          <p style={{maxWidth:'52ch',color:'rgba(255,233,244,.68)',fontSize:'1.05rem',lineHeight:1.7}}>My little corner of the internet — pick a tab. Full-stack web, maimai (rating 15,303), anime, and an AI VTuber named Elysia who lives here.</p>
+          <div style={{display:'flex',gap:24,marginTop:30,flexWrap:'wrap'}}>{[['maimai','15,303'],['projects','6'],['games','12'],['github','@Jeffiiii']].map(s=><div key={s[0]}><div className="ey">{s[0]}</div><div style={{fontFamily:'Bricolage Grotesque',fontWeight:800,fontSize:'1.5rem'}}>{s[1]}</div></div>)}</div>
+        </div>
+        <div className={'panel'+(tab==='work'?' on':'')}>
+          <div className="ey">02 / Projects</div><h2 style={{fontSize:'2rem',margin:'8px 0 20px'}}>Selected Work</h2>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:14}}>
+            {[['UTMCSSA Platform','Full-stack · DeepSeek AI','live'],['maimai Fan Hub','Rating optimizer','wip'],['Drone Survey','GIS · 3D models','done'],['Fan Game','Godot 4','soon']].map(p=><div key={p[0]} className="card2"><div className="ey" style={{color:'var(--acc)'}}>{p[2]}</div><h3 style={{fontSize:'1.15rem',margin:'8px 0 6px'}}>{p[0]}</h3><p style={{fontSize:'.84rem',color:'rgba(255,233,244,.6)',margin:0}}>{p[1]}</p></div>)}
+          </div>
+        </div>
+        <div className={'panel'+(tab==='play'?' on':'')}>
+          <div className="ey">03 / Games</div><h2 style={{fontSize:'2rem',margin:'8px 0 20px'}}>What I Play</h2>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))',gap:12}}>
+            {[['music','maimai DX','★ Main'],['crosshair','Apex Legends','Diamond'],['dice','Path of Exile 2','600h+'],['swords','Monster Hunter','450h+'],['crosshair','R6 Siege','700h+'],['pickaxe','Terraria','∞']].map(g=><div key={g[1]} className="card2" style={{display:'flex',alignItems:'center',gap:11}}>{I&&<I name={g[0]} size={20} style={{color:'var(--acc)'}}/>}<div style={{flex:1}}><div style={{fontWeight:700,fontFamily:'Bricolage Grotesque',fontSize:'.92rem'}}>{g[1]}</div></div><span className="mono" style={{fontSize:'.7rem',color:'rgba(255,233,244,.5)'}}>{g[2]}</span></div>)}
+          </div>
+        </div>
+        <div className={'panel'+(tab==='hear'?' on':'')}>
+          <div className="ey">04 / Music</div><h2 style={{fontSize:'2rem',margin:'8px 0 20px'}}>On Repeat</h2>
+          {[['JANE DOE','Kenshi Yonezu, Hikaru Utada'],['铁花飞','Mili'],['the EmpErroR','sasakure.UK'],['Garakuta','Kenshi Yonezu']].map((s,i)=><div key={i} style={{display:'flex',alignItems:'center',gap:14,padding:'13px 0',borderBottom:'1px solid rgba(255,255,255,.08)'}}><span className="mono" style={{color:'var(--acc)',fontSize:'.78rem'}}>{String(i+1).padStart(2,'0')}</span><div style={{flex:1}}><div style={{fontFamily:'Bricolage Grotesque',fontWeight:700}}>{s[0]}</div><div style={{fontSize:'.76rem',color:'rgba(255,233,244,.5)'}}>{s[1]}</div></div></div>)}
+        </div>
+        <div className={'panel'+(tab==='elysia'?' on':'')} style={{display:'flex',gap:28,alignItems:'center',flexWrap:'wrap'}}>
+          <div style={{flex:'1 1 300px',maxWidth:380}}><Live2DStage emotion="playful" speaking live name="Elysia" height={400} modelUrl="../../assets/live2d/changli.model3.json" frameBg="radial-gradient(120% 95% at 50% 12%, #3a2470 0%, #1a0f44 52%, #0a0822 100%)" /></div>
+          <div style={{flex:'1 1 280px'}}><div className="ey">05 / Elysia</div><h2 style={{fontSize:'2.2rem',margin:'8px 0 14px'}}>Miss Pink Elf ♪</h2><p style={{color:'rgba(255,233,244,.7)',fontSize:'1rem',lineHeight:1.7,maxWidth:'42ch'}}>A warm, playful AI VTuber I'm building — bilingual, with voice, expressions, and a real Live2D presence. She'll chat with you.</p></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

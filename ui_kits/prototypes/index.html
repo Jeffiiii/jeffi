@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jeffi — Home Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html,body{margin:0;}
+  :root{--ink:#0e0a12;--acc:var(--jeffi-500);}
+  body{font-family:'Zen Kaku Gothic New',sans-serif;color:#fff;min-height:100vh;
+    background:radial-gradient(60% 50% at 88% -8%, rgba(13,148,136,.22), transparent 55%), var(--ink);
+    display:flex;flex-direction:column;align-items:center;padding:clamp(30px,7vh,80px) 20px;}
+  h1,h2{color:inherit;}
+  h1{font-family:'Bricolage Grotesque';font-weight:800;letter-spacing:-.04em;font-size:clamp(1.8rem,4vw,2.8rem);margin:0 0 6px;}
+  .ey{font-family:'DM Mono';font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;}
+  .sub{color:rgba(255,233,244,.6);margin:0 0 40px;max-width:50ch;text-align:center;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,320px));gap:20px;width:100%;max-width:1080px;}
+  .opt{display:block;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.1);border-radius:20px;overflow:hidden;
+    background:rgba(255,255,255,.025);transition:.25s;}
+  .opt:hover{border-color:var(--acc);transform:translateY(-4px);}
+  .thumb{height:150px;display:flex;align-items:center;justify-content:center;position:relative;}
+  .meta{padding:18px 20px 22px;}
+  .meta .k{font-family:'DM Mono';font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);}
+  .meta h2{font-family:'Bricolage Grotesque';font-weight:700;font-size:1.25rem;margin:6px 0 7px;letter-spacing:-.03em;}
+  .meta p{font-size:.86rem;color:rgba(255,233,244,.6);margin:0;line-height:1.5;}
+  /* mini layout sketches */
+  .sk{width:78%;height:74%;display:grid;gap:5px;}
+  .sk i{background:rgba(255,255,255,.12);border-radius:4px;display:block;}
+  .sk.a{grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;grid-template-areas:"a a e" "b c e" "d d e";}
+  .sk.b{grid-template-rows:1.4fr 1fr 1fr;}
+  .sk.c{grid-template-columns:.5fr 1fr;}
+  .sk .acc{background:var(--acc);opacity:.7;}
+</style>
+</head>
+<body>
+  <div class="ey">Design exploration</div>
+  <h1>Home — three directions</h1>
+  <p class="sub">Same content & components, three ways to fix the "too modularized" feel. Open each, then tell me which to expand on.</p>
+  <div class="grid">
+    <a class="opt" href="Home-Bento.html">
+      <div class="thumb" style="background:radial-gradient(circle at 80% 0,rgba(13,148,136,.3),transparent)">
+        <div class="sk a"><i style="grid-area:a" class="acc"></i><i style="grid-area:b"></i><i style="grid-area:c"></i><i style="grid-area:d"></i><i style="grid-area:e"></i></div>
+      </div>
+      <div class="meta"><div class="k">Concept A</div><h2>Bento Dashboard</h2><p>Everything composed into one screen of tiles — identity, Elysia, now-playing, stats. Minimal scroll, highly cohesive.</p></div>
+    </a>
+    <a class="opt" href="Home-Editorial.html">
+      <div class="thumb" style="background:radial-gradient(circle at 80% 0,rgba(143,211,232,.22),transparent)">
+        <div class="sk b"><i class="acc"></i><i></i><i></i></div>
+      </div>
+      <div class="meta"><div class="k">Concept B</div><h2>Editorial Magazine</h2><p>Fewer, larger asymmetric spreads — a flowing long-read with numbered sections and generous space.</p></div>
+    </a>
+    <a class="opt" href="Home-Console.html">
+      <div class="thumb" style="background:radial-gradient(circle at 80% 0,rgba(13,148,136,.26),transparent)">
+        <div class="sk c"><i class="acc"></i><i></i></div>
+      </div>
+      <div class="meta"><div class="k">Concept C</div><h2>Arcade Console</h2><p>A single-screen, tabbed hub — pick a panel, no long scroll. App-like and on his rhythm-game brand.</p></div>
+    </a>
+  </div>
+  <p style="margin-top:36px;font-family:'DM Mono';font-size:.7rem;color:rgba(255,233,244,.4)">tip — click anywhere to feel the maimai judgement cursor ♪</p>
+  <script src="../personal-site/judgement-cursor.js"></script>
+</body>
+</html>

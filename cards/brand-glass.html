@@ -1,0 +1,21 @@
+<!-- @dsCard group="Brand" viewport="700x190" name="Glass & Shadows" subtitle="Translucent cards · pink-tinted elevation" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>
+ body{margin:0;padding:22px;font-family:var(--font-body);background:linear-gradient(135deg,#ffd9ec,#c4a8e8 70%,#8fd3e8)}
+ .row{display:flex;gap:16px;align-items:center}
+ .glass{flex:1;height:110px;border-radius:var(--radius-xl);background:var(--surface-card);border:1px solid var(--border-card);backdrop-filter:var(--glass-blur);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;color:var(--plum-800)}
+ .sh{display:flex;gap:14px}
+ .s{width:58px;height:58px;border-radius:var(--radius-md);background:#fff}
+ .l{font-family:var(--font-mono);font-size:9px;color:var(--plum-700);text-align:center;margin-top:5px}
+ .c{display:flex;flex-direction:column;align-items:center}
+</style></head><body>
+<div class="row">
+ <div class="glass">glass surface · 62% + blur</div>
+ <div class="sh">
+  <div class="c"><div class="s" style="box-shadow:var(--shadow-sm)"></div><div class="l">sm</div></div>
+  <div class="c"><div class="s" style="box-shadow:var(--shadow-md)"></div><div class="l">md</div></div>
+  <div class="c"><div class="s" style="box-shadow:var(--shadow-lg)"></div><div class="l">lg</div></div>
+  <div class="c"><div class="s" style="box-shadow:var(--shadow-glow)"></div><div class="l">glow</div></div>
+ </div>
+</div>
+</body></html>

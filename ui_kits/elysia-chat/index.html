@@ -1,0 +1,161 @@
+<!-- @dsCard group="Elysia Chat" viewport="1280x820" name="Elysia Chat — full experience" subtitle="Avatar window + voice/text chat, emotion reactions, TTS/STT, bilingual" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Elysia ♪ — Chat</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin: 0; }
+  body {
+    background:
+      radial-gradient(55% 45% at 50% -8%, rgba(150,110,255,0.30), transparent 62%),
+      radial-gradient(70% 60% at 86% 14%, rgba(86,64,200,0.28), transparent 60%),
+      radial-gradient(60% 55% at 8% 86%, rgba(214,51,122,0.16), transparent 62%),
+      linear-gradient(180deg, #08071f 0%, #100a30 42%, #190f3e 72%, #1d1148 100%);
+    color: var(--text-on-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  @keyframes vu { from { height: 18%; } to { height: 100%; } }
+  /* ── ELYSIA'S NIGHT REALM (post-ultimate) ── */
+  .realm { position: fixed; inset: 0; z-index: -2; pointer-events: none; overflow: hidden; }
+  .neb { position: absolute; border-radius: 50%; filter: blur(80px); mix-blend-mode: screen; }
+  .neb.n1 { width: 52vw; height: 52vw; top: -16vw; right: -8vw; background: radial-gradient(circle, rgba(120,80,255,0.5), transparent 68%); animation: nebDrift 32s ease-in-out infinite; }
+  .neb.n2 { width: 44vw; height: 44vw; bottom: -14vw; left: -10vw; background: radial-gradient(circle, rgba(70,90,220,0.42), transparent 68%); animation: nebDrift 38s ease-in-out infinite reverse; }
+  .neb.n3 { width: 34vw; height: 34vw; top: 30%; left: 40%; background: radial-gradient(circle, rgba(214,51,122,0.22), transparent 70%); animation: nebDrift 44s ease-in-out infinite; }
+  @keyframes nebDrift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(4vw,3vw) scale(1.14); } }
+  .moon { position: absolute; top: 8%; right: 12%; width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 36%, #fff6fb, #e7d9ff 42%, rgba(180,150,255,0.25) 70%, transparent 75%);
+    box-shadow: 0 0 80px 20px rgba(190,160,255,0.35); }
+  #stars, #realm-petals { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle linear infinite; }
+  @keyframes twinkle { 0%,100% { opacity: .15; } 50% { opacity: 1; } }
+  .rpetal { position: absolute; top: -4vh; opacity: 0; will-change: transform, opacity;
+    animation: petalFall linear infinite; }
+  .rpetal.cr { background: linear-gradient(135deg,#fff,#c9a8ff 45%,#7a4fd0); clip-path: polygon(50% 0,100% 38%,72% 100%,28% 100%,0 38%); box-shadow: 0 0 8px rgba(160,120,255,.6); }
+  .rpetal.pe { background: radial-gradient(circle at 32% 30%, #ffe6f2, #ff9ecb 78%); border-radius: 0 100% 0 100% / 0 100% 0 100%; box-shadow: 0 0 7px rgba(255,158,203,.5); }
+  @keyframes petalFall { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: .85; } 90% { opacity: .7; } 100% { opacity: 0; transform: translate(var(--dx), 108vh) rotate(var(--rot)); } }
+  @media (prefers-reduced-motion: reduce) { .neb, .star, .rpetal { animation: none !important; } .rpetal { display: none; } }
+  /* living sky — shifts with the visitor's local time */
+  body[data-sky="dawn"] { background:
+      radial-gradient(60% 50% at 50% -8%, rgba(255,180,200,0.30), transparent 62%),
+      radial-gradient(70% 60% at 84% 12%, rgba(150,120,230,0.26), transparent 60%),
+      radial-gradient(60% 55% at 10% 88%, rgba(255,150,180,0.16), transparent 62%),
+      linear-gradient(180deg, #1a1140 0%, #2a1a52 40%, #3d2360 72%, #5a3a6e 100%); }
+  body[data-sky="day"] { background:
+      radial-gradient(60% 50% at 50% -10%, rgba(190,200,255,0.28), transparent 62%),
+      radial-gradient(70% 60% at 84% 12%, rgba(130,140,235,0.24), transparent 60%),
+      radial-gradient(60% 55% at 10% 88%, rgba(214,51,122,0.12), transparent 62%),
+      linear-gradient(180deg, #20184f 0%, #2c2266 42%, #3a2f7e 74%, #4a3f96 100%); }
+  body[data-sky="dusk"] { background:
+      radial-gradient(60% 50% at 50% -8%, rgba(255,140,190,0.30), transparent 62%),
+      radial-gradient(70% 60% at 84% 14%, rgba(120,70,200,0.30), transparent 60%),
+      radial-gradient(60% 55% at 10% 88%, rgba(255,120,90,0.16), transparent 62%),
+      linear-gradient(180deg, #160e34 0%, #2a1148 42%, #45163f 74%, #5a1a3a 100%); }
+  body[data-sky="day"] .moon, body[data-sky="dawn"] .moon { opacity: .5; }
+  /* realm answers her voice */
+  .realm-pulse .neb { animation-duration: 7s; filter: blur(72px) brightness(1.4) saturate(1.2); }
+  .realm-pulse .moon { box-shadow: 0 0 110px 30px rgba(200,170,255,0.5); }
+  .realm-pulse .star { animation-duration: 1.6s; }
+  .neb, .moon, .star { transition: filter .5s var(--ease), box-shadow .5s var(--ease); }
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 16px clamp(16px,3vw,32px); }
+  .wm { font-family: var(--font-display); font-weight: 900; font-size: 1.25rem; color: #fff; }
+  /* arrival curtain — continues the rift reveal from Jeffi's page, receding left */
+  #rift-curtain { position: fixed; inset: 0; z-index: 300; pointer-events: none; overflow: hidden;
+    background: radial-gradient(circle at 100% 50%, #ffd9ec 0%, #ff9ecb 16%, #d6337a 40%, #5b2a4a 72%, #160d1c 100%);
+    clip-path: circle(150% at 100% 50%); }
+  #rift-curtain.away { animation: curtainAway 1s cubic-bezier(.7,0,.28,1) forwards; }
+  @keyframes curtainAway { to { clip-path: circle(0% at -10% 50%); } }
+  .rc-p { position: absolute; right: 8px; opacity: 0; will-change: transform, opacity;
+    background: linear-gradient(135deg,#fff,#ff9ecb 42%,#d6337a);
+    clip-path: polygon(50% 0,100% 38%,72% 100%,28% 100%,0 38%); box-shadow: 0 0 9px rgba(242,90,158,.75);
+    animation: rcDrift 1s ease-out forwards; }
+  @keyframes rcDrift { 0%{opacity:0;transform:translate(0,0) rotate(0)} 20%{opacity:.9} 100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot))} }
+  @media (prefers-reduced-motion: reduce) { #rift-curtain.away { animation-duration:.3s; } .rc-p { display:none; } }
+</style>
+</head>
+<body>
+<div class="realm" aria-hidden="true">
+  <div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div>
+  <div class="moon"></div>
+</div>
+<div id="stars" aria-hidden="true"></div>
+<div id="realm-petals" aria-hidden="true"></div>
+<div id="rift-curtain" aria-hidden="true"></div>
+<div class="topbar">
+  <a href="../personal-site/index.html" style="text-decoration:none;color:rgba(255,233,244,0.7);font-weight:800;font-size:0.85rem">← Jeffi ✦</a>
+  <div class="wm" style="margin-left:auto">Elysia <span style="color:var(--elysia-400)">♪</span></div>
+</div>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js?v=restraint"></script>
+<script type="text/babel" src="./ElysiaBrain.jsx"></script>
+<script type="text/babel" src="./ElysiaChatFull.jsx"></script>
+<script type="text/babel">
+ReactDOM.createRoot(document.getElementById('root')).render(<window.ElysiaChatFull />);
+</script>
+<script>
+(function () {
+  var c = document.getElementById('rift-curtain');
+  var fromRift = false;
+  try { fromRift = sessionStorage.getItem('fromRift') === '1'; sessionStorage.removeItem('fromRift'); } catch (e) {}
+  if (!fromRift) { c.parentNode && c.parentNode.removeChild(c); return; }
+  // a few crystals scatter as the curtain recedes
+  for (var i = 0; i < 12; i++) {
+    var p = document.createElement('i');
+    p.className = 'rc-p';
+    var s = 8 + Math.random() * 14;
+    p.style.cssText = 'top:' + (Math.random()*100) + 'vh;width:' + s + 'px;height:' + s + 'px;' +
+      '--dx:-' + (20 + Math.random()*70) + 'vw;--dy:' + (Math.random()*20-10) + 'vh;--rot:' + (Math.random()*720-360) + 'deg;' +
+      'animation-delay:' + (Math.random()*0.2).toFixed(2) + 's';
+    c.appendChild(p);
+  }
+  c.classList.add('away');
+  setTimeout(function () { c.parentNode && c.parentNode.removeChild(c); }, 1200);
+})();
+</script>
+<script>
+(function () {
+  // living sky by local time
+  var h = new Date().getHours();
+  var sky = (h >= 23 || h < 5) ? 'night' : (h < 9 ? 'dawn' : (h < 17 ? 'day' : 'dusk'));
+  document.body.setAttribute('data-sky', sky);
+  // starfield
+  var sk = document.getElementById('stars'); if (sk) {
+    var n = window.innerWidth < 700 ? 80 : 150;
+    for (var i = 0; i < n; i++) {
+      var s = document.createElement('span'); s.className = 'star';
+      var sz = Math.random() < 0.85 ? (Math.random()*1.6+0.6) : (Math.random()*2+2);
+      s.style.cssText = 'left:' + (Math.random()*100) + 'vw;top:' + (Math.random()*100) + 'vh;width:' + sz + 'px;height:' + sz + 'px;' +
+        'animation-duration:' + (2.2 + Math.random()*4).toFixed(2) + 's;animation-delay:' + (Math.random()*4).toFixed(2) + 's;' +
+        (sz > 2 ? 'box-shadow:0 0 6px 1px rgba(220,200,255,.9);' : '');
+      sk.appendChild(s);
+    }
+  }
+  // drifting sakura + crystals
+  var pc = document.getElementById('realm-petals');
+  if (pc) {
+    var alive = true;
+    function petal() {
+      if (!alive) return;
+      var el = document.createElement('i');
+      var crystal = Math.random() < 0.45;
+      el.className = 'rpetal ' + (crystal ? 'cr' : 'pe');
+      var sz = (crystal ? 7 : 9) + Math.random()*12;
+      el.style.cssText = 'left:' + (Math.random()*100) + 'vw;width:' + sz + 'px;height:' + sz + 'px;' +
+        '--dx:' + (Math.random()*24-12) + 'vw;--rot:' + (Math.random()*720-360) + 'deg;' +
+        'animation-duration:' + (10 + Math.random()*9).toFixed(2) + 's;';
+      pc.appendChild(el);
+      setTimeout(function(){ el.remove(); }, 20000);
+    }
+    for (var j = 0; j < 8; j++) setTimeout(petal, j*500);
+    setInterval(petal, 900);
+  }
+})();
+</script>
+</body>
+</html>

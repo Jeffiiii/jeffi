@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components" viewport="700x300" name="Live2D — Elysia's Cubism model" subtitle="Real rig: blink, lip-sync, emotion→expression (SVG fallback off-server)" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+ body{margin:0;background:radial-gradient(120% 90% at 30% 10%,#3a1f38,#241630 55%,#1a1020);padding:22px;font-family:var(--font-body);color:var(--text-on-dark);display:flex;gap:22px;align-items:center}
+ .frame{position:relative;width:210px;height:256px;border-radius:var(--radius-xl);overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 16px 48px rgba(0,0,0,.4);flex-shrink:0;background:radial-gradient(120% 90% at 50% 14%,#3a1f38,#241630 55%,#1a1020)}
+ .frame img{position:absolute;left:50%;top:8px;transform:translateX(-50%);width:230px;height:auto}
+ .glow{position:absolute;left:50%;top:6%;width:64%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;filter:blur(10px);background:radial-gradient(circle,rgba(242,90,158,.3),transparent 65%)}
+ .label{position:absolute;bottom:10px;left:12px;display:flex;align-items:center;gap:7px;padding:5px 11px 5px 7px;border-radius:999px;background:rgba(26,16,32,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12)}
+ .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 8px var(--brand)}
+ .label b{font-family:var(--font-display);font-weight:800;font-size:.82rem;color:#ffe9f4}
+ .label i{font-family:var(--font-display);font-weight:900;font-size:.6rem;letter-spacing:.1em;color:var(--elysia-300);font-style:normal}
+ h4{margin:0 0 8px;font-size:1.1rem;color:#fff}
+ p{margin:0 0 14px;font-size:.84rem;line-height:1.55;color:rgba(255,233,244,.66);max-width:380px}
+ .exp{display:flex;flex-wrap:wrap;gap:7px}
+ .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;font-family:var(--font-display);font-weight:800;font-size:.72rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(255,233,244,.85)}
+ code{font-family:var(--font-mono);font-size:.72rem;color:var(--elysia-300)}
+</style></head><body>
+ <div class="frame"><div class="glow"></div><img src="icon.png" alt="Elysia Live2D model"><div class="label"><span class="dot"></span><b>Elysia</b><i>LIVE</i></div></div>
+ <div>
+  <h4>Live2DStage — real Cubism 4 rig</h4>
+  <p>The <code>&lt;Live2DStage&gt;</code> component renders Elysia's actual Live2D model with auto blink &amp; breathing, lip-sync on <code>ParamMouthOpenY</code>, and emotion→expression mapping. Loads the Cubism runtime from CDN; falls back to the SVG avatar where <code>fetch()</code> is unavailable.</p>
+  <div class="exp">
+   <span class="chip">😏 heart-eyes</span>
+   <span class="chip">☺️ blush</span>
+   <span class="chip">😠 angry</span>
+   <span class="chip">🙄 eye-roll</span>
+   <span class="chip">🖤 dark-face</span>
+  </div>
+ </div>
+</body></html>
