@@ -9,6 +9,18 @@ The site is **static** (HTML/CSS/JS, no server code), so any static host works. 
   fetched at runtime. Every option below serves over https.
 - No build step. Just commit the files as-is and host them.
 
+## ⚠️ CRITICAL for GitHub Pages — the `.nojekyll` file
+
+GitHub Pages runs **Jekyll**, which **ignores every file/folder whose name starts with `_`**.
+This project ships its compiled component library as **`_ds_bundle.js`** — without it the
+whole site renders blank ("no content / bugs"). The repo includes an **empty `.nojekyll`
+file at the root** that disables Jekyll and serves underscore files normally.
+
+- **Keep `.nojekyll` in the repo root** and make sure it gets committed (it's a hidden file —
+  in VS Code's Source Control panel, stage it explicitly if git doesn't show it).
+- If the live site is blank but works locally, a missing `.nojekyll` is almost always why.
+  (Netlify and Vercel don't run Jekyll, so this only affects GitHub Pages.)
+
 ## Option A — GitHub Pages (free, simplest with your VS Code + git plan)
 
 1. In VS Code, commit and push everything to a GitHub repo (e.g. `Jeffiiii/jeffi`).
