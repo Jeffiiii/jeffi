@@ -24,13 +24,15 @@ function ElysiaChatFull() {
   const [autoplay, setAutoplay] = React.useState(true);
   const [live, setLive] = React.useState(null);   // null = probing, true = real server, false = demo
   const [model, setModel] = React.useState('');
+  const [voiceLive, setVoiceLive] = React.useState(false);
   const threadRef = React.useRef(null);
 
-  // Probe the model server for the live/demo badge; stop speech on unmount.
+  // Probe the model + voice servers for the status labels; stop speech on unmount.
   React.useEffect(() => {
     let alive = true;
     if (window.elysiaHealth) window.elysiaHealth().then((h) => { if (alive) { setLive(h.ok); setModel(h.model); } });
-    return () => { alive = false; if (window.stopBrowserSpeech) window.stopBrowserSpeech(); };
+    if (window.elysiaTTSHealth) window.elysiaTTSHealth().then((ok) => { if (alive) setVoiceLive(!!ok); });
+    return () => { alive = false; if (window.stopElysiaSpeech) window.stopElysiaSpeech(); };
   }, []);
 
   // greeting reflects the visitor's local time; realm reacts while she speaks
@@ -112,7 +114,7 @@ function ElysiaChatFull() {
             <Switch checked={autoplay} onChange={setAutoplay} label={<span style={{ color: 'rgba(255,233,244,0.85)' }}>{lang === 'zh' ? '自动播放' : 'Autoplay reply'}</span>} />
           </div>
           <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)', fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'rgba(255,233,244,0.4)', lineHeight: 1.7 }}>
-            model &gt; {live ? (model || 'elysia-merged') : (live === null ? 'connecting…' : 'demo mode')} · temp 0.85<br/>voice &gt; browser TTS · EN / 中文
+            model &gt; {live ? (model || 'elysia-merged') : (live === null ? 'connecting…' : 'demo mode')} · temp 0.85<br/>voice &gt; {voiceLive ? 'Elysia (GSVI · local)' : 'browser TTS'} · EN / 中文
           </div>
         </Card>
       </div>

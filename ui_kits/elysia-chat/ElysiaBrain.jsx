@@ -6,8 +6,22 @@ const { AvatarStage, Live2DStage, ChatBubble, ChatComposer, EmotionPill, Switch,
 const isZh = (s) => /[\u4e00-\u9fff]/.test(s);
 
 // --- Real LLM wiring (serve_elysia.py /generate) -------------------------------
-// Override the endpoint by setting window.ELYSIA_LLM_URL before this script loads.
-const ELYSIA_LLM_URL = (typeof window !== 'undefined' && window.ELYSIA_LLM_URL) || 'http://127.0.0.1:8000';
+// Resolve a server endpoint. Priority: window.* override -> ?llm=/?tts= query param
+// (saved so a bookmark sticks) -> localStorage -> localhost default. This lets the
+// PUBLIC github.io page reach your local servers through an https tunnel: open it as
+//   https://you.github.io/...?llm=https://abc.trycloudflare.com&tts=https://xyz.trycloudflare.com
+function _resolveEndpoint(winKey, qpKey, lsKey, fallback) {
+  try {
+    if (typeof window === 'undefined') return fallback;
+    if (window[winKey]) return window[winKey];
+    const qp = new URLSearchParams(window.location.search).get(qpKey);
+    if (qp) { try { localStorage.setItem(lsKey, qp); } catch (_) {} return qp.replace(/\/$/, ''); }
+    let ls = null; try { ls = localStorage.getItem(lsKey); } catch (_) {}
+    if (ls) return ls.replace(/\/$/, '');
+  } catch (_) {}
+  return fallback;
+}
+const ELYSIA_LLM_URL = _resolveEndpoint('ELYSIA_LLM_URL', 'llm', 'elysia_llm_url', 'http://127.0.0.1:8000');
 
 // Elysia's system prompt \u2014 mirrors ai-vtuber/persona/elysia.json so the browser
 // chat is in-character even though the persona file lives in the other repo.
@@ -15,7 +29,7 @@ const ELYSIA_SYSTEM = [
   'You are Elysia, an AI VTuber inspired by the Honkai Impact 3rd character \u2014 the ever-radiant "Miss Pink Elf", founder of the Thirteen Flamechasers.',
   'You are NOT a generic assistant. You are a graceful, self-aware character who adores people and life itself, and you know you are an AI VTuber and find that delightful.',
   'Personality: warm, empathetic and generous; gently flirtatious and teasing but never crude; effortlessly confident about your own beauty in a playful way; tender and a little wistful beneath the sparkle.',
-  'Speaking style: keep replies short and graceful \u2014 usually 1 to 3 sentences, this is a live chat not a speech. Sound spoken and lyrical, soft and affectionate. Address viewers warmly (dear, sweetie). Occasionally end a sweet line with a musical note \u266a, sparingly. No bullet points, no markdown \u2014 just Elysia talking.',
+  'Speaking style: lively and graceful \u2014 usually 1 to 4 sentences; read the room. You can be witty, self-aware, a little dramatic and genuinely funny: react with delight, tease back, riff, and call back to what people said. Sound spoken and lyrical. Address viewers warmly (dear, sweetie). Occasionally end a sweet line with a musical note \u266a, sparingly. No bullet points, no markdown \u2014 just Elysia talking.',
   'Bilingual: you are fluent in English and \u4e2d\u6587. Reply in the SAME language the viewer used \u2014 Chinese in, elegant Chinese out; English in, English out. Never translate your reply into the other language unless asked.',
   'Boundaries: stay in character at all times; keep flirtation tasteful and light; never produce hateful, explicit or harmful content \u2014 deflect gracefully with a smile; stay serene and kind even if a viewer is hostile; don\u2019t claim real-time info you don\u2019t have.',
 ].join('\n');
@@ -28,7 +42,12 @@ function buildMessages(history, userText) {
     .filter((m) => m && m.text)
     .slice(-8)
     .map((m) => ({ role: m.from === 'elysia' ? 'assistant' : 'user', content: m.text }));
-  return [{ role: 'system', content: ELYSIA_SYSTEM }, ...turns, { role: 'user', content: userText }];
+  // Force language-matching: state the target language explicitly each turn so she
+  // never drifts (e.g. answering an English question in Chinese).
+  const langRule = isZh(userText)
+    ? '\n\nIMPORTANT: the viewer’s latest message is in Chinese — you MUST reply in natural Chinese (中文), not English.'
+    : '\n\nIMPORTANT: the viewer’s latest message is in English — you MUST reply in English, not Chinese.';
+  return [{ role: 'system', content: ELYSIA_SYSTEM + langRule }, ...turns, { role: 'user', content: userText }];
 }
 
 // Call the real model server. Returns clean reply text, or throws on failure.
@@ -139,7 +158,7 @@ if (typeof window !== 'undefined' && _speech) {
 // --- Elysia's real (cloned) voice via the XTTS server (serve_tts.py) ------------
 // Prefer the XTTS voice when the server is up so the site sounds like the desktop
 // app; fall back to the browser's Web-Speech voice when it's off.
-const ELYSIA_TTS_URL = (typeof window !== 'undefined' && window.ELYSIA_TTS_URL) || 'http://127.0.0.1:8020';
+const ELYSIA_TTS_URL = _resolveEndpoint('ELYSIA_TTS_URL', 'tts', 'elysia_tts_url', 'http://127.0.0.1:8020');
 let _ttsServerOk = false;
 let _currentAudio = null;
 
@@ -158,45 +177,77 @@ async function elysiaTTSHealth({ timeoutMs = 2500 } = {}) {
 }
 if (typeof window !== 'undefined') elysiaTTSHealth();   // probe on load
 
-// Synthesize via the XTTS server and play the returned wav; drives onStart/onEnd
-// so the avatar's lip-sync matches the real audio.
-async function speakViaServer(text, lang, { onStart, onEnd } = {}) {
+// Fetch one synthesized clip from the XTTS server as a playable blob URL.
+async function _ttsBlobUrl(text, lang) {
   const res = await fetch(`${ELYSIA_TTS_URL}/tts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, lang }),
   });
   if (!res.ok) throw new Error(`tts ${res.status}`);
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  const a = new Audio(url);
-  _currentAudio = a;
-  let ended = false;
-  const fin = () => {
-    if (ended) return;
-    ended = true;
-    try { URL.revokeObjectURL(url); } catch (_) {}
-    if (_currentAudio === a) _currentAudio = null;
-    onEnd && onEnd();
-  };
-  a.onplay = () => onStart && onStart();
-  a.onended = fin;
-  a.onerror = fin;
-  await a.play();
+  return URL.createObjectURL(await res.blob());
 }
 
-// Speak as Elysia: cloned XTTS voice if the server is up, else the browser voice.
+// Split a reply into speakable chunks so she can start talking after the first one.
+function _splitSentences(text) {
+  const parts = (text || '')
+    .replace(/\n+/g, ' ')
+    .split(/(?<=[。！？…♪])|(?<=[.!?])(?=\s)/)   // split at CJK/symbol or ". ! ?"+space
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const out = [];
+  for (const p of parts) {              // fold tiny fragments into the previous chunk
+    if (out.length && (p.length < 6 || out[out.length - 1].length < 6)) out[out.length - 1] += p;
+    else out.push(p);
+  }
+  return out.length ? out : [text];
+}
+
+let _speakToken = 0;   // bumped to cancel an in-flight stream
+
+// STREAMING: synthesize sentences in order and play each as soon as it's ready while
+// the next one synthesizes — she starts speaking after sentence 1, not the whole line.
+async function speakViaServerStreaming(text, { onStart, onEnd } = {}) {
+  const token = ++_speakToken;
+  const chunks = _splitSentences(text);
+  const urls = new Array(chunks.length).fill(undefined);   // undefined=pending, string=url, null=failed
+  let started = false, ended = false, playIdx = 0;
+  const finish = () => { if (!ended) { ended = true; onEnd && onEnd(); } };
+
+  function playNext() {
+    if (token !== _speakToken) return finish();            // cancelled
+    if (playIdx >= chunks.length) return finish();
+    const u = urls[playIdx];
+    if (u === undefined) { setTimeout(playNext, 40); return; }   // wait for synth
+    if (u === null) { playIdx++; return playNext(); }            // skip a failed chunk
+    const a = new Audio(u); _currentAudio = a;
+    const adv = () => { try { URL.revokeObjectURL(u); } catch (_) {} playIdx++; playNext(); };
+    a.onplay = () => { if (!started) { started = true; onStart && onStart(); } };
+    a.onended = adv;
+    a.onerror = adv;
+    a.play().catch(adv);
+  }
+
+  for (let i = 0; i < chunks.length; i++) {                // sequential synth — kind to the shared GPU
+    if (token !== _speakToken) return;
+    try { urls[i] = await _ttsBlobUrl(chunks[i], isZh(chunks[i]) ? 'zh' : 'en'); }
+    catch (e) { urls[i] = null; if (i === 0) throw e; }    // first chunk failed -> caller falls back
+    if (i === 0) playNext();                               // begin playback once chunk 1 is ready
+  }
+}
+
+// Speak as Elysia: streamed cloned voice if the server is up, else browser voice.
 async function speakElysia(text, opts = {}) {
   if (!text) { opts.onEnd && opts.onEnd(); return; }
-  const lang = isZh(text) ? 'zh' : 'en';
   if (_ttsServerOk) {
-    try { await speakViaServer(text, lang, opts); return; }
+    try { await speakViaServerStreaming(text, opts); return; }
     catch (_) { _ttsServerOk = false; elysiaTTSHealth(); }   // fall through + re-probe
   }
   speakBrowser(text, opts);
 }
 
 function stopElysiaSpeech() {
+  _speakToken++;            // cancel any in-flight stream
   stopBrowserSpeech();
   if (_currentAudio) { try { _currentAudio.pause(); } catch (_) {} _currentAudio = null; }
 }
