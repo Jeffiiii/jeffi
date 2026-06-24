@@ -96,7 +96,6 @@ function _pickVoice(zh) {
 // Speak `text`; calls onStart/onEnd so the avatar's lip-sync matches real audio.
 function speakBrowser(text, { onStart, onEnd } = {}) {
   if (!_speech || !text) { onEnd && onEnd(); return; }
-  try { _speech.cancel(); } catch (_) {}
   const zh = isZh(text);
   const u = new SpeechSynthesisUtterance(text);
   const v = _pickVoice(zh);
@@ -109,12 +108,98 @@ function speakBrowser(text, { onStart, onEnd } = {}) {
   u.onstart = () => onStart && onStart();
   u.onend = finish;
   u.onerror = finish;
-  _speech.speak(u);
+  // Chrome quirk: calling cancel() and speak() back-to-back can swallow the
+  // utterance, and the engine can be left in a "paused" state. Cancel, then
+  // speak on the next tick, and resume() defensively.
+  try { _speech.cancel(); } catch (_) {}
+  setTimeout(() => {
+    try {
+      _speech.speak(u);
+      if (_speech.paused && _speech.resume) _speech.resume();
+    } catch (_) { finish(); }
+  }, 80);
   // Safety net: some browsers never fire onend; cap by length.
-  setTimeout(finish, Math.min(20000, 1500 + text.length * 90));
+  setTimeout(finish, Math.min(20000, 1800 + text.length * 90));
 }
 
 function stopBrowserSpeech() { if (_speech) { try { _speech.cancel(); } catch (_) {} } }
+
+// Warm up the speech engine on the first user gesture (autoplay policy). Calling
+// a near-silent utterance inside a click "unlocks" later speech in some browsers.
+if (typeof window !== 'undefined' && _speech) {
+  const _unlock = () => {
+    try { const w = new SpeechSynthesisUtterance(' '); w.volume = 0; _speech.speak(w); } catch (_) {}
+    window.removeEventListener('pointerdown', _unlock);
+    window.removeEventListener('keydown', _unlock);
+  };
+  window.addEventListener('pointerdown', _unlock);
+  window.addEventListener('keydown', _unlock);
+}
+
+// --- Elysia's real (cloned) voice via the XTTS server (serve_tts.py) ------------
+// Prefer the XTTS voice when the server is up so the site sounds like the desktop
+// app; fall back to the browser's Web-Speech voice when it's off.
+const ELYSIA_TTS_URL = (typeof window !== 'undefined' && window.ELYSIA_TTS_URL) || 'http://127.0.0.1:8020';
+let _ttsServerOk = false;
+let _currentAudio = null;
+
+async function elysiaTTSHealth({ timeoutMs = 2500 } = {}) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${ELYSIA_TTS_URL}/health`, { signal: ctrl.signal });
+    _ttsServerOk = res.ok;
+  } catch (_) {
+    _ttsServerOk = false;
+  } finally {
+    clearTimeout(t);
+  }
+  return _ttsServerOk;
+}
+if (typeof window !== 'undefined') elysiaTTSHealth();   // probe on load
+
+// Synthesize via the XTTS server and play the returned wav; drives onStart/onEnd
+// so the avatar's lip-sync matches the real audio.
+async function speakViaServer(text, lang, { onStart, onEnd } = {}) {
+  const res = await fetch(`${ELYSIA_TTS_URL}/tts`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, lang }),
+  });
+  if (!res.ok) throw new Error(`tts ${res.status}`);
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = new Audio(url);
+  _currentAudio = a;
+  let ended = false;
+  const fin = () => {
+    if (ended) return;
+    ended = true;
+    try { URL.revokeObjectURL(url); } catch (_) {}
+    if (_currentAudio === a) _currentAudio = null;
+    onEnd && onEnd();
+  };
+  a.onplay = () => onStart && onStart();
+  a.onended = fin;
+  a.onerror = fin;
+  await a.play();
+}
+
+// Speak as Elysia: cloned XTTS voice if the server is up, else the browser voice.
+async function speakElysia(text, opts = {}) {
+  if (!text) { opts.onEnd && opts.onEnd(); return; }
+  const lang = isZh(text) ? 'zh' : 'en';
+  if (_ttsServerOk) {
+    try { await speakViaServer(text, lang, opts); return; }
+    catch (_) { _ttsServerOk = false; elysiaTTSHealth(); }   // fall through + re-probe
+  }
+  speakBrowser(text, opts);
+}
+
+function stopElysiaSpeech() {
+  stopBrowserSpeech();
+  if (_currentAudio) { try { _currentAudio.pause(); } catch (_) {} _currentAudio = null; }
+}
 
 function detectEmotion(t) {
   const low = (t || '').toLowerCase();
@@ -173,7 +258,7 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
   React.useEffect(() => {
     let alive = true;
     elysiaHealth().then((h) => { if (alive) { setLive(h.ok); setModel(h.model); } });
-    return () => { alive = false; stopBrowserSpeech(); };
+    return () => { alive = false; stopElysiaSpeech(); };
   }, []);
 
   const send = async (m) => {
@@ -200,12 +285,10 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
     const total = reply.length;
     const stepN = Math.max(1, Math.round(total / 60));
 
-    // Voice: when the browser can speak, the utterance drives the lip-sync
-    // (speaking starts/stops with real audio). Otherwise fall back to a timed flap.
-    const canSpeak = tts && !!_speech;
-    if (tts && !canSpeak) setSpeaking(true);
-    if (canSpeak) {
-      speakBrowser(reply, {
+    // Voice: cloned XTTS voice if the server is up, else browser speech. Playback
+    // drives the avatar's lip-sync (speaking on/off).
+    if (tts) {
+      speakElysia(reply, {
         onStart: () => setSpeaking(true),
         onEnd: () => setSpeaking(false),
       });
@@ -220,7 +303,6 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
         return y;
       });
       if (i < total) setTimeout(tick, 24);
-      else if (tts && !canSpeak) setTimeout(() => setSpeaking(false), Math.min(4500, 600 + total * 35));
     };
     tick();
   };
@@ -252,7 +334,7 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
 
       <div style={{ flexShrink: 0, padding: '12px 16px 14px', background: 'var(--night-900)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-          <Switch checked={tts} onChange={(v) => { setTts(v); if (!v) { stopBrowserSpeech(); setSpeaking(false); } }} label={<span style={{ color: 'rgba(255,233,244,0.8)' }}>{lang === 'zh' ? '语音 (TTS)' : 'Voice (TTS)'}</span>} />
+          <Switch checked={tts} onChange={(v) => { setTts(v); if (!v) { stopElysiaSpeech(); setSpeaking(false); } }} label={<span style={{ color: 'rgba(255,233,244,0.8)' }}>{lang === 'zh' ? '语音 (TTS)' : 'Voice (TTS)'}</span>} />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'rgba(255,233,244,0.5)', display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: live ? '#54e39b' : (live === null ? '#caa6c0' : 'rgba(255,233,244,0.3)'), boxShadow: live ? '0 0 6px #54e39b' : 'none' }} />
             {live ? (model || 'elysia-merged') : (live === null ? (lang === 'zh' ? '连接中…' : 'connecting…') : (lang === 'zh' ? '演示模式' : 'demo mode'))} · EN/中文
@@ -264,4 +346,4 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
     </div>
   );
 }
-Object.assign(window, { elysiaRespond, elysiaGenerate, elysiaHealth, detectEmotion, speakBrowser, stopBrowserSpeech, ElysiaChatPanel });
+Object.assign(window, { elysiaRespond, elysiaGenerate, elysiaHealth, elysiaTTSHealth, detectEmotion, speakBrowser, stopBrowserSpeech, speakElysia, stopElysiaSpeech, ElysiaChatPanel });

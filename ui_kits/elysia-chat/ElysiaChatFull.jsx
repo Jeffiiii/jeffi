@@ -22,7 +22,16 @@ function ElysiaChatFull() {
   const [listening, setListening] = React.useState(false);
   const [tts, setTts] = React.useState(true);
   const [autoplay, setAutoplay] = React.useState(true);
+  const [live, setLive] = React.useState(null);   // null = probing, true = real server, false = demo
+  const [model, setModel] = React.useState('');
   const threadRef = React.useRef(null);
+
+  // Probe the model server for the live/demo badge; stop speech on unmount.
+  React.useEffect(() => {
+    let alive = true;
+    if (window.elysiaHealth) window.elysiaHealth().then((h) => { if (alive) { setLive(h.ok); setModel(h.model); } });
+    return () => { alive = false; if (window.stopBrowserSpeech) window.stopBrowserSpeech(); };
+  }, []);
 
   // greeting reflects the visitor's local time; realm reacts while she speaks
   React.useEffect(() => { setEmotion(greet.emo); }, []);
@@ -34,17 +43,43 @@ function ElysiaChatFull() {
 
   React.useEffect(() => { if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight; }, [msgs, typing]);
 
-  const send = (m) => {
-    setMsgs((x) => [...x, { from: 'user', text: m }]);
+  const send = async (m) => {
+    const input = (m || '').trim();
+    if (!input) return;
+    const history = msgs;
+    setMsgs((x) => [...x, { from: 'user', text: input }]);
     setText('');
     setTyping(true);
-    setTimeout(() => {
-      const r = window.elysiaRespond(m);
-      setTyping(false);
-      setEmotion(r.emotion);
-      setMsgs((x) => [...x, { from: 'elysia', text: r.text }]);
-      if (tts) { setSpeaking(true); setTimeout(() => setSpeaking(false), Math.min(4500, 1200 + r.text.length * 45)); }
-    }, 950);
+
+    // Real fine-tuned Elysia when the server is up; canned fallback otherwise.
+    let reply, usedReal = false;
+    try {
+      reply = await window.elysiaGenerate(history, input);
+      usedReal = true;
+    } catch (_) {
+      reply = window.elysiaRespond(input).text;
+    }
+    setLive(usedReal);
+    setTyping(false);
+    setEmotion(window.detectEmotion(reply));          // drives the Live2D expression
+
+    // Voice: cloned XTTS voice if the server is up, else browser speech. Playback
+    // drives the avatar's lip-sync.
+    if (tts) {
+      window.speakElysia(reply, { onStart: () => setSpeaking(true), onEnd: () => setSpeaking(false) });
+    }
+
+    // Typewriter reveal of the reply.
+    setMsgs((x) => [...x, { from: 'elysia', text: '' }]);
+    const total = reply.length;
+    const stepN = Math.max(1, Math.round(total / 60));
+    let i = 0;
+    const tick = () => {
+      i = Math.min(total, i + stepN);
+      setMsgs((x) => { const y = x.slice(); y[y.length - 1] = { from: 'elysia', text: reply.slice(0, i) }; return y; });
+      if (i < total) setTimeout(tick, 24);
+    };
+    tick();
   };
 
   const chips = lang === 'zh'
@@ -73,11 +108,11 @@ function ElysiaChatFull() {
             {lang === 'zh' ? '温暖、俏皮、优雅的 AI VTuber，会说中英双语，有语音、表情与 Live2D 形象。' : 'A warm, playful, elegant AI VTuber — bilingual, with voice, expressions, and a Live2D presence.'}
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <Switch checked={tts} onChange={setTts} label={<span style={{ color: 'rgba(255,233,244,0.85)' }}>{lang === 'zh' ? '语音输出 (TTS)' : 'Voice output (TTS)'}</span>} />
+            <Switch checked={tts} onChange={(v) => { setTts(v); if (!v) { if (window.stopBrowserSpeech) window.stopBrowserSpeech(); setSpeaking(false); } }} label={<span style={{ color: 'rgba(255,233,244,0.85)' }}>{lang === 'zh' ? '语音输出 (TTS)' : 'Voice output (TTS)'}</span>} />
             <Switch checked={autoplay} onChange={setAutoplay} label={<span style={{ color: 'rgba(255,233,244,0.85)' }}>{lang === 'zh' ? '自动播放' : 'Autoplay reply'}</span>} />
           </div>
           <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)', fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'rgba(255,233,244,0.4)', lineHeight: 1.7 }}>
-            model &gt; qwen3:8b · temp 0.92<br/>voice &gt; XTTS-v2 · EN / 中文
+            model &gt; {live ? (model || 'elysia-merged') : (live === null ? 'connecting…' : 'demo mode')} · temp 0.85<br/>voice &gt; browser TTS · EN / 中文
           </div>
         </Card>
       </div>
