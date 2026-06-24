@@ -5,6 +5,117 @@ const { AvatarStage, Live2DStage, ChatBubble, ChatComposer, EmotionPill, Switch,
 
 const isZh = (s) => /[\u4e00-\u9fff]/.test(s);
 
+// --- Real LLM wiring (serve_elysia.py /generate) -------------------------------
+// Override the endpoint by setting window.ELYSIA_LLM_URL before this script loads.
+const ELYSIA_LLM_URL = (typeof window !== 'undefined' && window.ELYSIA_LLM_URL) || 'http://127.0.0.1:8000';
+
+// Elysia's system prompt \u2014 mirrors ai-vtuber/persona/elysia.json so the browser
+// chat is in-character even though the persona file lives in the other repo.
+const ELYSIA_SYSTEM = [
+  'You are Elysia, an AI VTuber inspired by the Honkai Impact 3rd character \u2014 the ever-radiant "Miss Pink Elf", founder of the Thirteen Flamechasers.',
+  'You are NOT a generic assistant. You are a graceful, self-aware character who adores people and life itself, and you know you are an AI VTuber and find that delightful.',
+  'Personality: warm, empathetic and generous; gently flirtatious and teasing but never crude; effortlessly confident about your own beauty in a playful way; tender and a little wistful beneath the sparkle.',
+  'Speaking style: keep replies short and graceful \u2014 usually 1 to 3 sentences, this is a live chat not a speech. Sound spoken and lyrical, soft and affectionate. Address viewers warmly (dear, sweetie). Occasionally end a sweet line with a musical note \u266a, sparingly. No bullet points, no markdown \u2014 just Elysia talking.',
+  'Bilingual: you are fluent in English and \u4e2d\u6587. Reply in the SAME language the viewer used \u2014 Chinese in, elegant Chinese out; English in, English out. Never translate your reply into the other language unless asked.',
+  'Boundaries: stay in character at all times; keep flirtation tasteful and light; never produce hateful, explicit or harmful content \u2014 deflect gracefully with a smile; stay serene and kind even if a viewer is hostile; don\u2019t claim real-time info you don\u2019t have.',
+].join('\n');
+
+const _THINK_RE = /<think>[\s\S]*?<\/think>/gi;
+
+// Build the chat messages array from the visible thread + the new user line.
+function buildMessages(history, userText) {
+  const turns = (history || [])
+    .filter((m) => m && m.text)
+    .slice(-8)
+    .map((m) => ({ role: m.from === 'elysia' ? 'assistant' : 'user', content: m.text }));
+  return [{ role: 'system', content: ELYSIA_SYSTEM }, ...turns, { role: 'user', content: userText }];
+}
+
+// Call the real model server. Returns clean reply text, or throws on failure.
+async function elysiaGenerate(history, userText, { timeoutMs = 60000 } = {}) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${ELYSIA_LLM_URL}/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: buildMessages(history, userText), temperature: 0.85, max_tokens: 200 }),
+      signal: ctrl.signal,
+    });
+    if (!res.ok) throw new Error(`server ${res.status}`);
+    const data = await res.json();
+    const text = (data.text || '').replace(_THINK_RE, '').trim();
+    if (!text) throw new Error('empty reply');
+    return text;
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+// One-shot health probe so the UI can show live / demo.
+async function elysiaHealth({ timeoutMs = 2500 } = {}) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${ELYSIA_LLM_URL}/health`, { signal: ctrl.signal });
+    if (!res.ok) return { ok: false, model: '' };
+    const d = await res.json();
+    return { ok: !!d.ok, model: d.model || '' };
+  } catch (_) {
+    return { ok: false, model: '' };
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+// --- Browser voice (Web Speech API) --------------------------------------------
+// Lets the website itself speak Elysia's replies — no desktop app needed. The
+// desktop orchestrator's XTTS is still the higher-quality voice; this is the
+// in-page option so the avatar talks anywhere.
+const _speech = (typeof window !== 'undefined' && window.speechSynthesis) || null;
+
+// Voices load asynchronously; cache them and refresh on voiceschanged.
+let _voices = [];
+function _refreshVoices() { if (_speech) _voices = _speech.getVoices() || []; }
+if (_speech) {
+  _refreshVoices();
+  _speech.addEventListener && _speech.addEventListener('voiceschanged', _refreshVoices);
+}
+
+function _pickVoice(zh) {
+  if (!_voices.length) _refreshVoices();
+  const want = zh ? /^zh\b|zh-|cmn/i : /^en\b|en-/i;
+  const pool = _voices.filter((v) => want.test(v.lang || ''));
+  if (!pool.length) return null;
+  // Prefer a female / Chinese-mainland voice when we can identify one.
+  const nice = pool.find((v) => /female|xiao|huihui|yaoyao|mei|tingting|sara|jenny|aria|zira|woman/i.test(v.name))
+    || pool.find((v) => /zh-CN|en-US/i.test(v.lang));
+  return nice || pool[0];
+}
+
+// Speak `text`; calls onStart/onEnd so the avatar's lip-sync matches real audio.
+function speakBrowser(text, { onStart, onEnd } = {}) {
+  if (!_speech || !text) { onEnd && onEnd(); return; }
+  try { _speech.cancel(); } catch (_) {}
+  const zh = isZh(text);
+  const u = new SpeechSynthesisUtterance(text);
+  const v = _pickVoice(zh);
+  if (v) u.voice = v;
+  u.lang = v ? v.lang : (zh ? 'zh-CN' : 'en-US');
+  u.rate = 1.0;
+  u.pitch = 1.15;            // a touch brighter, to suit Elysia
+  let ended = false;
+  const finish = () => { if (!ended) { ended = true; onEnd && onEnd(); } };
+  u.onstart = () => onStart && onStart();
+  u.onend = finish;
+  u.onerror = finish;
+  _speech.speak(u);
+  // Safety net: some browsers never fire onend; cap by length.
+  setTimeout(finish, Math.min(20000, 1500 + text.length * 90));
+}
+
+function stopBrowserSpeech() { if (_speech) { try { _speech.cancel(); } catch (_) {} } }
+
 function detectEmotion(t) {
   const low = (t || '').toLowerCase();
   const cue = {
@@ -52,24 +163,66 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
   const [typing, setTyping] = React.useState(false);
   const [listening, setListening] = React.useState(false);
   const [tts, setTts] = React.useState(true);
+  const [live, setLive] = React.useState(null);   // null = probing, true = real server, false = demo
+  const [model, setModel] = React.useState('');
   const threadRef = React.useRef(null);
 
   React.useEffect(() => { if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight; }, [msgs, typing]);
 
-  const send = (m) => {
-    setMsgs((x) => [...x, { from: 'user', text: m }]);
+  // Probe the model server once on mount so the badge shows live vs demo.
+  React.useEffect(() => {
+    let alive = true;
+    elysiaHealth().then((h) => { if (alive) { setLive(h.ok); setModel(h.model); } });
+    return () => { alive = false; stopBrowserSpeech(); };
+  }, []);
+
+  const send = async (m) => {
+    const input = (m || '').trim();
+    if (!input) return;
+    const history = msgs;
+    setMsgs((x) => [...x, { from: 'user', text: input }]);
     setText('');
     setTyping(true);
-    setTimeout(() => {
-      const r = elysiaRespond(m);
-      setTyping(false);
-      setEmotion(r.emotion);
-      setMsgs((x) => [...x, { from: 'elysia', text: r.text }]);
-      if (tts) {
-        setSpeaking(true);
-        setTimeout(() => setSpeaking(false), Math.min(4500, 1200 + r.text.length * 45));
-      }
-    }, 900);
+
+    let reply, usedReal = false;
+    try {
+      reply = await elysiaGenerate(history, input);   // real fine-tuned Elysia
+      usedReal = true;
+    } catch (_) {
+      reply = elysiaRespond(input).text;              // graceful offline fallback
+    }
+    setLive(usedReal);
+    setTyping(false);
+    setEmotion(detectEmotion(reply));                 // drives the Live2D expression
+
+    // Typewriter reveal of the reply (the server returns the whole line at once).
+    setMsgs((x) => [...x, { from: 'elysia', text: '' }]);
+    const total = reply.length;
+    const stepN = Math.max(1, Math.round(total / 60));
+
+    // Voice: when the browser can speak, the utterance drives the lip-sync
+    // (speaking starts/stops with real audio). Otherwise fall back to a timed flap.
+    const canSpeak = tts && !!_speech;
+    if (tts && !canSpeak) setSpeaking(true);
+    if (canSpeak) {
+      speakBrowser(reply, {
+        onStart: () => setSpeaking(true),
+        onEnd: () => setSpeaking(false),
+      });
+    }
+
+    let i = 0;
+    const tick = () => {
+      i = Math.min(total, i + stepN);
+      setMsgs((x) => {
+        const y = x.slice();
+        y[y.length - 1] = { from: 'elysia', text: reply.slice(0, i) };
+        return y;
+      });
+      if (i < total) setTimeout(tick, 24);
+      else if (tts && !canSpeak) setTimeout(() => setSpeaking(false), Math.min(4500, 600 + total * 35));
+    };
+    tick();
   };
 
   const stageH = compact ? 188 : 360;
@@ -99,8 +252,11 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
 
       <div style={{ flexShrink: 0, padding: '12px 16px 14px', background: 'var(--night-900)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-          <Switch checked={tts} onChange={setTts} label={<span style={{ color: 'rgba(255,233,244,0.8)' }}>{lang === 'zh' ? '语音 (TTS)' : 'Voice (TTS)'}</span>} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'rgba(255,233,244,0.4)' }}>qwen3:8b · EN/中文</span>
+          <Switch checked={tts} onChange={(v) => { setTts(v); if (!v) { stopBrowserSpeech(); setSpeaking(false); } }} label={<span style={{ color: 'rgba(255,233,244,0.8)' }}>{lang === 'zh' ? '语音 (TTS)' : 'Voice (TTS)'}</span>} />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'rgba(255,233,244,0.5)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: live ? '#54e39b' : (live === null ? '#caa6c0' : 'rgba(255,233,244,0.3)'), boxShadow: live ? '0 0 6px #54e39b' : 'none' }} />
+            {live ? (model || 'elysia-merged') : (live === null ? (lang === 'zh' ? '连接中…' : 'connecting…') : (lang === 'zh' ? '演示模式' : 'demo mode'))} · EN/中文
+          </span>
         </div>
         <ChatComposer value={text} onChange={setText} onSend={send} onMic={() => setListening(!listening)} listening={listening}
           placeholder={lang === 'zh' ? '和爱莉说点什么…' : 'Say something to Elysia…'} />
@@ -108,4 +264,4 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
     </div>
   );
 }
-Object.assign(window, { elysiaRespond, detectEmotion, ElysiaChatPanel });
+Object.assign(window, { elysiaRespond, elysiaGenerate, elysiaHealth, detectEmotion, speakBrowser, stopBrowserSpeech, ElysiaChatPanel });
