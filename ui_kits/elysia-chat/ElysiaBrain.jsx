@@ -23,6 +23,21 @@ function _resolveEndpoint(winKey, qpKey, lsKey, fallback) {
 }
 const ELYSIA_LLM_URL = _resolveEndpoint('ELYSIA_LLM_URL', 'llm', 'elysia_llm_url', 'http://127.0.0.1:8000');
 
+// Stable per-browser id so the server's reactive substrate keeps memory + mood per visitor
+// (and so a returning friend has continuity). Sent with every /generate call.
+function _sessionId() {
+  try {
+    let id = localStorage.getItem('elysia_session_id');
+    if (!id) {
+      id = 'web-' + ((window.crypto && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : Date.now().toString(36) + Math.random().toString(36).slice(2));
+      localStorage.setItem('elysia_session_id', id);
+    }
+    return id;
+  } catch (_) { return 'web-anon'; }
+}
+
 // Elysia's system prompt \u2014 mirrors ai-vtuber/persona/elysia.json so the browser
 // chat is in-character even though the persona file lives in the other repo.
 const ELYSIA_SYSTEM = [
@@ -58,7 +73,7 @@ async function elysiaGenerate(history, userText, { timeoutMs = 60000 } = {}) {
     const res = await fetch(`${ELYSIA_LLM_URL}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: buildMessages(history, userText), temperature: 0.85, max_tokens: 200 }),
+      body: JSON.stringify({ messages: buildMessages(history, userText), temperature: 0.85, max_tokens: 200, session_id: _sessionId() }),
       signal: ctrl.signal,
     });
     if (!res.ok) throw new Error(`server ${res.status}`);
