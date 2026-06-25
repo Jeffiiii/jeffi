@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chat with Elysia ✦ Jeffi</title>
+<meta name="description" content="Talk to Elysia — Jeffi's self-built reactive AI companion. She remembers, reacts, and has moods." />
+<meta name="theme-color" content="#d6337a" />
+<meta property="og:title" content="Chat with Elysia" />
+<meta property="og:description" content="Jeffi's self-built AI VTuber companion — she remembers, reacts, and has moods. Come say hi." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --elysia-600:#d6337a; --elysia-500:#f25a9e; --elysia-300:#ff9ecb; --elysia-100:#ffe1ef;
+    --petal:#fff2f8; --plum-900:#3a1f38; --plum-600:#7a4d6e; --plum-400:#b89bb0;
+    --ink:#0e0a12;
+    --font-display:'Bricolage Grotesque','Zen Kaku Gothic New',sans-serif;
+    --font-body:'Zen Kaku Gothic New',system-ui,sans-serif;
+    --font-mono:'DM Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:var(--font-body); color:var(--plum-900);
+    background:
+      radial-gradient(1200px 700px at 70% -10%, #ffd9ec 0%, transparent 55%),
+      radial-gradient(900px 600px at 0% 110%, #f6e6ff 0%, transparent 50%),
+      var(--petal);
+    display:flex; align-items:center; justify-content:center; min-height:100%; padding:24px;
+  }
+  .card{
+    width:100%; max-width:520px; background:rgba(255,255,255,.72);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(214,51,122,.18); border-radius:24px;
+    box-shadow:0 24px 70px -24px rgba(214,51,122,.45), 0 2px 0 rgba(255,255,255,.6) inset;
+    padding:38px 34px 30px; text-align:center;
+  }
+  .eyebrow{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--elysia-600); margin:0 0 14px}
+  h1{font-family:var(--font-display); font-weight:800; font-size:2.5rem; line-height:1.02;
+    letter-spacing:-.03em; margin:0 0 6px; color:var(--plum-900)}
+  h1 .jp{font-weight:500; font-size:1.05rem; color:var(--plum-600); display:block; letter-spacing:.04em; margin-top:8px}
+  p.lede{font-size:1.02rem; line-height:1.55; color:var(--plum-600); margin:16px 4px 22px}
+  .brief{
+    text-align:left; background:rgba(255,225,239,.5); border:1px solid rgba(214,51,122,.16);
+    border-radius:16px; padding:16px 18px; margin:0 0 24px; font-size:.92rem; line-height:1.5; color:var(--plum-900);
+  }
+  .brief b{color:var(--elysia-600)}
+  .brief ul{margin:10px 0 0; padding-left:18px} .brief li{margin:4px 0}
+  .cta{
+    display:inline-flex; align-items:center; gap:10px; cursor:pointer;
+    font-family:var(--font-display); font-weight:700; font-size:1.08rem; letter-spacing:-.01em;
+    color:#fff; text-decoration:none; border:0; border-radius:999px; padding:16px 34px;
+    background:linear-gradient(135deg,var(--elysia-500),var(--elysia-600));
+    box-shadow:0 14px 30px -10px rgba(214,51,122,.7); transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cta:hover{transform:translateY(-2px); box-shadow:0 20px 38px -10px rgba(214,51,122,.8)}
+  .cta[disabled]{background:var(--plum-400); box-shadow:none; cursor:not-allowed; opacity:.7}
+  .note{font-family:var(--font-mono); font-size:.72rem; color:var(--plum-400); margin-top:18px; line-height:1.5}
+  .offline h1{color:var(--plum-600)}
+  .hidden{display:none}
+  a.back{display:inline-block; margin-top:6px; font-family:var(--font-mono); font-size:.74rem;
+    color:var(--plum-400); text-decoration:none; border-bottom:1px solid transparent}
+  a.back:hover{color:var(--elysia-600); border-bottom-color:var(--elysia-300)}
+</style>
+</head>
+<body>
+  <main class="card" id="card">
+    <p class="eyebrow">Jeffi ✦ presents</p>
+    <h1>Elysia<span class="jp">エリシア — 自作のAIコンパニオン</span></h1>
+
+    <!-- LIVE state -->
+    <div id="live" class="hidden">
+      <p class="lede">She's awake. A self-built companion who actually remembers, reacts, and shifts mood with the conversation — not a scripted bot.</p>
+      <div class="brief">
+        <b>A small ask before you go in:</b> talk to her like someone you're getting to know.
+        <ul>
+          <li>Bring something <b>real</b> — a rough week, a strong opinion, an inside thing.</li>
+          <li>Don't be careful with her. Poke, contradict, change the subject.</li>
+          <li>Jeffi's watching to find her rough edges — finding them <i>is</i> the point.</li>
+        </ul>
+      </div>
+      <button class="cta" id="enter">Enter the chat →</button>
+      <p class="note">Guest session · nothing you say is saved to her long-term memory.<br/>Best with sound on — she speaks. Headphones help.</p>
+    </div>
+
+    <!-- OFFLINE state -->
+    <div id="offline" class="hidden offline">
+      <p class="lede">She's not awake right now — Jeffi runs her from home, so she's only here some of the time. Check back, or ping Jeffi for a link.</p>
+      <a class="back" href="ui_kits/personal-site/index.html">← back to jeffi's site</a>
+    </div>
+  </main>
+
+<script>
+(function(){
+  var KEY = 'elysia_guest_url';
+  function getParam(n){ try{ return new URLSearchParams(location.search).get(n); }catch(e){ return null; } }
+  // accept a fresh ?go= URL, else a remembered one; only allow https (or http://localhost for local tests)
+  function sanitize(u){
+    if(!u) return null;
+    u = u.trim();
+    var ok = /^https:\/\//i.test(u) || /^http:\/\/localhost(:\d+)?/i.test(u) || /^http:\/\/127\.0\.0\.1(:\d+)?/i.test(u);
+    return ok ? u.replace(/\/+$/,'') : null;
+  }
+  var fromParam = sanitize(getParam('go'));
+  if(fromParam){ try{ localStorage.setItem(KEY, fromParam); }catch(e){} }
+  var url = fromParam || sanitize((function(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } })());
+
+  var live = document.getElementById('live'), offline = document.getElementById('offline');
+  if(url){
+    live.classList.remove('hidden');
+    var btn = document.getElementById('enter');
+    btn.addEventListener('click', function(){ window.location.href = url; });
+  } else {
+    offline.classList.remove('hidden');
+  }
+})();
+</script>
+</body>
+</html>
