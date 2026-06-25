@@ -153,12 +153,6 @@
     --site-accent: var(--elysia-400);
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes floatUp {
-    0% { transform: translateY(100vh) rotate(0); opacity: 0; }
-    10% { opacity: .5; } 90% { opacity: .5; }
-    100% { transform: translateY(-120px) rotate(420deg); opacity: 0; }
-  }
-  .petal { position: fixed; font-size: 1rem; pointer-events: none; z-index: 1; animation: floatUp linear infinite; }
   footer { text-align: center; padding: 48px 24px 110px; color: var(--site-text-faint); font-weight: 600; font-size: 0.85rem; border-top: 1px solid var(--site-hairline); }
   .fsoc { display: flex; justify-content: center; gap: 12px; margin-bottom: 14px; }
   .fsoc a { width: 40px; height: 40px; border-radius: 50%; background: var(--site-chip-bg); border: 1px solid var(--site-chip-border); display: flex; align-items: center; justify-content: center; color: var(--site-text-soft); text-decoration: none; transition: all .2s; }
@@ -198,13 +192,13 @@
 <div class="vignette"></div>
 <div class="grain"></div>
 <div id="root"></div>
-<div id="petals"></div>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="../../_ds_bundle.js?v=restraint"></script>
 <script src="./judgement-cursor.js"></script>
 <script src="./audio-beat.js"></script>
+<script src="./audio-engine.js"></script>
 <script type="text/babel" src="../elysia-chat/ElysiaBrain.jsx"></script>
 <script type="text/babel" src="./SiteNav.jsx"></script>
 <script type="text/babel" src="./EditorialHead.jsx"></script>
@@ -224,30 +218,45 @@ function App() {
   const [lang, setLang] = React.useState('en');
   const [theme, setThemeState] = React.useState(() => localStorage.getItem('jeffi-theme') || 'dark');
   const [chatOpen, setChatOpen] = React.useState(false);
+  const [tracks, setTracks] = React.useState(() => window.TRACKS.slice());
   const [cur, setCur] = React.useState(0);
   const [playing, setPlaying] = React.useState(false);
-  const [progress, setProgress] = React.useState(0.32);
+  const [progress, setProgress] = React.useState(0);
 
   const setTheme = (t) => { setThemeState(t); localStorage.setItem('jeffi-theme', t); };
   React.useEffect(() => { document.documentElement.setAttribute('data-theme', theme); }, [theme]);
 
+  // wire the audio engine once
   React.useEffect(() => {
-    if (!playing) { if (window.songBeat) window.songBeat.pause(); return; }
-    if (window.songBeat) window.songBeat.play(TRACKS[cur] && TRACKS[cur].bpm);
-    const id = setInterval(() => setProgress((p) => (p >= 1 ? 0 : p + 0.004)), 200);
-    return () => clearInterval(id);
-  }, [playing, cur]);
+    const e = window.audioEngine; if (!e) return;
+    const offT = e.on('tick', () => setProgress(e.state.progress));
+    const offS = e.on('state', () => setPlaying(e.playing));
+    e.onEnded(() => setCur((c) => (c + 1) % tracks.length));
+    e.load(tracks[0], false);
+    return () => { offT(); offS(); };
+  }, []);
+
+  // (re)load the engine whenever the selected track changes
+  const firstLoad = React.useRef(true);
+  React.useEffect(() => {
+    if (firstLoad.current) { firstLoad.current = false; return; }
+    window.audioEngine.load(tracks[cur], window.audioEngine.playing);
+  }, [cur]);
+
+  const onToggle = () => window.audioEngine.toggle();
+  const onSeek = (frac) => window.audioEngine.seek(frac);
+  const onAddTrack = (tk) => { setTracks((ts) => { const next = ts.concat([tk]); setTimeout(() => { setCur(next.length - 1); window.audioEngine.load(tk, true); }, 0); return next; }); };
 
   const { SiteNav, SiteHero, StatusStrip, About, Projects, GamesPlay, AnimeFaves, MusicSection, MiniPlayer, Gallery, Skills, ElysiaDock, TRACKS } = window;
   return (
     <React.Fragment>
       <SiteNav lang={lang} setLang={setLang} theme={theme} setTheme={setTheme} onOpenChat={() => setChatOpen(true)} />
       <SiteHero lang={lang} theme={theme} onOpenChat={() => setChatOpen(true)} />
-      <StatusStrip lang={lang} track={TRACKS[cur]} playing={playing} />
+      <StatusStrip lang={lang} track={tracks[cur]} playing={playing} />
       <About lang={lang} />
       <Projects lang={lang} />
       <GamesPlay lang={lang} />
-      <MusicSection lang={lang} cur={cur} setCur={setCur} playing={playing} setPlaying={setPlaying} progress={progress} />
+      <MusicSection lang={lang} tracks={tracks} cur={cur} setCur={setCur} playing={playing} progress={progress} onToggle={onToggle} onSeek={onSeek} onAdd={onAddTrack} />
       <AnimeFaves lang={lang} />
       <Gallery lang={lang} />
       <Skills lang={lang} />
@@ -260,28 +269,13 @@ function App() {
         </div>
         {lang === 'zh' ? '由 Jeffi 用 💚 制作 · 2026' : 'Made with 💚 by Jeffi · 2026'}
       </footer>
-      <MiniPlayer cur={cur} setCur={setCur} playing={playing} setPlaying={setPlaying} progress={progress} />
+      <MiniPlayer tracks={tracks} cur={cur} setCur={setCur} playing={playing} progress={progress} onToggle={onToggle} />
       <window.RiftPortal lang={lang} />
       <ElysiaDock lang={lang} setLang={setLang} open={chatOpen} setOpen={setChatOpen} />
     </React.Fragment>
   );
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
-// ambient petals
-const petals = document.getElementById('petals');
-const glyphs = ['✦','✨','💫','🌟','⭐','🍃'];
-function spawn() {
-  const el = document.createElement('div');
-  el.className = 'petal';
-  el.textContent = glyphs[Math.floor(Math.random()*glyphs.length)];
-  el.style.left = Math.random()*100 + 'vw';
-  el.style.animationDuration = (Math.random()*10 + 11) + 's';
-  petals.appendChild(el);
-  setTimeout(() => el.remove(), 24000);
-}
-for (let i=0;i<8;i++) setTimeout(spawn, i*600);
-setInterval(spawn, 1400);
 </script>
 </body>
 </html>
