@@ -13,7 +13,7 @@ function StatusStrip({ lang, track, playing }) {
       }}
       onMouseEnter={href ? (e) => e.currentTarget.style.background = 'var(--site-row-hover)' : undefined}
       onMouseLeave={href ? (e) => e.currentTarget.style.background = 'transparent' : undefined}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.64rem', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--site-text-faint)' }}>{label}</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--site-text-faint)' }}>{label}</div>
         <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem', color: 'var(--site-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{children}</div>
       </div>
     );

@@ -1,0 +1,438 @@
+<!-- @dsCard group="Personal Site" viewport="1280x900" name="Elysia Devlog" subtitle="Golden inscribed chronicle for the Elysia VTuber project (localStorage)" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Devlog · Elysia</title>
+<link rel="icon" type="image/png" href="../../assets/live2d/icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --gold:       #e8c372;
+    --gold-bright:#f8e6b0;
+    --gold-deep:  #b8862f;
+    --gold-line:  rgba(232,195,114,0.32);
+    --gold-faint: rgba(232,195,114,0.14);
+    --obsidian:   #08070b;
+    --ivory:      #ece0c4;
+    --ivory-soft: rgba(236,224,196,0.74);
+    --ivory-faint:rgba(236,224,196,0.46);
+    --parch:      #efe5cd;
+    --parch-edge: #d8c49a;
+    --sepia:      #3a2c18;
+    --sepia-soft: #6f5a3a;
+    --stone:      linear-gradient(162deg, #17130c 0%, #100c08 60%, #0c0907 100%);
+    --serif:      'Cormorant Garamond', 'Noto Serif SC', Georgia, serif;
+    --roman:      'Cinzel', 'Noto Serif SC', serif;
+    --cjk:        'Noto Serif SC', serif;
+    --t-thought:  #b6a0e6;
+    --t-progress: #7fc6a6;
+    --t-idea:     #f0c25a;
+    --t-milestone:#dd7a4e;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; min-height: 100vh; overflow-x: hidden;
+    font-family: var(--serif); color: var(--ivory);
+    background:
+      radial-gradient(120% 75% at 50% -12%, rgba(232,195,114,0.15), transparent 54%),
+      radial-gradient(90% 60% at 50% 118%, rgba(184,134,47,0.08), transparent 60%),
+      var(--obsidian);
+  }
+  body::after { /* vignette */
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 2;
+    box-shadow: inset 0 0 220px 60px rgba(0,0,0,0.6);
+  }
+  h1, h2, h3 { margin: 0; }
+  ::placeholder { color: var(--sepia-soft); opacity: 0.8; }
+  textarea:focus, input:focus { outline: none; }
+  ::selection { background: rgba(232,195,114,0.3); color: #fff; }
+
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.7; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 clamp(16px,4vw,40px); position: relative; z-index: 3; }
+
+  /* top bar */
+  .topbar { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    background: linear-gradient(to bottom, rgba(8,7,11,0.85), rgba(8,7,11,0.5)); border-bottom: 1px solid var(--gold-faint); }
+  .tb-link { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ivory-soft);
+    font-family: var(--roman); font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; transition: color .2s; }
+  .tb-link:hover { color: var(--gold-bright); }
+  .ghost-btn { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; background: transparent;
+    border: 1px solid var(--gold-line); color: var(--gold); border-radius: 2px; padding: 8px 15px;
+    font-family: var(--roman); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; transition: all .2s; }
+  .ghost-btn:hover { background: rgba(232,195,114,0.08); border-color: var(--gold); color: var(--gold-bright); }
+
+  /* header */
+  .gold-text { background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 48%, var(--gold-deep) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--gold); }
+  .emblem { animation: spin 80s linear infinite; transform-origin: 50% 50%; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .title-cjk { font-family: var(--cjk); font-weight: 900; font-size: clamp(3rem,9vw,5.5rem); line-height: 1;
+    letter-spacing: 0.14em; text-indent: 0.14em; filter: drop-shadow(0 2px 18px rgba(232,195,114,0.3)); }
+  .title-en { font-family: var(--roman); font-weight: 600; font-size: clamp(0.8rem,2.2vw,1.05rem);
+    letter-spacing: 0.46em; text-indent: 0.46em; color: var(--gold); }
+
+  /* primary button (inscribe) */
+  .inscribe { cursor: pointer; border: none; border-radius: 2px; padding: 11px 26px;
+    font-family: var(--roman); font-weight: 600; font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #2a1d08; background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, var(--gold-deep));
+    box-shadow: 0 4px 18px rgba(232,195,114,0.35), inset 0 1px 0 rgba(255,255,255,0.5); transition: all .2s; }
+  .inscribe:hover { filter: brightness(1.08); box-shadow: 0 6px 26px rgba(232,195,114,0.5), inset 0 1px 0 rgba(255,255,255,0.6); transform: translateY(-1px); }
+  .quiet-btn { cursor: pointer; background: transparent; border: 1px solid var(--parch-edge); color: var(--sepia-soft);
+    border-radius: 2px; padding: 10px 18px; font-family: var(--roman); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; transition: all .2s; }
+  .quiet-btn:hover { border-color: var(--sepia); color: var(--sepia); }
+
+  /* parchment composer */
+  .parchment { position: relative; background: linear-gradient(168deg, #f3ead3 0%, #ece0c2 100%); color: var(--sepia);
+    border-radius: 3px; padding: 22px clamp(18px,3vw,30px) 20px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), inset 0 0 60px rgba(180,140,70,0.14), 0 0 0 1px var(--parch-edge); }
+  .parchment::before { /* corner gilt frame */
+    content: ''; position: absolute; inset: 8px; border: 1px solid rgba(120,90,40,0.4); border-radius: 2px; pointer-events: none; }
+  .p-input { width: 100%; background: rgba(255,255,255,0.45); border: 1px solid var(--parch-edge);
+    border-radius: 2px; padding: 11px 14px; color: var(--sepia); font-family: var(--serif); font-size: 1.05rem; }
+  .p-input:focus { border-color: var(--gold-deep); box-shadow: 0 0 0 2px rgba(184,134,47,0.2); }
+  .seal { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 14px; border-radius: 2px;
+    font-family: var(--roman); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    background: rgba(255,255,255,0.35); border: 1px solid var(--parch-edge); color: var(--sepia-soft); transition: all .18s; }
+  .seal:hover { color: var(--sepia); }
+  .seal .gem { width: 9px; height: 9px; transform: rotate(45deg); border-radius: 1px; }
+
+  /* filter tags */
+  .ftag { cursor: pointer; padding: 7px 16px; border-radius: 2px; font-family: var(--roman); font-size: 0.68rem;
+    font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; background: transparent;
+    border: 1px solid var(--gold-line); color: var(--ivory-faint); transition: all .2s; }
+  .ftag:hover { color: var(--gold-bright); border-color: var(--gold); }
+  .ftag.on { background: linear-gradient(180deg, rgba(232,195,114,0.18), rgba(232,195,114,0.06)); color: var(--gold-bright); border-color: var(--gold); }
+  .search { background: rgba(20,16,10,0.6); border: 1px solid var(--gold-line); border-radius: 2px;
+    padding: 9px 16px; color: var(--ivory); font-family: var(--serif); font-size: 1rem; font-style: italic; }
+  .search:focus { border-color: var(--gold); }
+
+  /* timeline + tablets */
+  .tl-row { display: grid; grid-template-columns: 30px 1fr; gap: 16px; }
+  .tl-rail { display: flex; flex-direction: column; align-items: center; }
+  .tl-node { margin-top: 20px; flex-shrink: 0; width: 16px; height: 16px; transform: rotate(45deg); border-radius: 2px;
+    border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center;
+    background: #0d0a07; box-shadow: 0 0 12px rgba(232,195,114,0.3); }
+  .tl-node .gem { width: 6px; height: 6px; border-radius: 1px; }
+  .tl-line { width: 1px; flex: 1; background: linear-gradient(var(--gold-line), var(--gold-faint)); margin-top: 6px; }
+  .tl-row:last-child .tl-line { display: none; }
+
+  .tablet { position: relative; background: var(--stone); border: 1px solid var(--gold-line); border-radius: 3px;
+    padding: 16px 20px; margin-bottom: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(232,195,114,0.08); transition: border-color .25s, box-shadow .25s; }
+  .tablet:hover { border-color: var(--gold); box-shadow: 0 14px 38px rgba(0,0,0,0.55), 0 0 22px rgba(232,195,114,0.12), inset 0 1px 0 rgba(232,195,114,0.12); }
+  .tablet::before { /* top gilt rule */ content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-line) 20%, var(--gold-line) 80%, transparent); }
+  .type-label { font-family: var(--roman); font-size: 0.64rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+  .meta { font-family: var(--serif); font-style: italic; font-size: 0.92rem; color: var(--ivory-faint); }
+  .e-title { font-family: var(--serif); font-weight: 700; font-size: 1.45rem; line-height: 1.15; color: var(--gold-bright); letter-spacing: 0.01em; }
+  .e-body { font-family: var(--serif); font-size: 1.12rem; line-height: 1.6; color: var(--ivory-soft); white-space: pre-wrap; }
+  .e-tag { font-family: var(--roman); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold);
+    padding: 3px 10px; border: 1px solid var(--gold-line); border-radius: 2px; }
+  .acts { opacity: 0; transition: opacity .2s; display: inline-flex; gap: 2px; }
+  .tablet:hover .acts, .tablet:focus-within .acts { opacity: 1; }
+  .icn { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 2px;
+    background: transparent; border: 1px solid transparent; color: var(--ivory-faint); cursor: pointer; transition: all .18s; }
+  .icn:hover { color: var(--gold-bright); border-color: var(--gold-line); }
+  .icn.del:hover { color: #e58a6a; border-color: rgba(229,138,106,0.4); }
+
+  .tally { display: inline-flex; align-items: baseline; gap: 8px; padding: 8px 15px; border: 1px solid var(--gold-line);
+    border-radius: 2px; background: rgba(20,16,10,0.4); }
+  .tally .n { font-family: var(--roman); font-weight: 700; font-size: 1.05rem; }
+  .tally .l { font-family: var(--roman); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ivory-faint); }
+
+  .oracle { position: relative; width: 188px; flex-shrink: 0; }
+  .oracle-frame { position: absolute; inset: -10px; border: 1px solid var(--gold-line); border-radius: 4px; pointer-events: none; }
+  .oracle-frame::before, .oracle-frame::after { content: ''; position: absolute; width: 14px; height: 14px; border: 1.5px solid var(--gold); }
+  .oracle-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .oracle-frame::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  @media (max-width: 600px) {
+    .head-grid { grid-template-columns: 1fr !important; text-align: center; }
+    .oracle { display: none; }
+    .tl-row { grid-template-columns: 22px 1fr; gap: 12px; }
+    .title-cjk { font-size: clamp(2.6rem,16vw,4rem); }
+  }
+  @media (prefers-reduced-motion: reduce) { .emblem { animation: none; } }
+  *:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<svg class="stars" aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1000 700">
+  <g stroke="rgba(232,195,114,0.35)" stroke-width="0.6" fill="none">
+    <polyline points="120,90 200,140 260,90 340,170" />
+    <polyline points="760,110 820,170 900,130" />
+    <polyline points="650,520 720,470 800,540 870,500" />
+    <polyline points="140,560 210,510 250,580" />
+  </g>
+  <g fill="rgba(232,195,114,0.6)">
+    <circle cx="120" cy="90" r="1.6"/><circle cx="200" cy="140" r="2.2"/><circle cx="260" cy="90" r="1.4"/><circle cx="340" cy="170" r="1.8"/>
+    <circle cx="760" cy="110" r="1.8"/><circle cx="820" cy="170" r="2.4"/><circle cx="900" cy="130" r="1.5"/>
+    <circle cx="650" cy="520" r="1.6"/><circle cx="720" cy="470" r="2.2"/><circle cx="800" cy="540" r="1.5"/><circle cx="870" cy="500" r="1.9"/>
+    <circle cx="140" cy="560" r="1.7"/><circle cx="210" cy="510" r="2.1"/><circle cx="250" cy="580" r="1.4"/>
+    <circle cx="500" cy="60" r="1.3"/><circle cx="480" cy="300" r="1.2"/><circle cx="930" cy="350" r="1.4"/><circle cx="60" cy="320" r="1.3"/>
+  </g>
+</svg>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+const { Live2DStage } = window.ElysiaJeffiDesignSystem_f13e8e;
+const STORE_KEY = 'elysiaDevlog.v1';
+
+const TYPES = {
+  thought:   { label: 'Reflection', cjk: '思', c: 'var(--t-thought)',   ph: 'Set down a thought about Elysia…' },
+  progress:  { label: 'Progress',   cjk: '进', c: 'var(--t-progress)',  ph: 'Record what you forged or shipped…' },
+  idea:      { label: 'Idea',       cjk: '念', c: 'var(--t-idea)',      ph: 'Inscribe what she might become…' },
+  milestone: { label: 'Milestone',  cjk: '碑', c: 'var(--t-milestone)', ph: 'Mark a moment worth remembering…' },
+};
+const ORDER = ['thought', 'progress', 'idea', 'milestone'];
+
+const now = Date.now(), DAY = 86400000;
+const SEED = [
+  { id: 's4', type: 'milestone', title: 'Live2D rig is live on the site', body: 'The Changli Cubism model loads on the homepage with real blink and lip-sync. After weeks of fighting the loader, she finally feels present — no longer a static poster, but a presence.', tags: ['live2d', 'frontend'], ts: now - DAY * 1.2 },
+  { id: 's3', type: 'progress', title: 'Emotion → expression mapping', body: 'Wired the emotion pills to the model parameters. happy / playful / thinking all switch cleanly, and speaking drives the mouth. Next: blend between expressions instead of hard cuts.', tags: ['live2d', 'emotion'], ts: now - DAY * 2.6 },
+  { id: 's2', type: 'idea', title: 'Let her react to the page', body: 'When the music section scrolls into view, brighten her mood and animate a little. She should feel aware of what I am doing on the site, not just embedded in a box.', tags: ['ux', 'ambient'], ts: now - DAY * 4 },
+  { id: 's1', type: 'thought', title: 'Voice latency is the whole experience', body: 'The TTS round-trip has to feel instant or the illusion breaks. Probably need to stream audio chunks as they synthesize rather than waiting for the full clip. Worth prototyping the streaming path first.', tags: ['voice', 'tts'], ts: now - DAY * 6 },
+];
+
+function load() { try { const r = localStorage.getItem(STORE_KEY); if (r) return JSON.parse(r); } catch (e) {} return SEED; }
+function relTime(ts) {
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return 'moments ago';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  const d = Math.floor(s / 86400);
+  if (d < 30) return d + 'd ago';
+  return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+function fullDate(ts) {
+  return new Date(ts).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+    + ' · ' + new Date(ts).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+}
+
+function Emblem({ size = 84 }) {
+  const ticks = [];
+  for (let i = 0; i < 24; i++) { const a = (i / 24) * Math.PI * 2; const r1 = 44, r2 = i % 2 ? 40 : 37;
+    ticks.push(<line key={i} x1={50 + Math.cos(a) * r1} y1={50 + Math.sin(a) * r1} x2={50 + Math.cos(a) * r2} y2={50 + Math.sin(a) * r2} />); }
+  const star = [];
+  for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 - Math.PI / 2; const r = i % 2 ? 8 : 18;
+    star.push((50 + Math.cos(a) * r) + ',' + (50 + Math.sin(a) * r)); }
+  return (
+    <svg className="emblem" width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="var(--gold)" aria-hidden="true">
+      <circle cx="50" cy="50" r="47" strokeWidth="0.8" opacity="0.6" />
+      <circle cx="50" cy="50" r="44" strokeWidth="1.4" />
+      <circle cx="50" cy="50" r="30" strokeWidth="0.7" opacity="0.5" />
+      <g strokeWidth="1" opacity="0.85">{ticks}</g>
+      <polygon points={star.join(' ')} strokeWidth="1.2" fill="rgba(232,195,114,0.12)" />
+      <circle cx="50" cy="50" r="3.4" fill="var(--gold)" stroke="none" />
+    </svg>
+  );
+}
+
+// Greek-key meander divider
+function Meander() {
+  return (
+    <svg width="100%" height="20" viewBox="0 0 280 20" preserveAspectRatio="xMidYMid meet" aria-hidden="true" style={{ display: 'block', maxWidth: 340, margin: '0 auto', opacity: 0.85 }}>
+      <defs>
+        <pattern id="mdr" width="28" height="20" patternUnits="userSpaceOnUse">
+          <path d="M0 18 H28 M2 14 V4 H20 V14 H8 V8 H14" fill="none" stroke="var(--gold)" strokeWidth="1.4" />
+        </pattern>
+        <linearGradient id="mfade" x1="0" x2="1">
+          <stop offset="0" stopColor="white" stopOpacity="0" /><stop offset="0.2" stopColor="white" stopOpacity="1" />
+          <stop offset="0.8" stopColor="white" stopOpacity="1" /><stop offset="1" stopColor="white" stopOpacity="0" />
+        </linearGradient>
+        <mask id="mmask"><rect width="280" height="20" fill="url(#mfade)" /></mask>
+      </defs>
+      <rect width="280" height="20" fill="url(#mdr)" mask="url(#mmask)" />
+    </svg>
+  );
+}
+
+function gemColor(type) { return getComputedStyle(document.documentElement).getPropertyValue(TYPES[type].c.replace('var(', '').replace(')', '')) || '#e8c372'; }
+
+function Composer({ onSubmit, editing, onCancel }) {
+  const [type, setType] = React.useState('progress');
+  const [title, setTitle] = React.useState('');
+  const [body, setBody] = React.useState('');
+  const [tags, setTags] = React.useState('');
+  const ta = React.useRef(null);
+  React.useEffect(() => {
+    if (editing) { setType(editing.type); setTitle(editing.title || ''); setBody(editing.body || ''); setTags((editing.tags || []).join(', ')); if (ta.current) ta.current.focus(); }
+  }, [editing]);
+  const reset = () => { setType('progress'); setTitle(''); setBody(''); setTags(''); };
+  const submit = () => {
+    if (!body.trim() && !title.trim()) return;
+    onSubmit({ type, title: title.trim(), body: body.trim(), tags: tags.split(',').map(t => t.trim()).filter(Boolean) });
+    reset();
+  };
+  const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); submit(); } };
+  return (
+    <div className="parchment" style={{ position: 'relative', boxShadow: editing ? '0 24px 60px rgba(0,0,0,0.5), 0 0 0 2px var(--gold)' : undefined }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+        <span style={{ fontFamily: 'var(--roman)', fontSize: '0.66rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--sepia-soft)' }}>{editing ? 'Revise the verse' : 'Inscribe a new verse'}</span>
+        <span style={{ flex: 1, height: 1, background: 'rgba(120,90,40,0.3)' }} />
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
+        {ORDER.map(k => {
+          const on = type === k; const t = TYPES[k];
+          return (
+            <button key={k} className="seal" onClick={() => setType(k)}
+              style={on ? { background: 'rgba(184,134,47,0.16)', borderColor: 'var(--gold-deep)', color: 'var(--sepia)' } : undefined}>
+              <span className="gem" style={{ background: t.c }} />{t.label}
+            </button>
+          );
+        })}
+      </div>
+      <input className="p-input" style={{ fontWeight: 700, fontSize: '1.2rem', marginBottom: 10 }} placeholder="Title (optional)" value={title} onChange={e => setTitle(e.target.value)} onKeyDown={onKey} />
+      <textarea ref={ta} className="p-input" style={{ minHeight: 100, lineHeight: 1.6, resize: 'vertical' }} placeholder={TYPES[type].ph} value={body} onChange={e => setBody(e.target.value)} onKeyDown={onKey} />
+      <input className="p-input" style={{ fontFamily: 'var(--roman)', fontSize: '0.78rem', letterSpacing: '0.08em', marginTop: 10 }} placeholder="tags, separated by commas (optional)" value={tags} onChange={e => setTags(e.target.value)} onKeyDown={onKey} />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
+        <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '0.9rem', color: 'var(--sepia-soft)' }}>⌘ / Ctrl + Enter to inscribe</span>
+        <div style={{ display: 'flex', gap: 10 }}>
+          {editing && <button className="quiet-btn" onClick={() => { reset(); onCancel(); }}>Cancel</button>}
+          <button className="inscribe" onClick={submit}>{editing ? 'Rewrite' : 'Inscribe'}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PencilIcon() { return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>); }
+function XIcon() { return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>); }
+
+function Entry({ e, onEdit, onDelete }) {
+  const t = TYPES[e.type];
+  return (
+    <div className="tl-row">
+      <div className="tl-rail">
+        <span className="tl-node"><span className="gem" style={{ background: t.c, transform: 'rotate(-45deg)' }} /></span>
+        <span className="tl-line" />
+      </div>
+      <div className="tablet" tabIndex={0}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: e.title ? 8 : 4 }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <span className="gem" style={{ width: 8, height: 8, transform: 'rotate(45deg)', borderRadius: 1, background: t.c, boxShadow: `0 0 8px ${t.c}` }} />
+            <span className="type-label" style={{ color: t.c }}>{t.label}</span>
+          </span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+            <span className="meta" title={fullDate(e.ts)}>{relTime(e.ts)}</span>
+            <span className="acts">
+              <button className="icn" title="Edit" onClick={() => onEdit(e)}><PencilIcon /></button>
+              <button className="icn del" title="Delete" onClick={() => onDelete(e)}><XIcon /></button>
+            </span>
+          </span>
+        </div>
+        {e.title && <h3 className="e-title" style={{ margin: '0 0 6px' }}>{e.title}</h3>}
+        {e.body && <p className="e-body" style={{ margin: 0 }}>{e.body}</p>}
+        {e.tags && e.tags.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 13 }}>
+            {e.tags.map(tag => <span key={tag} className="e-tag">{tag}</span>)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [entries, setEntries] = React.useState(load);
+  const [filter, setFilter] = React.useState('all');
+  const [query, setQuery] = React.useState('');
+  const [editing, setEditing] = React.useState(null);
+  React.useEffect(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(entries)); } catch (e) {} }, [entries]);
+
+  const add = (data) => {
+    if (editing) { setEntries(es => es.map(x => x.id === editing.id ? { ...x, ...data } : x)); setEditing(null); }
+    else { setEntries(es => [{ id: 'e' + Date.now(), ts: Date.now(), ...data }, ...es]); }
+  };
+  const remove = (e) => { if (window.confirm('Erase this inscription?')) setEntries(es => es.filter(x => x.id !== e.id)); };
+  const startEdit = (e) => { setEditing(e); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const exportJSON = () => {
+    const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'elysia-devlog.json'; a.click(); URL.revokeObjectURL(url);
+  };
+
+  const counts = ORDER.reduce((m, k) => (m[k] = entries.filter(e => e.type === k).length, m), {});
+  const q = query.trim().toLowerCase();
+  const shown = entries
+    .filter(e => filter === 'all' || e.type === filter)
+    .filter(e => !q || (e.title + ' ' + e.body + ' ' + (e.tags || []).join(' ')).toLowerCase().includes(q))
+    .sort((a, b) => b.ts - a.ts);
+  const lastTs = entries.length ? Math.max(...entries.map(e => e.ts)) : null;
+
+  return (
+    <React.Fragment>
+      <div className="topbar">
+        <div className="wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px clamp(16px,4vw,40px)' }}>
+          <a className="tb-link" href="index.html"><span style={{ fontSize: '1.05rem' }}>←</span> Jeffi</a>
+          <button className="ghost-btn" onClick={exportJSON} title="Download a backup of every inscription">Export</button>
+        </div>
+      </div>
+
+      <div className="wrap" style={{ paddingTop: 'clamp(38px,7vh,72px)', paddingBottom: 'clamp(70px,11vh,120px)' }}>
+        {/* header */}
+        <div className="head-grid" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, alignItems: 'center', marginBottom: 'clamp(20px,4vh,34px)' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18 }}>
+              <Emblem size={86} />
+              <div>
+                <h1 className="gold-text" style={{ fontFamily: 'var(--roman)', fontWeight: 700, fontSize: 'clamp(2.4rem,7vw,4.2rem)', lineHeight: 1, letterSpacing: '0.1em', textIndent: '0.1em', filter: 'drop-shadow(0 2px 18px rgba(232,195,114,0.3))' }}>Devlog</h1>
+              </div>
+            </div>
+            <div className="title-en" style={{ marginBottom: 18 }}>Elysia VTuber Project</div>
+            <p style={{ maxWidth: 470, fontFamily: 'var(--serif)', fontSize: '1.18rem', lineHeight: 1.55, color: 'var(--ivory-soft)', margin: 0 }}>
+              A chronicle of the <span style={{ color: 'var(--gold-bright)' }}>Elysia</span> VTuber project — every thought, advance, and idea, set down as it is written into being. Kept within this browser.
+            </p>
+          </div>
+          <div className="oracle">
+            <div className="oracle-frame" />
+            <Live2DStage emotion="playful" speaking name="Elysia" height={236} modelUrl="../../assets/live2d/changli.model3.json" frameBg="radial-gradient(120% 95% at 50% 10%, #2a2010 0%, #15100a 56%, #0a0806 100%)" />
+          </div>
+        </div>
+
+        <div style={{ margin: '8px 0 30px' }}><Meander /></div>
+
+        {/* tallies */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
+          <div className="tally"><span className="n gold-text">{entries.length}</span><span className="l">Inscriptions</span></div>
+          {ORDER.map(k => (
+            <div key={k} className="tally"><span className="n" style={{ color: TYPES[k].c }}>{counts[k]}</span><span className="l">{TYPES[k].label}</span></div>
+          ))}
+          {lastTs && <div style={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto', fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '0.95rem', color: 'var(--ivory-faint)' }}>last written {relTime(lastTs)}</div>}
+        </div>
+
+        {/* composer */}
+        <div style={{ marginBottom: 32 }}><Composer onSubmit={add} editing={editing} onCancel={() => setEditing(null)} /></div>
+
+        {/* filters */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 9, marginBottom: 26 }}>
+          <button className={'ftag' + (filter === 'all' ? ' on' : '')} onClick={() => setFilter('all')}>All</button>
+          {ORDER.map(k => <button key={k} className={'ftag' + (filter === k ? ' on' : '')} onClick={() => setFilter(k)}>{TYPES[k].label}</button>)}
+          <input className="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search the record…" style={{ marginLeft: 'auto', minWidth: 160, flex: '0 1 230px' }} />
+        </div>
+
+        {/* feed */}
+        {shown.length === 0 ? (
+          <div className="tablet" style={{ textAlign: 'center', padding: '48px 24px' }}>
+            <div style={{ marginBottom: 12 }}><Emblem size={48} /></div>
+            <div style={{ fontFamily: 'var(--serif)', fontWeight: 700, fontSize: '1.3rem', color: 'var(--gold-bright)', marginBottom: 6 }}>{entries.length === 0 ? 'The page is blank' : 'Nothing is written here'}</div>
+            <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', color: 'var(--ivory-faint)', fontSize: '1.02rem' }}>{entries.length === 0 ? 'Inscribe your first verse about Elysia above.' : 'Try another filter or search term.'}</div>
+          </div>
+        ) : (
+          <div>{shown.map(e => <Entry key={e.id} e={e} onEdit={startEdit} onDelete={remove} />)}</div>
+        )}
+      </div>
+    </React.Fragment>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

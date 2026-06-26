@@ -117,22 +117,22 @@ function AddTrack({ lang, onAdd }) {
     <div style={{ marginTop: 12 }}>
       {!openInput ? (
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button onClick={() => fileRef.current.click()} style={loaderBtn}>＋ {lang === 'zh' ? '本地文件' : 'Local file'}</button>
-          <button onClick={() => setOpenInput(true)} style={loaderBtn}>🔗 {lang === 'zh' ? '粘贴链接' : 'Paste URL / YouTube'}</button>
+          <button onClick={() => fileRef.current.click()} style={loaderBtn}>+ {lang === 'zh' ? '本地文件' : 'Local file'}</button>
+          <button onClick={() => setOpenInput(true)} style={loaderBtn}>{lang === 'zh' ? '粘贴链接' : 'Paste URL / YouTube'}</button>
           <input ref={fileRef} type="file" accept="audio/*" onChange={pick} style={{ display: 'none' }} />
         </div>
       ) : (
         <div style={{ display: 'flex', gap: 8 }}>
           <input autoFocus value={url} onChange={(e) => setUrl(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addUrl(); if (e.key === 'Escape') setOpenInput(false); }}
             placeholder={lang === 'zh' ? '音频直链或 YouTube 链接…' : 'Direct audio URL or YouTube link…'}
-            style={{ flex: 1, background: 'rgba(255,255,255,0.06)', border: '1px solid var(--site-card-border)', borderRadius: 9, padding: '9px 12px', color: 'var(--site-text)', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', outline: 'none' }} />
+            style={{ flex: 1, background: 'rgba(255,255,255,0.06)', border: '1px solid var(--site-card-border)', borderRadius: 'var(--radius-xs)', padding: '9px 12px', color: 'var(--site-text)', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', outline: 'none' }} />
           <button onClick={addUrl} style={{ ...loaderBtn, color: '#fff', background: 'var(--site-accent)', borderColor: 'transparent' }}>{lang === 'zh' ? '加载' : 'Load'}</button>
         </div>
       )}
     </div>
   );
 }
-const loaderBtn = { fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.04em', color: 'var(--site-text-soft)', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--site-card-border)', borderRadius: 9, padding: '8px 13px', cursor: 'pointer' };
+const loaderBtn = { fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.04em', color: 'var(--site-text-soft)', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--site-card-border)', borderRadius: 'var(--radius-xs)', padding: '8px 13px', cursor: 'pointer' };
 
 function MusicSection({ lang, tracks, cur, setCur, playing, progress, onToggle, onSeek, onAdd }) {
   const t = tracks[cur] || TRACKS[0];
@@ -184,7 +184,7 @@ function MusicSection({ lang, tracks, cur, setCur, playing, progress, onToggle, 
                   <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem', color: 'var(--site-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tr.title}</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--site-text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tr.artist}</div>
                 </div>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'var(--font-mono)', fontSize: '0.64rem', letterSpacing: '0.08em', color: 'var(--site-text-faint)' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.08em', color: 'var(--site-text-faint)' }}>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: SRC_COLOR[kindLabel(tr)] || 'var(--site-text-faint)' }} />{kindLabel(tr)}
                 </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--site-text-faint)', width: 38, textAlign: 'right' }}>{fmt(tr.len)}</span>
@@ -206,7 +206,7 @@ function MiniPlayer({ tracks, cur, setCur, playing, progress, onToggle }) {
   const t = tracks[cur] || TRACKS[0];
   const accent = t.url && window.audioEngine.kindOf(t.url) === 'yt' ? '#ff4d6d' : '#2dd4bf';
   return (
-    <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 18, zIndex: 60, width: 'min(540px, calc(100vw - 32px))', display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 16px', borderRadius: 'var(--radius-sm)', background: 'rgba(18,11,26,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 16px 48px rgba(0,0,0,0.45)' }}>
+    <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 18, zIndex: 60, width: 'min(540px, calc(100vw - 96px))', display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 16px', borderRadius: 'var(--radius-sm)', background: 'rgba(18,11,26,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 16px 48px rgba(0,0,0,0.45)' }}>
       <span style={{ width: 7, height: 7, borderRadius: '50%', background: accent, flexShrink: 0, boxShadow: `0 0 7px ${accent}` }} />
       <div style={{ minWidth: 0, width: 150 }}>
         <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.84rem', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.title}</div>

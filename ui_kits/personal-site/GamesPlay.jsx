@@ -38,16 +38,19 @@ function GamesPlay({ lang }) {
     <section id="games" style={{ maxWidth: 'var(--container)', margin: '0 auto', padding: 'clamp(48px,8vh,80px) clamp(16px,4vw,40px)' }}>
       <window.SecHead n="02" eyebrow={lang === 'zh' ? '游戏生活' : 'Gaming Life'} title={lang === 'zh' ? '我玩的游戏' : 'What I Play'} kana="ゲーム" />
 
+      <window.RhythmStats lang={lang} />
+
       <p style={{ textAlign: 'center', color: 'var(--site-text-muted)', fontSize: '0.86rem', margin: '0 0 6px' }}>{lang === 'zh' ? '\u9760\u8fd1\u8bbe\u5907\u770b\u770b\u2014\u2014\u70b9\u51fb\u56fe\u6807\u67e5\u770b\u8be6\u60c5' : 'Lean in to a device \u2014 click an icon for the details'}</p>
       <window.PlayedDevices lang={lang} />
 
       {/* fav songs + goals */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '20px' }}>
-        <Card tone="surface" padding="20px 22px">
+        <Card tone="surface" padding="20px 22px" className="peek-host" style={{ position: 'relative' }}>
+          <span className="peek" style={{ width: 52, height: 52, top: -16, right: -16 }} aria-hidden="true"></span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--site-text)', marginBottom: 14 }}><window.Icon name="music" size={19} style={{ color: 'var(--site-text-muted)' }} />{lang === 'zh' ? '最爱曲目' : 'Favourite Songs'}</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: 8 }}>
             {SONGS.map((s, i) => (
-              <div key={i} style={{ padding: '9px 12px', borderRadius: 11, background: 'var(--site-chip-bg)', border: '1px solid var(--site-chip-border)' }}>
+              <div key={i} style={{ padding: '9px 12px', borderRadius: 'var(--radius-sm)', background: 'var(--site-chip-bg)', border: '1px solid var(--site-chip-border)' }}>
                 <div style={{ fontWeight: 800, fontSize: '0.82rem', color: 'var(--site-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s[0]}</div>
                 <div style={{ fontSize: '0.72rem', color: 'var(--site-text-faint)', fontWeight: 600 }}>{s[1]}</div>
               </div>
@@ -58,7 +61,7 @@ function GamesPlay({ lang }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--site-text)', marginBottom: 14 }}><window.Icon name="target" size={19} style={{ color: 'var(--site-text-muted)' }} />{lang === 'zh' ? '我的目标' : 'My Goals'}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
             {GOALS.map((g, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, padding: '9px 12px', borderRadius: 12, background: 'var(--site-chip-bg)', border: '1px solid var(--site-chip-border)' }}>
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, padding: '9px 12px', borderRadius: 'var(--radius-sm)', background: 'var(--site-chip-bg)', border: '1px solid var(--site-chip-border)' }}>
                 <span style={{ width: 22, height: 22, borderRadius: 7, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 900, marginTop: 1, background: g.done ? 'rgba(63,185,138,0.2)' : 'var(--site-chip-bg)', border: g.done ? '1.5px solid var(--success)' : '1.5px solid var(--site-chip-border)', color: g.done ? 'var(--success)' : 'var(--site-text-faint)' }}>{g.done ? '✓' : '○'}</span>
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '0.86rem', color: 'var(--site-text)' }}>{g[L][0]}</div>

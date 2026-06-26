@@ -33,6 +33,72 @@ function RiftPortal({ lang }) {
     return () => { alive = false; clearInterval(id); };
   }, [hover]);
 
+  // Shared heartbeat (music → --beat), scroll spine (--rift-energy), and
+  // bleed-through filaments that reach toward the cursor over any Elysia zone.
+  React.useEffect(() => {
+    const root = document.documentElement;
+    const ENG = window.audioEngine;
+    let beat = 0, mood = 0, mult = 1, raf;
+    const loop = () => {
+      const playing = ENG && ENG.playing;
+      const target = playing ? ENG.level() : 0;
+      beat += (target - beat) * 0.25;
+      const moodTarget = playing ? 1 : 0;
+      mood += (moodTarget - mood) * 0.04;
+      let multTarget = 1;
+      if (playing) {
+        const bpm = (window.maiBeat && window.maiBeat.state && window.maiBeat.state.bpm) || 120;
+        multTarget = Math.max(0.5, Math.min(1.3, 120 / bpm));
+      }
+      mult += (multTarget - mult) * 0.04;
+      root.style.setProperty('--beat', beat.toFixed(3));
+      root.style.setProperty('--mood', mood.toFixed(3));
+      root.style.setProperty('--mood-mult', mult.toFixed(3));
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+
+    const onScroll = () => {
+      const vh = window.innerHeight;
+      let energy = 0.18;
+      ['music', 'anime'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const center = r.top + r.height / 2;
+        const dist = Math.abs(center - vh / 2) / vh;
+        energy = Math.max(energy, 1 - dist);
+      });
+      root.style.setProperty('--rift-energy', Math.max(0, Math.min(1, energy)).toFixed(3));
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    let lastSpawn = 0;
+    const onMove = (e) => {
+      const zone = e.target.closest && e.target.closest('.elysia-zone, .rift');
+      if (!zone) return;
+      const now = performance.now();
+      if (now - lastSpawn < 150) return;
+      lastSpawn = now;
+      const reach = Math.max(60, window.innerWidth - e.clientX - 8);
+      const t = document.createElement('div');
+      t.className = 'rift-tendril';
+      t.style.top = e.clientY + 'px';
+      t.style.setProperty('--reach', reach + 'px');
+      t.style.setProperty('--sag', (Math.random() * 16 - 8) + 'px');
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 1500);
+    };
+    window.addEventListener('mousemove', onMove, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('mousemove', onMove);
+    };
+  }, []);
+
   const open = () => {
     if (openingRef.current) return;
     openingRef.current = true;
@@ -54,6 +120,9 @@ function RiftPortal({ lang }) {
 
   return (
     <React.Fragment>
+      <div className="mood-pulse" aria-hidden="true"></div>
+      <div className="rift-pulse" aria-hidden="true"></div>
+      <div className="rift-spine" aria-hidden="true"></div>
       <div className="rift-fx" ref={fxRef} aria-hidden="true"></div>
       <div
         className={'rift' + (hover ? ' is-hover' : '')}

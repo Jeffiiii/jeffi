@@ -51,7 +51,7 @@ function PlayedDevices({ lang }) {
           border:1px solid var(--site-card-border);
           background:linear-gradient(180deg,#0b0913 0%,#100d1b 44%,#1c1626 44%,#15111f 100%);}
         .desk-scene::before{content:'';position:absolute;left:0;right:0;top:44%;height:2px;
-          background:linear-gradient(90deg,transparent,rgba(45,212,191,.35),transparent);box-shadow:0 0 24px rgba(45,212,191,.25);}
+          background:linear-gradient(90deg,transparent,rgba(45,212,191,.22),transparent);box-shadow:0 0 14px rgba(45,212,191,.13);}
         .desk-grid{position:absolute;left:0;right:0;top:0;height:44%;pointer-events:none;opacity:.5;
           background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
           background-size:42px 42px;-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent);}
@@ -61,7 +61,7 @@ function PlayedDevices({ lang }) {
         .desk-item .shadow{position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);width:78%;height:20px;border-radius:50%;
           background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);filter:blur(3px);z-index:-1;}
         .desk-item:not(.is-focus) .scr{pointer-events:none;}
-        .di-label{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--site-text-faint);white-space:nowrap;}
+        .di-label{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--site-text-faint);white-space:nowrap;}
         /* ── monitor ── */
         .m-screen{width:300px;aspect-ratio:16/10;border-radius:12px;background:#06060d;border:9px solid #0d0c13;position:relative;overflow:hidden;
           box-shadow:0 24px 54px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.05),0 0 0 1px #000;}
@@ -123,6 +123,7 @@ function PlayedDevices({ lang }) {
         @keyframes pdIn{from{opacity:0}to{opacity:1}}
         .pd-card{width:min(420px,90%);background:var(--glass-bg-dark);border:1px solid var(--site-card-border);border-radius:16px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.5);}
         @media(max-width:640px){.m-screen{width:240px}.bookstand{transform:scale(.85) rotate(-3deg)}}
+        @media(max-width:480px){.m-screen{width:184px}.ph-frame{width:104px}.bookstand{transform:scale(.66) rotate(-3deg)}.di-label{font-size:.56rem;bottom:-22px}.desk-scene{height:clamp(380px,52vh,520px)}}
       `}</style>
 
       <div className={'desk-cam'} style={{ transform: cam }}>

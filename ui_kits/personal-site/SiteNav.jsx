@@ -3,17 +3,18 @@ const { Button, IconButton } = window.ElysiaJeffiDesignSystem_f13e8e;
 
 function SiteNav({ lang, setLang, theme, setTheme, onOpenChat }) {
   const links = [
-    { en: 'Home', zh: '首页', icon: '🏠', id: 'top' },
-    { en: 'About', zh: '关于', icon: '🌸', id: 'about' },
-    { en: 'Projects', zh: '项目', icon: '🚀', id: 'projects' },
-    { en: 'Games', zh: '游戏', icon: '🎮', id: 'games' },
-    { en: 'Anime', zh: '动漫', icon: '✨', id: 'anime' },
-    { en: 'Music', zh: '音乐', icon: '🎵', id: 'music' },
-    { en: 'Gallery', zh: '相册', icon: '🖼️', id: 'gallery' },
+    { en: 'Home', zh: '首页', id: 'top' },
+    { en: 'About', zh: '关于', id: 'about' },
+    { en: 'Projects', zh: '项目', id: 'projects' },
+    { en: 'Games', zh: '游戏', id: 'games' },
+    { en: 'Anime', zh: '动漫', id: 'anime' },
+    { en: 'Music', zh: '音乐', id: 'music' },
+    { en: 'Gallery', zh: '相册', id: 'gallery' },
+    { en: 'Devlog', zh: '日志', id: 'devlog', href: 'devlog.html' },
   ];
   const [active, setActive] = React.useState('Home');
   return (
-    <nav style={{
+    <nav className="site-nav" style={{
       position: 'sticky', top: 0, zIndex: 50,
       display: 'flex', alignItems: 'center', gap: '12px',
       padding: '14px clamp(16px,4vw,40px)',
@@ -23,11 +24,12 @@ function SiteNav({ lang, setLang, theme, setTheme, onOpenChat }) {
       <div className="site-display" style={{ fontWeight: 800, fontSize: '1.4rem', letterSpacing: '-0.04em', color: 'var(--site-text)', flexShrink: 0 }}>
         Jeffi<span style={{ color: 'var(--site-accent)' }}>.</span>
       </div>
-      <ul style={{ display: 'flex', gap: '2px', listStyle: 'none', margin: 0, padding: 0, flex: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
+      <ul className="nav-links" style={{ display: 'flex', gap: '2px', listStyle: 'none', margin: 0, padding: 0, flex: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
         {links.map((l, idx) => {
           const on = active === l.en;
           const go = (e) => {
             e.preventDefault();
+            if (l.href) { window.location.href = l.href; return; }
             setActive(l.en);
             if (l.id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
             const el = document.getElementById(l.id);
@@ -45,7 +47,7 @@ function SiteNav({ lang, setLang, theme, setTheme, onOpenChat }) {
               }}
               onMouseEnter={(e)=>{ if(!on) e.currentTarget.style.color='var(--site-text)'; }}
               onMouseLeave={(e)=>{ if(!on) e.currentTarget.style.color='var(--site-text-muted)'; }}>
-                <span style={{ opacity: 0.5, fontSize: '0.66rem' }}>{String(idx).padStart(2,'0')}</span>{lang === 'zh' ? l.zh : l.en}
+                <span style={{ opacity: 0.5, fontSize: '0.66rem' }}>{String(idx).padStart(2,'0')}</span><window.XFade text={lang === 'zh' ? l.zh : l.en} />
               </a>
             </li>
           );

@@ -27,20 +27,42 @@ function About({ lang }) {
             <Badge tone="mint">{lang === 'zh' ? '音游玩家' : 'Rhythm Gamer'}</Badge>
           </div>
         </div>
-        <Card tone="surface" padding="26px">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {[
-              { k: lang === 'zh' ? '所在地' : 'Based in', v: lang === 'zh' ? '加拿大 · 多伦多' : 'Toronto, Canada' },
-              { k: lang === 'zh' ? '专注于' : 'Focused on', v: lang === 'zh' ? 'Web + AI + 游戏' : 'Web + AI + Games' },
-              { k: lang === 'zh' ? '正在学' : 'Learning', v: lang === 'zh' ? '后端 · React · Godot' : 'Backend · React · Godot' },
-              { k: lang === 'zh' ? '语言' : 'Languages', v: 'English · 中文' },
-            ].map((r, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, paddingBottom: 12, borderBottom: i < 3 ? '1px solid var(--site-hairline)' : 'none' }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--site-text-faint)' }}>{r.k}</span>
-                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '0.95rem', color: 'var(--site-text)', textAlign: 'right' }}>{r.v}</span>
+        <Card tone="surface" padding="24px" className="peek-host" style={{ position: 'relative' }}>
+          <span className="peek" style={{ width: 58, height: 58, top: -18, right: -18 }} aria-hidden="true"></span>
+          <window.Reveal>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18, paddingBottom: 18, borderBottom: '1px solid var(--site-hairline)' }}>
+              <span style={{ width: 56, height: 56, flexShrink: 0, borderRadius: '50%', background: 'linear-gradient(135deg,#2dd4bf,#0d9488)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.5rem', color: '#06201d', boxShadow: '0 8px 22px rgba(13,148,136,0.4)' }}>J</span>
+              <div>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.1rem', color: 'var(--site-text)' }}>Jeffi</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--site-text-faint)' }}>{lang === 'zh' ? '学生开发者 · 多伦多' : 'Student Developer · Toronto'}</div>
               </div>
+            </div>
+          </window.Reveal>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[
+              { c: 'var(--jeffi-400)', k: lang === 'zh' ? '专注于' : 'Focused on', v: lang === 'zh' ? 'Web + AI + 游戏' : 'Web + AI + Games' },
+              { c: 'var(--crystal)', k: lang === 'zh' ? '正在学' : 'Learning', v: lang === 'zh' ? '后端 · React · Godot' : 'Backend · React · Godot' },
+              { c: 'var(--mint)', k: lang === 'zh' ? '语言' : 'Languages', v: 'English · 中文' },
+            ].map((r, i) => (
+              <window.Reveal key={i} delay={i * 80}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--site-text-faint)' }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: r.c, flexShrink: 0 }} />{r.k}
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '0.92rem', color: 'var(--site-text)', textAlign: 'right' }}>{r.v}</span>
+                </div>
+              </window.Reveal>
             ))}
           </div>
+          <window.Reveal delay={260}>
+            <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid var(--site-hairline)', display: 'flex', alignItems: 'center', gap: 9 }}>
+              <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 7px var(--success)', animation: 'pulseDot 1.6s ease-in-out infinite', flexShrink: 0 }} />
+              <span style={{ fontSize: '0.82rem', color: 'var(--site-text-soft)' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--site-text-faint)', marginRight: 8 }}>{lang === 'zh' ? '正在打造' : 'Now building'}</span>
+                Elysia VTuber
+              </span>
+            </div>
+          </window.Reveal>
         </Card>
       </div>
     </section>
@@ -68,7 +90,7 @@ const PROJECTS = [
     zh: { t: '个人作品集网站', s: '已上线', o: '双语作品集 + 内嵌 AI VTuber', d: '就是你正在浏览的网站 —— 双语作品集，含音乐播放器、相册与内嵌 AI VTuber。基于 Elysia × Jeffi 设计系统构建。' } },
 ];
 
-const STATUS_C = { live: 'var(--success)', wip: '#f0a93a', soon: 'var(--site-text-faint)' };
+const STATUS_C = { live: 'var(--success)', wip: 'var(--warning)', soon: 'var(--site-text-faint)' };
 
 // inline .execute() loader shown inside the expanding detail block
 function MiniExec({ label, lang }) {
@@ -101,7 +123,7 @@ function ProjItem({ p, lang, featured, openId, loadId, onToggle }) {
       <div style={{ position: 'absolute', top: -1, left: 0, width: featured ? 72 : 44, height: 2, background: p.grad }} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
         <span style={{ color: 'var(--site-text-soft)', display: 'inline-flex' }}><window.Icon name={p.ic} size={featured ? 22 : 18} /></span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: STATUS_C[p.status] }}>{d.s}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: STATUS_C[p.status] }}>{d.s}</span>
         <span style={{ marginLeft: 'auto', color: 'var(--site-text-faint)', display: 'inline-flex', transform: isOpen ? 'rotate(90deg)' : 'none', transition: 'transform .3s var(--ease-out)' }}><window.Icon name="code" size={15} /></span>
       </div>
       <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: featured ? 'clamp(1.6rem,3vw,2.3rem)' : '1.25rem', letterSpacing: '-0.03em', color: 'var(--site-text)', margin: '0 0 6px', lineHeight: 1.05 }}>{d.t}</h3>
@@ -112,7 +134,7 @@ function ProjItem({ p, lang, featured, openId, loadId, onToggle }) {
           : <div style={{ padding: '14px 0 6px' }}>
               <p style={{ fontSize: '0.94rem', lineHeight: 1.7, color: 'var(--site-text-soft)', margin: '0 0 14px', textWrap: 'pretty' }}>{d.d}</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 14 }}>
-                {p.tags.map(t => <i key={t} style={{ fontStyle: 'normal', fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'var(--site-text-muted)', padding: '3px 9px', border: '1px solid var(--site-hairline)', borderRadius: 3 }}>{t}</i>)}
+                {p.tags.map(t => <i key={t} style={{ fontStyle: 'normal', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--site-text-muted)', padding: '3px 9px', border: '1px solid var(--site-hairline)', borderRadius: 4 }}>{t}</i>)}
               </div>
               {p.live && p.live !== '#' && <a href={p.live} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--site-accent)', textDecoration: 'none', borderBottom: '1px solid var(--site-accent)', paddingBottom: 2 }}>{lang === 'zh' ? '访问线上' : 'Visit live'} ↗</a>}
             </div>}

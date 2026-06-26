@@ -59,11 +59,27 @@ function AnimeFaves({ lang }) {
         {g[L][1]}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: 16 }}>
-        {g.chars.map((c, i) => (
-          <Card key={i} tone="surface" padding="20px 16px 16px" hover style={{ textAlign: 'center', position: 'relative' }}>
+      <div className="anime-grid">
+        {g.chars.map((c, i) => i === 0 ? (
+          <Card key={i} tone="surface" padding="0" hover className="ac-feat" style={{ position: 'relative', overflow: 'hidden' }}>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: c.bg }} />
+            <div style={{ display: 'flex', gap: 18, padding: '22px 20px', alignItems: 'center' }}>
+              <div style={{ width: 96, height: 96, flexShrink: 0, borderRadius: '50%', background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.6rem', lineHeight: 1, border: '2.5px solid var(--site-card-border)', boxShadow: 'inset 0 2px 16px rgba(255,255,255,0.28), 0 8px 22px rgba(0,0,0,0.34)' }}>{c.e}</div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '1.3rem', color: 'var(--site-text)' }}>{c.n}</span>
+                  {c.fav && <window.Icon name="sparkles" size={15} style={{ color: 'var(--site-accent)' }} />}
+                </div>
+                <div style={{ fontSize: '0.82rem', color: 'var(--site-text-faint)', fontWeight: 600, marginBottom: 8 }}>{c.jp}</div>
+                <div style={{ fontSize: '0.86rem', color: 'var(--site-text-soft)', lineHeight: 1.5 }}>{c[L]}</div>
+              </div>
+            </div>
+          </Card>
+        ) : (
+          <Card key={i} tone="surface" padding="20px 16px 16px" hover style={{ textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: c.bg }} />
             {c.fav && <span style={{ position: 'absolute', top: 12, right: 14, display: 'inline-flex' }}><window.Icon name="sparkles" size={14} style={{ color: 'var(--site-accent)' }} /></span>}
-            <div style={{ width: 84, height: 84, borderRadius: '50%', margin: '0 auto 12px', background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.7rem', color: '#fff', border: '2.5px solid var(--site-card-border)' }}>{c.n.charAt(0)}</div>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', margin: '0 auto 12px', background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.2rem', lineHeight: 1, border: '2.5px solid var(--site-card-border)', boxShadow: 'inset 0 2px 16px rgba(255,255,255,0.28), 0 8px 22px rgba(0,0,0,0.34)' }}>{c.e}</div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '0.95rem', color: 'var(--site-text)' }}>{c.n}</div>
             <div style={{ fontSize: '0.74rem', color: 'var(--site-text-faint)', fontWeight: 600, marginBottom: 8 }}>{c.jp}</div>
             <div style={{ display: 'inline-block', fontSize: '0.7rem', fontWeight: 800, padding: '3px 10px', borderRadius: 'var(--radius-pill)', background: 'var(--site-chip-bg)', border: '1px solid var(--site-chip-border)', color: 'var(--site-text-soft)' }}>{c[L]}</div>
