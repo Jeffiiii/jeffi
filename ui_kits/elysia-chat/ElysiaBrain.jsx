@@ -21,7 +21,10 @@ function _resolveEndpoint(winKey, qpKey, lsKey, fallback) {
   } catch (_) {}
   return fallback;
 }
-const ELYSIA_LLM_URL = _resolveEndpoint('ELYSIA_LLM_URL', 'llm', 'elysia_llm_url', 'http://127.0.0.1:8000');
+// Default brain = the RunPod vLLM proxy over Tailscale Funnel. ?llm= still overrides it.
+// NOTE: the hostname gets a numeric suffix if a stale node lingers — delete old "elysia-pod*"
+// nodes in the Tailscale admin so future pods reuse the bare "elysia-pod" and this stays put.
+const ELYSIA_LLM_URL = _resolveEndpoint('ELYSIA_LLM_URL', 'llm', 'elysia_llm_url', 'https://elysia-pod-1.tail411537.ts.net');
 
 // Stable per-browser id so the server's reactive substrate keeps memory + mood per visitor
 // (and so a returning friend has continuity). Sent with every /generate call.
