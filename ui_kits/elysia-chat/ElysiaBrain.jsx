@@ -24,7 +24,7 @@ function _resolveEndpoint(winKey, qpKey, lsKey, fallback) {
 // Default brain = the RunPod vLLM proxy over Tailscale Funnel. ?llm= still overrides it.
 // NOTE: the hostname gets a numeric suffix if a stale node lingers — delete old "elysia-pod*"
 // nodes in the Tailscale admin so future pods reuse the bare "elysia-pod" and this stays put.
-const ELYSIA_LLM_URL = _resolveEndpoint('ELYSIA_LLM_URL', 'llm', 'elysia_llm_url', 'https://elysia-pod-1.tail411537.ts.net');
+const ELYSIA_LLM_URL = _resolveEndpoint('ELYSIA_LLM_URL', 'llm', 'elysia_llm_url', 'https://elysia-pod.tail411537.ts.net');
 
 // Stable per-browser id so the server's reactive substrate keeps memory + mood per visitor
 // (and so a returning friend has continuity). Sent with every /generate call.
@@ -89,20 +89,26 @@ async function elysiaGenerate(history, userText, { timeoutMs = 60000 } = {}) {
   }
 }
 
-// One-shot health probe so the UI can show live / demo.
-async function elysiaHealth({ timeoutMs = 2500 } = {}) {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const res = await fetch(`${ELYSIA_LLM_URL}/health`, { signal: ctrl.signal });
-    if (!res.ok) return { ok: false, model: '' };
-    const d = await res.json();
-    return { ok: !!d.ok, model: d.model || '' };
-  } catch (_) {
-    return { ok: false, model: '' };
-  } finally {
-    clearTimeout(t);
+// Health probe so the UI can show live / demo. Tailscale Funnel's FIRST hit (cold
+// cert/relay handshake) is often slow, so use a generous timeout and retry a couple
+// times before giving up — otherwise one slow cold start wrongly locks us to "demo".
+async function elysiaHealth({ timeoutMs = 8000, attempts = 3 } = {}) {
+  for (let i = 0; i < attempts; i++) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      const res = await fetch(`${ELYSIA_LLM_URL}/health`, { signal: ctrl.signal });
+      clearTimeout(t);
+      if (res.ok) {
+        const d = await res.json();
+        if (d && d.ok) return { ok: true, model: d.model || '' };
+      }
+    } catch (_) {
+      clearTimeout(t);
+    }
+    if (i < attempts - 1) await new Promise((r) => setTimeout(r, 700));
   }
+  return { ok: false, model: '' };
 }
 
 // --- Browser voice (Web Speech API) --------------------------------------------
@@ -323,11 +329,19 @@ function ElysiaChatPanel({ lang = 'en', setLang, compact = false, onClose }) {
 
   React.useEffect(() => { if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight; }, [msgs, typing]);
 
-  // Probe the model server once on mount so the badge shows live vs demo.
+  // Probe the model server on mount, then keep re-probing until it's reachable, so the
+  // badge self-heals if the brain/funnel comes up (or warms up) after the page loaded —
+  // no manual refresh needed.
   React.useEffect(() => {
     let alive = true;
-    elysiaHealth().then((h) => { if (alive) { setLive(h.ok); setModel(h.model); } });
-    return () => { alive = false; stopElysiaSpeech(); };
+    let timer;
+    const probe = () => elysiaHealth().then((h) => {
+      if (!alive) return;
+      setLive(h.ok); setModel(h.model);
+      if (!h.ok) timer = setTimeout(probe, 15000);
+    });
+    probe();
+    return () => { alive = false; clearTimeout(timer); stopElysiaSpeech(); };
   }, []);
 
   const send = async (m) => {
